@@ -1,5 +1,6 @@
 import fitz  # PyMuPDF
 
+from app.services.chapter_splitter import split_into_chapters
 from app.services.content_filter import extract_content_pages
 
 
@@ -15,3 +16,9 @@ def extract_novel_text(pdf_bytes: bytes) -> str:
     pages_text = extract_pages_text(pdf_bytes)
     content_pages = extract_content_pages(pages_text)
     return " ".join(" ".join(page.split()) for page in content_pages)
+
+
+def extract_novel_chapters(pdf_bytes: bytes) -> list[dict]:
+    pages_text = extract_pages_text(pdf_bytes)
+    content_pages = extract_content_pages(pages_text)
+    return split_into_chapters(content_pages)
