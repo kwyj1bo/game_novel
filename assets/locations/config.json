@@ -1,0 +1,305 @@
+{
+  "privet_drive": {
+    "sky": "#bcd4e8",
+    "ground": "#5a8f3c",
+    "bounds": { "width": 28, "height": 5, "depth": 14 },
+    "props": [
+      { "id": "house_body", "type": "box", "size": [3, 2.5, 3], "pos": [0, 1.25, 0], "color": "#c9a876" },
+      { "id": "roof", "type": "box", "size": [2.6, 1.4, 1.2], "pos": [0, 3.2, 0], "color": "#8b5a2b" },
+      { "id": "front_door", "type": "box", "size": [0.6, 1.2, 0.1], "pos": [0, 0.6, 1.51], "color": "#4a2f1a" },
+      { "id": "mail_slot", "type": "box", "size": [0.25, 0.08, 0.05], "pos": [0, 0.5, 1.53], "color": "#1a1a1a" },
+      { "id": "cupboard_under_stairs", "type": "box", "size": [0.5, 0.5, 0.5], "pos": [-0.5, 0.25, 0.5], "color": "#2a1a0a" },
+      { "id": "second_bedroom_window", "type": "box", "size": [0.6, 0.6, 0.05], "pos": [1, 2, 1.53], "color": "#88aacc" },
+      { "id": "garage_car", "type": "box", "size": [1.8, 0.7, 3.2], "pos": [-3.5, 0.35, 2], "color": "#33557a" },
+      { "id": "car_wheel_1", "type": "cylinder", "radius": [0.3, 0.3, 0.3], "pos": [-3.5, 0.3, 3.2], "color": "#111111" },
+      { "id": "car_wheel_2", "type": "cylinder", "radius": [0.3, 0.3, 0.3], "pos": [-3.5, 0.3, 0.8], "color": "#111111" },
+      { "id": "garden_tree_trunk", "type": "cylinder", "radius": [0.5, 0.5, 3], "pos": [3, 1.5, 2], "color": "#6b4226" },
+      { "id": "garden_tree_top", "type": "sphere", "radius": 1.2, "pos": [3, 3.2, 2], "color": "#2e5c1e" },
+      { "id": "garden_wall", "type": "box", "size": [4, 0.5, 0.2], "pos": [3.5, 0.25, 3.5], "color": "#8a8a7a" },
+      { "id": "front_fence_left", "type": "box", "size": [0.15, 0.7, 8], "pos": [-6, 0.35, 0], "color": "#eeeeee" },
+      { "id": "front_fence_right", "type": "box", "size": [0.15, 0.7, 8], "pos": [6, 0.35, 0], "color": "#eeeeee" },
+      { "id": "street_road", "type": "box", "size": [28, 0.1, 4], "pos": [0, 0.06, 6], "color": "#3a3a3a" },
+      { "id": "street_lamp_pole", "type": "cylinder", "radius": [0.08, 0.08, 3], "pos": [-8, 1.5, 5], "color": "#222222" },
+      { "id": "street_lamp_head", "type": "sphere", "radius": 0.3, "pos": [-8, 3, 5], "color": "#ffefaa" },
+      { "id": "neighbor_house_left", "type": "box", "size": [2.6, 2.2, 2.6], "pos": [-9, 1.1, -1], "color": "#b89860" },
+      { "id": "neighbor_house_left_roof", "type": "box", "size": [2.2, 1.1, 1], "pos": [-9, 2.7, -1], "color": "#7a4a2c" },
+      { "id": "neighbor_house_right", "type": "box", "size": [2.6, 2.2, 2.6], "pos": [9, 1.1, -1], "color": "#a8987c" },
+      { "id": "neighbor_house_right_roof", "type": "box", "size": [2.2, 1.1, 1], "pos": [9, 2.7, -1], "color": "#6a4a3a" }
+    ]
+  },
+  "mrs_figgs_house": {
+    "sky": "#a0a8a0",
+    "ground": "#6a7a5c",
+    "bounds": { "width": 8, "height": 4, "depth": 8 },
+    "props": [
+      { "id": "house_body", "type": "box", "size": [2.6, 2, 2.6], "pos": [0, 1, 0], "color": "#7a8a6a" },
+      { "id": "roof", "type": "box", "size": [2.2, 1, 1], "pos": [0, 2.5, 0], "color": "#4a4a3a" },
+      { "id": "cat_1", "type": "sphere", "radius": 0.25, "pos": [1.5, 0.25, 1], "color": "#333333" },
+      { "id": "cat_2", "type": "sphere", "radius": 0.25, "pos": [-1.5, 0.25, -1], "color": "#993333" }
+    ]
+  },
+  "zoo_reptile_house": {
+    "sky": "#2a2a2a",
+    "ground": "#3a3a3a",
+    "bounds": { "width": 10, "height": 4, "depth": 6 },
+    "props": [
+      { "id": "building_wall", "type": "box", "size": [10, 3, 0.4], "pos": [0, 1.5, -2], "color": "#555555" },
+      { "id": "snake_tank", "type": "box", "size": [2, 1.4, 1], "pos": [0, 0.7, 0], "color": "#88cc88", "wireframe": true },
+      { "id": "boa_constrictor", "type": "cylinder", "radius": [0.15, 0.15, 2], "pos": [0, 0.4, 0], "color": "#5c4a2a" }
+    ]
+  },
+  "hogwarts_great_hall": {
+    "sky": "#1a1a2e",
+    "ground": "#4a3b28",
+    "bounds": { "width": 12, "height": 8, "depth": 22 },
+    "props": [
+      { "id": "hall_shell", "type": "box", "size": [10, 6, 20], "pos": [0, 3, 0], "color": "#6b5b45", "wireframe": true },
+      { "id": "pillar_nw", "type": "box", "size": [1.5, 4, 1.5], "pos": [-4, 2, -8], "color": "#8a7a5c" },
+      { "id": "pillar_ne", "type": "box", "size": [1.5, 4, 1.5], "pos": [4, 2, -8], "color": "#8a7a5c" },
+      { "id": "pillar_sw", "type": "box", "size": [1.5, 4, 1.5], "pos": [-4, 2, 8], "color": "#8a7a5c" },
+      { "id": "pillar_se", "type": "box", "size": [1.5, 4, 1.5], "pos": [4, 2, 8], "color": "#8a7a5c" },
+      { "id": "high_table", "type": "box", "size": [6, 0.8, 1.2], "pos": [0, 0.4, -9], "color": "#5c3a1a" },
+      { "id": "house_table_gryffindor", "type": "box", "size": [1.2, 0.8, 12], "pos": [-3, 0.4, 0], "color": "#7a2f2f" }
+    ]
+  },
+  "gryffindor_common_room": {
+    "sky": "#3a1f1f",
+    "ground": "#7a2f2f",
+    "bounds": { "width": 9, "height": 5, "depth": 9 },
+    "props": [
+      { "id": "tower_wall", "type": "cylinder", "radius": [4, 4, 4], "pos": [0, 2, 0], "color": "#8b1a1a", "wireframe": true },
+      { "id": "armchair_1", "type": "box", "size": [1.2, 1, 1.2], "pos": [2, 0.5, 2], "color": "#5c3a1a" },
+      { "id": "armchair_2", "type": "box", "size": [1.2, 1, 1.2], "pos": [-2, 0.5, -2], "color": "#5c3a1a" },
+      { "id": "fireplace", "type": "cylinder", "radius": [0.3, 0.5, 1.5], "pos": [0, 0.75, -3], "color": "#3a2a1a" },
+      { "id": "fat_lady_portrait", "type": "box", "size": [1, 1.4, 0.1], "pos": [0, 1.2, 3.9], "color": "#c9a876" }
+    ]
+  },
+  "dungeon_potions": {
+    "sky": "#0a0a0f",
+    "ground": "#2a2a30",
+    "bounds": { "width": 8, "height": 4, "depth": 12 },
+    "props": [
+      { "id": "dungeon_shell", "type": "box", "size": [8, 3.5, 12], "pos": [0, 1.75, 0], "color": "#3a3a45", "wireframe": true },
+      { "id": "cauldron_1", "type": "cylinder", "radius": [0.4, 0.4, 0.8], "pos": [-2, 0.9, 0], "color": "#1a1a1a" },
+      { "id": "cauldron_2", "type": "cylinder", "radius": [0.4, 0.4, 0.8], "pos": [2, 0.9, 0], "color": "#1a1a1a" },
+      { "id": "potion_glow", "type": "sphere", "radius": 0.5, "pos": [-2, 1.6, 0], "color": "#3ada3a" },
+      { "id": "snapes_desk", "type": "box", "size": [2, 0.9, 1], "pos": [0, 0.45, -5], "color": "#2a2a2a" }
+    ]
+  },
+  "charms_classroom": {
+    "sky": "#c8d8e8",
+    "ground": "#8a7a6a",
+    "bounds": { "width": 8, "height": 4, "depth": 8 },
+    "props": [
+      { "id": "flitwicks_stack", "type": "box", "size": [1, 1.2, 1], "pos": [-1, 0.6, -2], "color": "#c9a876" },
+      { "id": "student_desk_1", "type": "box", "size": [1.2, 0.8, 0.6], "pos": [1, 0.4, 1], "color": "#7a5a3a" },
+      { "id": "feather", "type": "sphere", "radius": 0.1, "pos": [1, 1.2, 1], "color": "#ffffff" }
+    ]
+  },
+  "transfiguration_classroom": {
+    "sky": "#b8c8d8",
+    "ground": "#6a6a7a",
+    "bounds": { "width": 8, "height": 4, "depth": 8 },
+    "props": [
+      { "id": "mcgonagalls_desk", "type": "box", "size": [1.8, 0.9, 1], "pos": [0, 0.45, -3], "color": "#3a2a1a" },
+      { "id": "transfigured_pig", "type": "sphere", "radius": 0.5, "pos": [0, 0.5, -3], "color": "#e8a8c0" }
+    ]
+  },
+  "history_of_magic_classroom": {
+    "sky": "#8a8a9a",
+    "ground": "#5a5a6a",
+    "bounds": { "width": 8, "height": 4, "depth": 8 },
+    "props": [
+      { "id": "binns_ghost", "type": "sphere", "radius": 0.6, "pos": [0, 1.5, -3], "color": "#cfe8ff", "wireframe": true },
+      { "id": "student_desks", "type": "box", "size": [4, 0.8, 2], "pos": [0, 0.4, 1], "color": "#7a5a3a" }
+    ]
+  },
+  "defense_dark_arts_classroom": {
+    "sky": "#302030",
+    "ground": "#4a3a4a",
+    "bounds": { "width": 8, "height": 4, "depth": 8 },
+    "props": [
+      { "id": "quirrells_desk", "type": "box", "size": [1.6, 0.9, 1], "pos": [0, 0.45, -3], "color": "#3a2a1a" },
+      { "id": "garlic_bunch", "type": "sphere", "radius": 0.3, "pos": [-1.5, 1.2, -3], "color": "#e8e8c0" }
+    ]
+  },
+  "herbology_greenhouse": {
+    "sky": "#bcd8bc",
+    "ground": "#6a5a3a",
+    "bounds": { "width": 8, "height": 5, "depth": 8 },
+    "props": [
+      { "id": "glass_shell", "type": "box", "size": [7, 4, 7], "pos": [0, 2, 0], "color": "#aad4e8", "wireframe": true },
+      { "id": "plant_pot_1", "type": "cylinder", "radius": [0.4, 0.5, 0.6], "pos": [-2, 0.3, -2], "color": "#5c3a1a" },
+      { "id": "plant_1", "type": "sphere", "radius": 0.5, "pos": [-2, 0.9, -2], "color": "#2e8f3c" },
+      { "id": "plant_pot_2", "type": "cylinder", "radius": [0.4, 0.5, 0.6], "pos": [2, 0.3, 2], "color": "#5c3a1a" },
+      { "id": "plant_2", "type": "sphere", "radius": 0.5, "pos": [2, 0.9, 2], "color": "#2e8f3c" }
+    ]
+  },
+  "hospital_wing": {
+    "sky": "#e8f0f8",
+    "ground": "#d8d8d8",
+    "bounds": { "width": 10, "height": 4, "depth": 8 },
+    "props": [
+      { "id": "bed_1", "type": "box", "size": [1, 0.5, 2], "pos": [-3, 0.25, 0], "color": "#ffffff" },
+      { "id": "bed_2", "type": "box", "size": [1, 0.5, 2], "pos": [0, 0.25, 0], "color": "#ffffff" },
+      { "id": "bed_3", "type": "box", "size": [1, 0.5, 2], "pos": [3, 0.25, 0], "color": "#ffffff" }
+    ]
+  },
+  "boathouse_lake": {
+    "sky": "#101830",
+    "ground": "#102040",
+    "bounds": { "width": 20, "height": 6, "depth": 20 },
+    "props": [
+      { "id": "boat_1", "type": "box", "size": [1.2, 0.4, 2.4], "pos": [-3, 0.2, 2], "color": "#5c3a1a" },
+      { "id": "boat_2", "type": "box", "size": [1.2, 0.4, 2.4], "pos": [0, 0.2, 2], "color": "#5c3a1a" },
+      { "id": "castle_silhouette", "type": "box", "size": [4, 6, 2], "pos": [0, 3, -10], "color": "#1a1a2a" }
+    ]
+  },
+  "diagon_alley": {
+    "sky": "#e8dcc0",
+    "ground": "#8a7a5c",
+    "bounds": { "width": 12, "height": 6, "depth": 6 },
+    "props": [
+      { "id": "leaky_cauldron", "type": "box", "size": [2, 3, 2], "pos": [-5, 1.5, 0], "color": "#a05a2c" },
+      { "id": "gringotts_facade", "type": "box", "size": [2, 4, 2], "pos": [0, 2, 0], "color": "#f0f0f0" },
+      { "id": "generic_shop", "type": "box", "size": [2, 2.5, 2], "pos": [5, 1.25, 0], "color": "#c9975c" }
+    ]
+  },
+  "ollivanders": {
+    "sky": "#3a2a2a",
+    "ground": "#2a1a1a",
+    "bounds": { "width": 6, "height": 4, "depth": 6 },
+    "props": [
+      { "id": "shop_shell", "type": "box", "size": [5, 3.5, 5], "pos": [0, 1.75, 0], "color": "#4a3a2a", "wireframe": true },
+      { "id": "wand_boxes_shelf", "type": "box", "size": [4, 2.5, 0.4], "pos": [0, 1.5, -2], "color": "#8a6a3a" }
+    ]
+  },
+  "madam_malkins": {
+    "sky": "#e8d0d8",
+    "ground": "#c0a0a8",
+    "bounds": { "width": 6, "height": 4, "depth": 6 },
+    "props": [
+      { "id": "shop_shell", "type": "box", "size": [5, 3, 5], "pos": [0, 1.5, 0], "color": "#c090a0", "wireframe": true },
+      { "id": "fitting_stool", "type": "cylinder", "radius": [0.3, 0.3, 0.6], "pos": [0, 0.3, 0], "color": "#5c3a1a" }
+    ]
+  },
+  "gringotts": {
+    "sky": "#dcdcdc",
+    "ground": "#f0f0f0",
+    "bounds": { "width": 8, "height": 10, "depth": 8 },
+    "props": [
+      { "id": "bank_facade", "type": "box", "size": [6, 8, 6], "pos": [0, 4, 0], "color": "#ffffff" },
+      { "id": "column_left", "type": "cylinder", "radius": [0.5, 0.5, 6], "pos": [-2, 3, 3.1], "color": "#e0e0e0" },
+      { "id": "column_right", "type": "cylinder", "radius": [0.5, 0.5, 6], "pos": [2, 3, 3.1], "color": "#e0e0e0" },
+      { "id": "vault_713", "type": "box", "size": [1.5, 1.5, 1], "pos": [0, 0.75, -8], "color": "#333333" }
+    ]
+  },
+  "kings_cross": {
+    "sky": "#8899aa",
+    "ground": "#555555",
+    "bounds": { "width": 14, "height": 6, "depth": 10 },
+    "props": [
+      { "id": "platform_roof", "type": "box", "size": [12, 4, 0.3], "pos": [0, 2, -5], "color": "#993333" },
+      { "id": "pillar_left", "type": "cylinder", "radius": [0.15, 0.15, 4], "pos": [-3, 2, -2], "color": "#222222" },
+      { "id": "pillar_right", "type": "cylinder", "radius": [0.15, 0.15, 4], "pos": [3, 2, -2], "color": "#222222" },
+      { "id": "brick_barrier", "type": "box", "size": [0.3, 4, 3], "pos": [0, 2, 0], "color": "#7a2a2a" }
+    ]
+  },
+  "forbidden_forest": {
+    "sky": "#0d1f0d",
+    "ground": "#1a2e1a",
+    "bounds": { "width": 16, "height": 8, "depth": 16 },
+    "props": [
+      { "id": "tree_trunk_1", "type": "cylinder", "radius": [0.3, 0.4, 5], "pos": [-2, 2.5, -2], "color": "#3a2a1a" },
+      { "id": "tree_top_1", "type": "sphere", "radius": 1.5, "pos": [-2, 5.2, -2], "color": "#0f2e0f" },
+      { "id": "tree_trunk_2", "type": "cylinder", "radius": [0.3, 0.4, 6], "pos": [2, 3, 1], "color": "#3a2a1a" },
+      { "id": "tree_top_2", "type": "sphere", "radius": 1.8, "pos": [2, 6.2, 1], "color": "#0f2e0f" },
+      { "id": "tree_trunk_3", "type": "cylinder", "radius": [0.2, 0.3, 4], "pos": [0, 2, -4], "color": "#3a2a1a" },
+      { "id": "tree_top_3", "type": "sphere", "radius": 1.2, "pos": [0, 4.2, -4], "color": "#0f2e0f" },
+      { "id": "unicorn_body", "type": "box", "size": [1.4, 0.8, 0.5], "pos": [0, 0.5, 3], "color": "#f5f5f5" }
+    ]
+  },
+  "hut_on_the_rock": {
+    "sky": "#22334a",
+    "ground": "#334455",
+    "bounds": { "width": 6, "height": 4, "depth": 6 },
+    "props": [
+      { "id": "hut_body", "type": "box", "size": [2.5, 2, 2.5], "pos": [0, 1, 0], "color": "#4a3a2a" },
+      { "id": "hut_roof", "type": "cylinder", "radius": [0, 1.8, 1.2], "pos": [0, 2.6, 0], "color": "#2a1a1a" }
+    ]
+  },
+  "third_floor_corridor": {
+    "sky": "#151020",
+    "ground": "#201828",
+    "bounds": { "width": 8, "height": 5, "depth": 8 },
+    "props": [
+      { "id": "corridor_shell", "type": "box", "size": [7, 4, 7], "pos": [0, 2, 0], "color": "#302040", "wireframe": true },
+      { "id": "trapdoor", "type": "cylinder", "radius": [1, 1, 0.1], "pos": [0, 0.05, 0], "color": "#1a1a1a" },
+      { "id": "fluffy_head_center", "type": "sphere", "radius": 1, "pos": [0, 3, -2], "color": "#3a2a1a" },
+      { "id": "fluffy_head_left", "type": "sphere", "radius": 0.8, "pos": [-1.3, 2.8, -2], "color": "#3a2a1a" },
+      { "id": "fluffy_head_right", "type": "sphere", "radius": 0.8, "pos": [1.3, 2.8, -2], "color": "#3a2a1a" }
+    ]
+  },
+  "flying_keys_chamber": {
+    "sky": "#20304a",
+    "ground": "#101828",
+    "bounds": { "width": 10, "height": 8, "depth": 10 },
+    "props": [
+      { "id": "far_door", "type": "box", "size": [1.2, 2.2, 0.2], "pos": [0, 1.1, -4], "color": "#5c3a1a" },
+      { "id": "key_swarm_center", "type": "sphere", "radius": 0.5, "pos": [0, 4, 0], "color": "#d4af37", "wireframe": true }
+    ]
+  },
+  "chessboard_chamber": {
+    "sky": "#0a0a12",
+    "ground": "#1a1a2a",
+    "bounds": { "width": 12, "height": 6, "depth": 12 },
+    "props": [
+      { "id": "black_king", "type": "box", "size": [0.8, 2, 0.8], "pos": [-4, 1, 4], "color": "#111111" },
+      { "id": "white_king", "type": "box", "size": [0.8, 2, 0.8], "pos": [4, 1, -4], "color": "#eeeeee" },
+      { "id": "board_tile", "type": "box", "size": [10, 0.2, 10], "pos": [0, -0.1, 0], "color": "#888888" }
+    ]
+  },
+  "mirror_of_erised_room": {
+    "sky": "#1a1420",
+    "ground": "#2a2030",
+    "bounds": { "width": 6, "height": 5, "depth": 6 },
+    "props": [
+      { "id": "mirror_frame", "type": "box", "size": [1.8, 3.5, 0.3], "pos": [0, 1.75, -2], "color": "#d4af37" },
+      { "id": "mirror_glass", "type": "box", "size": [1.4, 3.1, 0.05], "pos": [0, 1.75, -1.85], "color": "#88aacc" }
+    ]
+  },
+  "quidditch_pitch": {
+    "sky": "#7ec8e3",
+    "ground": "#3c8f3c",
+    "bounds": { "width": 24, "height": 16, "depth": 34 },
+    "crowd": { "count": 60, "xRange": [-11, 11], "zRange": [-15, 15], "y": 5, "colors": ["#7a2f2f", "#1a5c3a", "#3a3a7a", "#c9a876"] },
+    "props": [
+      { "id": "hoop_pole_left_south", "type": "cylinder", "radius": [0.15, 0.15, 12], "pos": [-6, 6, -12], "color": "#8b5a2b" },
+      { "id": "hoop_ring_left_south", "type": "torus", "radius": [1, 0.1], "pos": [-6, 11, -12], "color": "#c9a876" },
+      { "id": "hoop_pole_center_south", "type": "cylinder", "radius": [0.15, 0.15, 12], "pos": [0, 6, -12], "color": "#8b5a2b" },
+      { "id": "hoop_ring_center_south", "type": "torus", "radius": [1, 0.1], "pos": [0, 12, -12], "color": "#c9a876" },
+      { "id": "hoop_pole_right_south", "type": "cylinder", "radius": [0.15, 0.15, 12], "pos": [6, 6, -12], "color": "#8b5a2b" },
+      { "id": "hoop_ring_right_south", "type": "torus", "radius": [1, 0.1], "pos": [6, 11, -12], "color": "#c9a876" },
+      { "id": "hoop_pole_left_north", "type": "cylinder", "radius": [0.15, 0.15, 12], "pos": [-6, 6, 12], "color": "#8b5a2b" },
+      { "id": "hoop_ring_left_north", "type": "torus", "radius": [1, 0.1], "pos": [-6, 11, 12], "color": "#c9a876" },
+      { "id": "hoop_pole_center_north", "type": "cylinder", "radius": [0.15, 0.15, 12], "pos": [0, 6, 12], "color": "#8b5a2b" },
+      { "id": "hoop_ring_center_north", "type": "torus", "radius": [1, 0.1], "pos": [0, 12, 12], "color": "#c9a876" },
+      { "id": "hoop_pole_right_north", "type": "cylinder", "radius": [0.15, 0.15, 12], "pos": [6, 6, 12], "color": "#8b5a2b" },
+      { "id": "hoop_ring_right_north", "type": "torus", "radius": [1, 0.1], "pos": [6, 11, 12], "color": "#c9a876" },
+      { "id": "stand_west", "type": "box", "size": [2, 6, 30], "pos": [-11, 3, 0], "color": "#7a5a3a" },
+      { "id": "stand_east", "type": "box", "size": [2, 6, 30], "pos": [11, 3, 0], "color": "#7a5a3a" },
+      { "id": "stand_north", "type": "box", "size": [20, 6, 2], "pos": [0, 3, 16], "color": "#7a5a3a" },
+      { "id": "stand_south", "type": "box", "size": [20, 6, 2], "pos": [0, 3, -16], "color": "#7a5a3a" }
+    ]
+  },
+  "hagrids_hut": {
+    "sky": "#a8c8e8",
+    "ground": "#4a7a2c",
+    "bounds": { "width": 8, "height": 5, "depth": 8 },
+    "props": [
+      { "id": "hut_body", "type": "box", "size": [3.5, 2.5, 3.5], "pos": [0, 1.25, 0], "color": "#5c3a1a" },
+      { "id": "hut_roof", "type": "cylinder", "radius": [0, 2.6, 1.6], "pos": [0, 3.3, 0], "color": "#2a1a0a" },
+      { "id": "crossbow", "type": "cylinder", "radius": [0.2, 0.2, 1.5], "pos": [1.5, 3.5, 0], "color": "#3a3a3a" }
+    ]
+  }
+}

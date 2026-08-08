@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Chapter World</title>
+<style>
+  body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: #111;
+    color: #eee;
+  }
+  #controls {
+    padding: 12px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    background: #1a1a1a;
+    border-bottom: 1px solid #333;
+  }
+  #chapterList {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 8px 16px;
+    background: #1a1a1a;
+  }
+  #chapterList button {
+    background: #222;
+    color: #ddd;
+    border: 1px solid #444;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  #chapterList button.active {
+    background: #3a6ea5;
+    border-color: #3a6ea5;
+    color: #fff;
+  }
+  #world {
+    width: 100%;
+    height: 70vh;
+    background: #000;
+  }
+  #meta {
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #aaa;
+  }
+  #sceneNav {
+    padding: 8px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #1a1a1a;
+  }
+  #sceneNav button {
+    background: #222;
+    color: #ddd;
+    border: 1px solid #444;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  #sceneNav button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  #sceneNav span {
+    font-size: 12px;
+    color: #aaa;
+  }
+  #actionTest {
+    padding: 8px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #1a1a1a;
+    border-top: 1px solid #333;
+  }
+  #actionTest select {
+    background: #222;
+    color: #ddd;
+    border: 1px solid #444;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  #actionTest button {
+    background: #3a6ea5;
+    color: #fff;
+    border: none;
+    padding: 5px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  #storyGraph {
+    padding: 10px 16px;
+    background: #15181f;
+    border-top: 1px solid #333;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+  #storyGraph h3 {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: #aaa;
+    font-weight: normal;
+  }
+  .story-node {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    padding: 6px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .story-node:hover {
+    background: #22262f;
+  }
+  .story-node.active {
+    background: #3a6ea5;
+  }
+  .story-node .chip {
+    font-size: 10px;
+    color: #888;
+    min-width: 55px;
+  }
+  .story-node.thread-mystery .chip {
+    color: #c98a3a;
+  }
+</style>
+</head>
+<body>
+
+<div id="controls">
+  <input type="file" id="pdfInput" accept="application/pdf" />
+  <button id="loadBtn">Load Chapters</button>
+  <span id="status"></span>
+</div>
+
+<div id="chapterList"></div>
+<div id="meta"></div>
+<div id="sceneNav">
+  <button id="prevSceneBtn">&larr; Prev</button>
+  <span id="sceneStatus"></span>
+  <button id="nextSceneBtn">Next &rarr;</button>
+</div>
+<div id="world"></div>
+<div id="actionTest">
+  <label>Character: <select id="actionCharacter"></select></label>
+  <label>Action: <select id="actionName"></select></label>
+  <button id="playActionBtn">Play Action</button>
+</div>
+<div id="storyGraph">
+  <h3>Story Graph — key events only (click to jump &amp; play dialogue + actions)</h3>
+  <div id="storyNav" style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
+    <button id="prevStoryBtn">&larr; Prev Event</button>
+    <span id="storyNavLabel" style="font-size:12px;color:#aaa;"></span>
+    <button id="nextStoryBtn">Next Event &rarr;</button>
+  </div>
+  <div id="storyGraphList"></div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+<script src="/assets/locations/scene-builder.js"></script>
+<script type="module">
+import * as THREE from "three";
+
+let chapters = [];
+let locationConfig = {};
+let entityDefs = {};
+let actionsFlat = {};
+let currentScene = null;
+let currentChapterIndex = 0;
+let currentSceneIndex = 0;
+
+const pdfInput = document.getElementById("pdfInput");
+const loadBtn = document.getElementById("loadBtn");
+const statusEl = document.getElementById("status");
+const chapterListEl = document.getElementById("chapterList");
+const worldEl = document.getElementById("world");
+const metaEl = document.getElementById("meta");
+const sceneStatusEl = document.getElementById("sceneStatus");
+const prevSceneBtn = document.getElementById("prevSceneBtn");
+const nextSceneBtn = document.getElementById("nextSceneBtn");
+const actionCharacterEl = document.getElementById("actionCharacter");
+const actionNameEl = document.getElementById("actionName");
+const playActionBtn = document.getElementById("playActionBtn");
+
+let storyGraph = { nodes: [] };
+let storyNodesById = {};
+let storyHistory = [];
+let currentStoryNode = null;
+let storyTimeouts = [];
+const storyGraphListEl = document.getElementById("storyGraphList");
+const prevStoryBtn = document.getElementById("prevStoryBtn");
+const nextStoryBtn = document.getElementById("nextStoryBtn");
+const storyNavLabelEl = document.getElementById("storyNavLabel");
+
+async function loadLocationConfig() {
+  const [locRes, entRes, actRes, storyRes] = await Promise.all([
+    fetch("/assets/locations/config.json"),
+    fetch("/assets/locations/entities.json"),
+    fetch("/assets/locations/actions.json"),
+    fetch("/assets/locations/story_graph.json"),
+  ]);
+  locationConfig = await locRes.json();
+  entityDefs = await entRes.json();
+  const actionsByCategory = await actRes.json();
+  actionsFlat = {};
+  Object.values(actionsByCategory).forEach((category) => {
+    Object.assign(actionsFlat, category);
+  });
+
+  actionNameEl.innerHTML = "";
+  Object.keys(actionsFlat).sort().forEach((name) => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    actionNameEl.appendChild(opt);
+  });
+
+  storyGraph = await storyRes.json();
+  storyNodesById = {};
+  storyGraph.nodes.forEach((n) => { storyNodesById[n.id] = n; });
+  renderStoryGraph();
+}
+
+function renderStoryGraph() {
+  storyGraphListEl.innerHTML = "";
+  storyGraph.nodes.forEach((node) => {
+    const row = document.createElement("div");
+    row.className = `story-node thread-${node.thread}`;
+    row.dataset.nodeId = node.id;
+    row.innerHTML = `<span class="chip">ch.${node.chapter} · ${node.thread}</span><span>${node.summary}</span>`;
+    row.addEventListener("click", () => {
+      storyHistory = [];
+      goToStoryNode(node);
+    });
+    storyGraphListEl.appendChild(row);
+  });
+}
+
+function markActiveStoryRow(nodeId) {
+  [...storyGraphListEl.children].forEach((r) => {
+    r.classList.toggle("active", r.dataset.nodeId === nodeId);
+  });
+}
+
+function clearStoryTimeouts() {
+  storyTimeouts.forEach((t) => clearTimeout(t));
+  storyTimeouts = [];
+}
+
+function goToStoryNode(node) {
+  currentStoryNode = node;
+  markActiveStoryRow(node.id);
+  playStoryNode(node);
+  storyNavLabelEl.textContent = `ch.${node.chapter} — ${node.thread}`;
+  prevStoryBtn.disabled = storyHistory.length === 0;
+  nextStoryBtn.disabled = !(node.next && node.next.length);
+}
+
+function playStoryNode(node) {
+  clearStoryTimeouts();
+  const config = locationConfig[node.location];
+  if (!config) {
+    metaEl.textContent = `Story event: ${node.summary} — no scene data for ${node.location}`;
+    return;
+  }
+  metaEl.textContent = `Story event (ch. ${node.chapter}): ${node.summary}`;
+  sceneStatusEl.textContent = "";
+  const entities = { characters: node.characters || [], objects: [] };
+  currentScene = buildLocationScene(THREE, worldEl, config, entities, entityDefs);
+  refreshActionCharacterOptions();
+
+  // Dialogue and actions run on their own schedules but share the same
+  // scene, so as the chapter "plays" the characters act and speak together.
+  (node.dialogue || []).forEach((line, i) => {
+    storyTimeouts.push(setTimeout(() => {
+      showSpeech(currentScene.scene, line.character, line.line, 3000);
+    }, i * 2600));
+  });
+
+  (node.actions || []).forEach((step) => {
+    const actionDef = actionsFlat[step.action];
+    if (!actionDef || !actionDef.animation) return;
+    storyTimeouts.push(setTimeout(() => {
+      playAction(currentScene.scene, {
+        character: step.character,
+        clip: actionDef.animation.clip,
+        duration_ms: actionDef.animation.duration_ms,
+        loop: actionDef.animation.loop,
+      });
+    }, step.at_ms));
+  });
+}
+
+prevStoryBtn.addEventListener("click", () => {
+  if (!storyHistory.length) return;
+  const prevId = storyHistory.pop();
+  goToStoryNode(storyNodesById[prevId]);
+});
+
+nextStoryBtn.addEventListener("click", () => {
+  if (!currentStoryNode || !currentStoryNode.next || !currentStoryNode.next.length) return;
+  storyHistory.push(currentStoryNode.id);
+  goToStoryNode(storyNodesById[currentStoryNode.next[0]]);
+});
+
+function refreshActionCharacterOptions() {
+  actionCharacterEl.innerHTML = "";
+  const entities = currentScene && currentScene.scene && currentScene.scene.userData.entities;
+  if (!entities) return;
+  Object.keys(entities).forEach((id) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = id;
+    actionCharacterEl.appendChild(opt);
+  });
+}
+
+playActionBtn.addEventListener("click", () => {
+  if (!currentScene) return;
+  const character = actionCharacterEl.value;
+  const actionDef = actionsFlat[actionNameEl.value];
+  if (!character || !actionDef || !actionDef.animation) return;
+  playAction(currentScene.scene, {
+    character,
+    clip: actionDef.animation.clip,
+    duration_ms: actionDef.animation.duration_ms,
+    loop: actionDef.animation.loop,
+  });
+});
+
+loadBtn.addEventListener("click", async () => {
+  const file = pdfInput.files[0];
+  if (!file) {
+    statusEl.textContent = "Choose a PDF first.";
+    return;
+  }
+  statusEl.textContent = "Extracting chapters...";
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    if (!Object.keys(locationConfig).length) await loadLocationConfig();
+    const res = await fetch("/extract-chapters", { method: "POST", body: formData });
+    if (!res.ok) throw new Error(await res.text());
+    chapters = await res.json();
+    statusEl.textContent = `Loaded ${chapters.length} chapters.`;
+    renderChapterList();
+    if (chapters.length) renderWorld(0);
+  } catch (err) {
+    statusEl.textContent = "Error: " + err.message;
+  }
+});
+
+function renderChapterList() {
+  chapterListEl.innerHTML = "";
+  chapters.forEach((ch, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = ch.title || `Chapter ${i + 1}`;
+    btn.addEventListener("click", () => {
+      renderWorld(i);
+      [...chapterListEl.children].forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+    chapterListEl.appendChild(btn);
+  });
+  if (chapterListEl.firstChild) chapterListEl.firstChild.classList.add("active");
+}
+
+function renderWorld(chapterIndex) {
+  currentChapterIndex = chapterIndex;
+  currentSceneIndex = 0;
+  renderScene();
+}
+
+function renderScene() {
+  const chapter = chapters[currentChapterIndex];
+  const scenes = chapter.scenes || [];
+
+  if (!scenes.length) {
+    metaEl.textContent = `${chapter.title} — no recognized location`;
+    sceneStatusEl.textContent = "";
+    prevSceneBtn.disabled = true;
+    nextSceneBtn.disabled = true;
+    worldEl.innerHTML = "";
+    return;
+  }
+
+  const scene = scenes[currentSceneIndex];
+  const config = locationConfig[scene.location];
+
+  if (!config) {
+    metaEl.textContent = `${chapter.title} — unknown location: ${scene.location}`;
+    worldEl.innerHTML = "";
+  } else {
+    metaEl.textContent = `${chapter.title} — location: ${scene.location.replace(/_/g, " ")}`;
+    currentScene = buildLocationScene(THREE, worldEl, config, scene.entities, entityDefs);
+    refreshActionCharacterOptions();
+  }
+
+  sceneStatusEl.textContent = `Scene ${currentSceneIndex + 1} of ${scenes.length}`;
+  prevSceneBtn.disabled = currentSceneIndex === 0;
+  nextSceneBtn.disabled = currentSceneIndex === scenes.length - 1;
+}
+
+prevSceneBtn.addEventListener("click", () => {
+  if (currentSceneIndex > 0) {
+    currentSceneIndex -= 1;
+    renderScene();
+  }
+});
+
+nextSceneBtn.addEventListener("click", () => {
+  const scenes = chapters[currentChapterIndex].scenes || [];
+  if (currentSceneIndex < scenes.length - 1) {
+    currentSceneIndex += 1;
+    renderScene();
+  }
+});
+</script>
+
+</body>
+</html>

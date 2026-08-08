@@ -1,0 +1,1316 @@
+{
+  "privet_drive": {
+    "bounds": {
+      "width": 28,
+      "height": 5,
+      "depth": 14
+    },
+    "points": [
+      {
+        "id": "house_body",
+        "type": "box",
+        "pos": [
+          0,
+          1.25,
+          0
+        ]
+      },
+      {
+        "id": "roof",
+        "type": "box",
+        "pos": [
+          0,
+          3.2,
+          0
+        ]
+      },
+      {
+        "id": "front_door",
+        "type": "box",
+        "pos": [
+          0,
+          0.6,
+          1.51
+        ]
+      },
+      {
+        "id": "mail_slot",
+        "type": "box",
+        "pos": [
+          0,
+          0.5,
+          1.53
+        ]
+      },
+      {
+        "id": "cupboard_under_stairs",
+        "type": "box",
+        "pos": [
+          -0.5,
+          0.25,
+          0.5
+        ]
+      },
+      {
+        "id": "second_bedroom_window",
+        "type": "box",
+        "pos": [
+          1,
+          2,
+          1.53
+        ]
+      },
+      {
+        "id": "garage_car",
+        "type": "box",
+        "pos": [
+          -3.5,
+          0.35,
+          2
+        ]
+      },
+      {
+        "id": "car_wheel_1",
+        "type": "cylinder",
+        "pos": [
+          -3.5,
+          0.3,
+          3.2
+        ]
+      },
+      {
+        "id": "car_wheel_2",
+        "type": "cylinder",
+        "pos": [
+          -3.5,
+          0.3,
+          0.8
+        ]
+      },
+      {
+        "id": "garden_tree_trunk",
+        "type": "cylinder",
+        "pos": [
+          3,
+          1.5,
+          2
+        ]
+      },
+      {
+        "id": "garden_tree_top",
+        "type": "sphere",
+        "pos": [
+          3,
+          3.2,
+          2
+        ]
+      },
+      {
+        "id": "garden_wall",
+        "type": "box",
+        "pos": [
+          3.5,
+          0.25,
+          3.5
+        ]
+      },
+      {
+        "id": "front_fence_left",
+        "type": "box",
+        "pos": [
+          -6,
+          0.35,
+          0
+        ]
+      },
+      {
+        "id": "front_fence_right",
+        "type": "box",
+        "pos": [
+          6,
+          0.35,
+          0
+        ]
+      },
+      {
+        "id": "street_road",
+        "type": "box",
+        "pos": [
+          0,
+          -0.05,
+          6
+        ]
+      },
+      {
+        "id": "street_lamp_pole",
+        "type": "cylinder",
+        "pos": [
+          -8,
+          1.5,
+          5
+        ]
+      },
+      {
+        "id": "street_lamp_head",
+        "type": "sphere",
+        "pos": [
+          -8,
+          3,
+          5
+        ]
+      },
+      {
+        "id": "neighbor_house_left",
+        "type": "box",
+        "pos": [
+          -9,
+          1.1,
+          -1
+        ]
+      },
+      {
+        "id": "neighbor_house_left_roof",
+        "type": "box",
+        "pos": [
+          -9,
+          2.7,
+          -1
+        ]
+      },
+      {
+        "id": "neighbor_house_right",
+        "type": "box",
+        "pos": [
+          9,
+          1.1,
+          -1
+        ]
+      },
+      {
+        "id": "neighbor_house_right_roof",
+        "type": "box",
+        "pos": [
+          9,
+          2.7,
+          -1
+        ]
+      }
+    ]
+  },
+  "mrs_figgs_house": {
+    "bounds": {
+      "width": 8,
+      "height": 4,
+      "depth": 8
+    },
+    "points": [
+      {
+        "id": "house_body",
+        "type": "box",
+        "pos": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "roof",
+        "type": "box",
+        "pos": [
+          0,
+          2.5,
+          0
+        ]
+      },
+      {
+        "id": "cat_1",
+        "type": "sphere",
+        "pos": [
+          1.5,
+          0.25,
+          1
+        ]
+      },
+      {
+        "id": "cat_2",
+        "type": "sphere",
+        "pos": [
+          -1.5,
+          0.25,
+          -1
+        ]
+      }
+    ]
+  },
+  "zoo_reptile_house": {
+    "bounds": {
+      "width": 10,
+      "height": 4,
+      "depth": 6
+    },
+    "points": [
+      {
+        "id": "building_wall",
+        "type": "box",
+        "pos": [
+          0,
+          1.5,
+          -2
+        ]
+      },
+      {
+        "id": "snake_tank",
+        "type": "box",
+        "pos": [
+          0,
+          0.7,
+          0
+        ]
+      },
+      {
+        "id": "boa_constrictor",
+        "type": "cylinder",
+        "pos": [
+          0,
+          0.4,
+          0
+        ]
+      }
+    ]
+  },
+  "hogwarts_great_hall": {
+    "bounds": {
+      "width": 12,
+      "height": 8,
+      "depth": 22
+    },
+    "points": [
+      {
+        "id": "hall_shell",
+        "type": "box",
+        "pos": [
+          0,
+          3,
+          0
+        ]
+      },
+      {
+        "id": "pillar_nw",
+        "type": "box",
+        "pos": [
+          -4,
+          2,
+          -8
+        ]
+      },
+      {
+        "id": "pillar_ne",
+        "type": "box",
+        "pos": [
+          4,
+          2,
+          -8
+        ]
+      },
+      {
+        "id": "pillar_sw",
+        "type": "box",
+        "pos": [
+          -4,
+          2,
+          8
+        ]
+      },
+      {
+        "id": "pillar_se",
+        "type": "box",
+        "pos": [
+          4,
+          2,
+          8
+        ]
+      },
+      {
+        "id": "high_table",
+        "type": "box",
+        "pos": [
+          0,
+          0.4,
+          -9
+        ]
+      },
+      {
+        "id": "house_table_gryffindor",
+        "type": "box",
+        "pos": [
+          -3,
+          0.4,
+          0
+        ]
+      }
+    ]
+  },
+  "gryffindor_common_room": {
+    "bounds": {
+      "width": 9,
+      "height": 5,
+      "depth": 9
+    },
+    "points": [
+      {
+        "id": "tower_wall",
+        "type": "cylinder",
+        "pos": [
+          0,
+          2,
+          0
+        ]
+      },
+      {
+        "id": "armchair_1",
+        "type": "box",
+        "pos": [
+          2,
+          0.5,
+          2
+        ]
+      },
+      {
+        "id": "armchair_2",
+        "type": "box",
+        "pos": [
+          -2,
+          0.5,
+          -2
+        ]
+      },
+      {
+        "id": "fireplace",
+        "type": "cylinder",
+        "pos": [
+          0,
+          0.75,
+          -3
+        ]
+      },
+      {
+        "id": "fat_lady_portrait",
+        "type": "box",
+        "pos": [
+          0,
+          1.2,
+          3.9
+        ]
+      }
+    ]
+  },
+  "dungeon_potions": {
+    "bounds": {
+      "width": 8,
+      "height": 4,
+      "depth": 12
+    },
+    "points": [
+      {
+        "id": "dungeon_shell",
+        "type": "box",
+        "pos": [
+          0,
+          1.75,
+          0
+        ]
+      },
+      {
+        "id": "cauldron_1",
+        "type": "cylinder",
+        "pos": [
+          -2,
+          0.9,
+          0
+        ]
+      },
+      {
+        "id": "cauldron_2",
+        "type": "cylinder",
+        "pos": [
+          2,
+          0.9,
+          0
+        ]
+      },
+      {
+        "id": "potion_glow",
+        "type": "sphere",
+        "pos": [
+          -2,
+          1.6,
+          0
+        ]
+      },
+      {
+        "id": "snapes_desk",
+        "type": "box",
+        "pos": [
+          0,
+          0.45,
+          -5
+        ]
+      }
+    ]
+  },
+  "charms_classroom": {
+    "bounds": {
+      "width": 8,
+      "height": 4,
+      "depth": 8
+    },
+    "points": [
+      {
+        "id": "flitwicks_stack",
+        "type": "box",
+        "pos": [
+          -1,
+          0.6,
+          -2
+        ]
+      },
+      {
+        "id": "student_desk_1",
+        "type": "box",
+        "pos": [
+          1,
+          0.4,
+          1
+        ]
+      },
+      {
+        "id": "feather",
+        "type": "sphere",
+        "pos": [
+          1,
+          1.2,
+          1
+        ]
+      }
+    ]
+  },
+  "transfiguration_classroom": {
+    "bounds": {
+      "width": 8,
+      "height": 4,
+      "depth": 8
+    },
+    "points": [
+      {
+        "id": "mcgonagalls_desk",
+        "type": "box",
+        "pos": [
+          0,
+          0.45,
+          -3
+        ]
+      },
+      {
+        "id": "transfigured_pig",
+        "type": "sphere",
+        "pos": [
+          0,
+          0.5,
+          -3
+        ]
+      }
+    ]
+  },
+  "history_of_magic_classroom": {
+    "bounds": {
+      "width": 8,
+      "height": 4,
+      "depth": 8
+    },
+    "points": [
+      {
+        "id": "binns_ghost",
+        "type": "sphere",
+        "pos": [
+          0,
+          1.5,
+          -3
+        ]
+      },
+      {
+        "id": "student_desks",
+        "type": "box",
+        "pos": [
+          0,
+          0.4,
+          1
+        ]
+      }
+    ]
+  },
+  "defense_dark_arts_classroom": {
+    "bounds": {
+      "width": 8,
+      "height": 4,
+      "depth": 8
+    },
+    "points": [
+      {
+        "id": "quirrells_desk",
+        "type": "box",
+        "pos": [
+          0,
+          0.45,
+          -3
+        ]
+      },
+      {
+        "id": "garlic_bunch",
+        "type": "sphere",
+        "pos": [
+          -1.5,
+          1.2,
+          -3
+        ]
+      }
+    ]
+  },
+  "herbology_greenhouse": {
+    "bounds": {
+      "width": 8,
+      "height": 5,
+      "depth": 8
+    },
+    "points": [
+      {
+        "id": "glass_shell",
+        "type": "box",
+        "pos": [
+          0,
+          2,
+          0
+        ]
+      },
+      {
+        "id": "plant_pot_1",
+        "type": "cylinder",
+        "pos": [
+          -2,
+          0.3,
+          -2
+        ]
+      },
+      {
+        "id": "plant_1",
+        "type": "sphere",
+        "pos": [
+          -2,
+          0.9,
+          -2
+        ]
+      },
+      {
+        "id": "plant_pot_2",
+        "type": "cylinder",
+        "pos": [
+          2,
+          0.3,
+          2
+        ]
+      },
+      {
+        "id": "plant_2",
+        "type": "sphere",
+        "pos": [
+          2,
+          0.9,
+          2
+        ]
+      }
+    ]
+  },
+  "hospital_wing": {
+    "bounds": {
+      "width": 10,
+      "height": 4,
+      "depth": 8
+    },
+    "points": [
+      {
+        "id": "bed_1",
+        "type": "box",
+        "pos": [
+          -3,
+          0.25,
+          0
+        ]
+      },
+      {
+        "id": "bed_2",
+        "type": "box",
+        "pos": [
+          0,
+          0.25,
+          0
+        ]
+      },
+      {
+        "id": "bed_3",
+        "type": "box",
+        "pos": [
+          3,
+          0.25,
+          0
+        ]
+      }
+    ]
+  },
+  "boathouse_lake": {
+    "bounds": {
+      "width": 20,
+      "height": 6,
+      "depth": 20
+    },
+    "points": [
+      {
+        "id": "boat_1",
+        "type": "box",
+        "pos": [
+          -3,
+          0.2,
+          2
+        ]
+      },
+      {
+        "id": "boat_2",
+        "type": "box",
+        "pos": [
+          0,
+          0.2,
+          2
+        ]
+      },
+      {
+        "id": "castle_silhouette",
+        "type": "box",
+        "pos": [
+          0,
+          3,
+          -10
+        ]
+      }
+    ]
+  },
+  "diagon_alley": {
+    "bounds": {
+      "width": 12,
+      "height": 6,
+      "depth": 6
+    },
+    "points": [
+      {
+        "id": "leaky_cauldron",
+        "type": "box",
+        "pos": [
+          -5,
+          1.5,
+          0
+        ]
+      },
+      {
+        "id": "gringotts_facade",
+        "type": "box",
+        "pos": [
+          0,
+          2,
+          0
+        ]
+      },
+      {
+        "id": "generic_shop",
+        "type": "box",
+        "pos": [
+          5,
+          1.25,
+          0
+        ]
+      }
+    ]
+  },
+  "ollivanders": {
+    "bounds": {
+      "width": 6,
+      "height": 4,
+      "depth": 6
+    },
+    "points": [
+      {
+        "id": "shop_shell",
+        "type": "box",
+        "pos": [
+          0,
+          1.75,
+          0
+        ]
+      },
+      {
+        "id": "wand_boxes_shelf",
+        "type": "box",
+        "pos": [
+          0,
+          1.5,
+          -2
+        ]
+      }
+    ]
+  },
+  "madam_malkins": {
+    "bounds": {
+      "width": 6,
+      "height": 4,
+      "depth": 6
+    },
+    "points": [
+      {
+        "id": "shop_shell",
+        "type": "box",
+        "pos": [
+          0,
+          1.5,
+          0
+        ]
+      },
+      {
+        "id": "fitting_stool",
+        "type": "cylinder",
+        "pos": [
+          0,
+          0.3,
+          0
+        ]
+      }
+    ]
+  },
+  "gringotts": {
+    "bounds": {
+      "width": 8,
+      "height": 10,
+      "depth": 8
+    },
+    "points": [
+      {
+        "id": "bank_facade",
+        "type": "box",
+        "pos": [
+          0,
+          4,
+          0
+        ]
+      },
+      {
+        "id": "column_left",
+        "type": "cylinder",
+        "pos": [
+          -2,
+          3,
+          3.1
+        ]
+      },
+      {
+        "id": "column_right",
+        "type": "cylinder",
+        "pos": [
+          2,
+          3,
+          3.1
+        ]
+      },
+      {
+        "id": "vault_713",
+        "type": "box",
+        "pos": [
+          0,
+          0.75,
+          -8
+        ]
+      }
+    ]
+  },
+  "kings_cross": {
+    "bounds": {
+      "width": 14,
+      "height": 6,
+      "depth": 10
+    },
+    "points": [
+      {
+        "id": "platform_roof",
+        "type": "box",
+        "pos": [
+          0,
+          2,
+          -5
+        ]
+      },
+      {
+        "id": "pillar_left",
+        "type": "cylinder",
+        "pos": [
+          -3,
+          2,
+          -2
+        ]
+      },
+      {
+        "id": "pillar_right",
+        "type": "cylinder",
+        "pos": [
+          3,
+          2,
+          -2
+        ]
+      },
+      {
+        "id": "brick_barrier",
+        "type": "box",
+        "pos": [
+          0,
+          2,
+          0
+        ]
+      }
+    ]
+  },
+  "forbidden_forest": {
+    "bounds": {
+      "width": 16,
+      "height": 8,
+      "depth": 16
+    },
+    "points": [
+      {
+        "id": "tree_trunk_1",
+        "type": "cylinder",
+        "pos": [
+          -2,
+          2.5,
+          -2
+        ]
+      },
+      {
+        "id": "tree_top_1",
+        "type": "sphere",
+        "pos": [
+          -2,
+          5.2,
+          -2
+        ]
+      },
+      {
+        "id": "tree_trunk_2",
+        "type": "cylinder",
+        "pos": [
+          2,
+          3,
+          1
+        ]
+      },
+      {
+        "id": "tree_top_2",
+        "type": "sphere",
+        "pos": [
+          2,
+          6.2,
+          1
+        ]
+      },
+      {
+        "id": "tree_trunk_3",
+        "type": "cylinder",
+        "pos": [
+          0,
+          2,
+          -4
+        ]
+      },
+      {
+        "id": "tree_top_3",
+        "type": "sphere",
+        "pos": [
+          0,
+          4.2,
+          -4
+        ]
+      },
+      {
+        "id": "unicorn_body",
+        "type": "box",
+        "pos": [
+          0,
+          0.5,
+          3
+        ]
+      }
+    ]
+  },
+  "hut_on_the_rock": {
+    "bounds": {
+      "width": 6,
+      "height": 4,
+      "depth": 6
+    },
+    "points": [
+      {
+        "id": "hut_body",
+        "type": "box",
+        "pos": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "hut_roof",
+        "type": "cylinder",
+        "pos": [
+          0,
+          2.6,
+          0
+        ]
+      }
+    ]
+  },
+  "third_floor_corridor": {
+    "bounds": {
+      "width": 8,
+      "height": 5,
+      "depth": 8
+    },
+    "points": [
+      {
+        "id": "corridor_shell",
+        "type": "box",
+        "pos": [
+          0,
+          2,
+          0
+        ]
+      },
+      {
+        "id": "trapdoor",
+        "type": "cylinder",
+        "pos": [
+          0,
+          0.05,
+          0
+        ]
+      },
+      {
+        "id": "fluffy_head_center",
+        "type": "sphere",
+        "pos": [
+          0,
+          3,
+          -2
+        ]
+      },
+      {
+        "id": "fluffy_head_left",
+        "type": "sphere",
+        "pos": [
+          -1.3,
+          2.8,
+          -2
+        ]
+      },
+      {
+        "id": "fluffy_head_right",
+        "type": "sphere",
+        "pos": [
+          1.3,
+          2.8,
+          -2
+        ]
+      }
+    ]
+  },
+  "flying_keys_chamber": {
+    "bounds": {
+      "width": 10,
+      "height": 8,
+      "depth": 10
+    },
+    "points": [
+      {
+        "id": "far_door",
+        "type": "box",
+        "pos": [
+          0,
+          1.1,
+          -4
+        ]
+      },
+      {
+        "id": "key_swarm_center",
+        "type": "sphere",
+        "pos": [
+          0,
+          4,
+          0
+        ]
+      }
+    ]
+  },
+  "chessboard_chamber": {
+    "bounds": {
+      "width": 12,
+      "height": 6,
+      "depth": 12
+    },
+    "points": [
+      {
+        "id": "black_king",
+        "type": "box",
+        "pos": [
+          -4,
+          1,
+          4
+        ]
+      },
+      {
+        "id": "white_king",
+        "type": "box",
+        "pos": [
+          4,
+          1,
+          -4
+        ]
+      },
+      {
+        "id": "board_tile",
+        "type": "box",
+        "pos": [
+          0,
+          -0.1,
+          0
+        ]
+      }
+    ]
+  },
+  "mirror_of_erised_room": {
+    "bounds": {
+      "width": 6,
+      "height": 5,
+      "depth": 6
+    },
+    "points": [
+      {
+        "id": "mirror_frame",
+        "type": "box",
+        "pos": [
+          0,
+          1.75,
+          -2
+        ]
+      },
+      {
+        "id": "mirror_glass",
+        "type": "box",
+        "pos": [
+          0,
+          1.75,
+          -1.85
+        ]
+      }
+    ]
+  },
+  "quidditch_pitch": {
+    "bounds": {
+      "width": 24,
+      "height": 16,
+      "depth": 34
+    },
+    "points": [
+      {
+        "id": "hoop_pole_left_south",
+        "type": "cylinder",
+        "pos": [
+          -6,
+          6,
+          -12
+        ]
+      },
+      {
+        "id": "hoop_ring_left_south",
+        "type": "torus",
+        "pos": [
+          -6,
+          11,
+          -12
+        ]
+      },
+      {
+        "id": "hoop_pole_center_south",
+        "type": "cylinder",
+        "pos": [
+          0,
+          6,
+          -12
+        ]
+      },
+      {
+        "id": "hoop_ring_center_south",
+        "type": "torus",
+        "pos": [
+          0,
+          12,
+          -12
+        ]
+      },
+      {
+        "id": "hoop_pole_right_south",
+        "type": "cylinder",
+        "pos": [
+          6,
+          6,
+          -12
+        ]
+      },
+      {
+        "id": "hoop_ring_right_south",
+        "type": "torus",
+        "pos": [
+          6,
+          11,
+          -12
+        ]
+      },
+      {
+        "id": "hoop_pole_left_north",
+        "type": "cylinder",
+        "pos": [
+          -6,
+          6,
+          12
+        ]
+      },
+      {
+        "id": "hoop_ring_left_north",
+        "type": "torus",
+        "pos": [
+          -6,
+          11,
+          12
+        ]
+      },
+      {
+        "id": "hoop_pole_center_north",
+        "type": "cylinder",
+        "pos": [
+          0,
+          6,
+          12
+        ]
+      },
+      {
+        "id": "hoop_ring_center_north",
+        "type": "torus",
+        "pos": [
+          0,
+          12,
+          12
+        ]
+      },
+      {
+        "id": "hoop_pole_right_north",
+        "type": "cylinder",
+        "pos": [
+          6,
+          6,
+          12
+        ]
+      },
+      {
+        "id": "hoop_ring_right_north",
+        "type": "torus",
+        "pos": [
+          6,
+          11,
+          12
+        ]
+      },
+      {
+        "id": "stand_west",
+        "type": "box",
+        "pos": [
+          -11,
+          3,
+          0
+        ]
+      },
+      {
+        "id": "stand_east",
+        "type": "box",
+        "pos": [
+          11,
+          3,
+          0
+        ]
+      },
+      {
+        "id": "stand_north",
+        "type": "box",
+        "pos": [
+          0,
+          3,
+          16
+        ]
+      },
+      {
+        "id": "stand_south",
+        "type": "box",
+        "pos": [
+          0,
+          3,
+          -16
+        ]
+      }
+    ]
+  },
+  "hagrids_hut": {
+    "bounds": {
+      "width": 8,
+      "height": 5,
+      "depth": 8
+    },
+    "points": [
+      {
+        "id": "hut_body",
+        "type": "box",
+        "pos": [
+          0,
+          1.25,
+          0
+        ]
+      },
+      {
+        "id": "hut_roof",
+        "type": "cylinder",
+        "pos": [
+          0,
+          3.3,
+          0
+        ]
+      },
+      {
+        "id": "crossbow",
+        "type": "cylinder",
+        "pos": [
+          1.5,
+          3.5,
+          0
+        ]
+      }
+    ]
+  }
+}

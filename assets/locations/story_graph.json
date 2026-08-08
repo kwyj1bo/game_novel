@@ -1,0 +1,3443 @@
+{
+  "nodes": [
+    {
+      "id": "c1_dursleys_ordinary_morning",
+      "chapter": 1,
+      "location": "privet_drive",
+      "thread": "main",
+      "summary": "The Dursleys insist they are perfectly normal, oblivious to the strange people gathering across Britain.",
+      "characters": [
+        "vernon",
+        "petunia"
+      ],
+      "dialogue": [
+        {
+          "character": "vernon",
+          "line": "Perfectly normal people, that's us. Nothing strange going on here."
+        },
+        {
+          "character": "petunia",
+          "line": "I saw that Potter woman's cat again, prowling by the fence."
+        }
+      ],
+      "actions": [
+        {
+          "character": "vernon",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "petunia",
+          "action": "look_at",
+          "at_ms": 1200
+        },
+        {
+          "character": "vernon",
+          "action": "speak",
+          "at_ms": 2200
+        }
+      ],
+      "next": [
+        "c1_owls_and_signs"
+      ]
+    },
+    {
+      "id": "c1_owls_and_signs",
+      "chapter": 1,
+      "location": "privet_drive",
+      "thread": "main",
+      "summary": "Owls fly by daylight and strangely dressed people whisper in the streets; Vernon senses something is wrong.",
+      "characters": [
+        "vernon"
+      ],
+      "dialogue": [
+        {
+          "character": "vernon",
+          "line": "Owls in broad daylight? People in cloaks whispering the name Potter?"
+        },
+        {
+          "character": "vernon",
+          "line": "It can't have anything to do with us."
+        }
+      ],
+      "actions": [
+        {
+          "character": "vernon",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "vernon",
+          "action": "stare",
+          "at_ms": 1500
+        },
+        {
+          "character": "vernon",
+          "action": "frown",
+          "at_ms": 3000
+        }
+      ],
+      "next": [
+        "c1_dumbledore_mcgonagall_meet"
+      ]
+    },
+    {
+      "id": "c1_dumbledore_mcgonagall_meet",
+      "chapter": 1,
+      "location": "privet_drive",
+      "thread": "main",
+      "summary": "Dumbledore meets Professor McGonagall, who has been watching the Dursleys all day as a cat, to discuss Voldemort's sudden fall.",
+      "characters": [
+        "dumbledore",
+        "mcgonagall"
+      ],
+      "dialogue": [
+        {
+          "character": "mcgonagall",
+          "line": "Is it true, Albus? Has he really gone at last?"
+        },
+        {
+          "character": "dumbledore",
+          "line": "It certainly seems so. We have much to be thankful for."
+        },
+        {
+          "character": "mcgonagall",
+          "line": "But why leave Harry with these people? They're nothing like us."
+        }
+      ],
+      "actions": [
+        {
+          "character": "mcgonagall",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "dumbledore",
+          "action": "walk",
+          "at_ms": 800
+        },
+        {
+          "character": "dumbledore",
+          "action": "speak",
+          "at_ms": 2200
+        },
+        {
+          "character": "mcgonagall",
+          "action": "argue",
+          "at_ms": 4000
+        }
+      ],
+      "next": [
+        "c1_hagrid_arrives_with_baby"
+      ]
+    },
+    {
+      "id": "c1_hagrid_arrives_with_baby",
+      "chapter": 1,
+      "location": "privet_drive",
+      "thread": "main",
+      "summary": "Hagrid arrives on a flying motorcycle carrying baby Harry, rescued from the ruins of the Potters' house.",
+      "characters": [
+        "hagrid",
+        "dumbledore",
+        "mcgonagall"
+      ],
+      "dialogue": [
+        {
+          "character": "hagrid",
+          "line": "No problems, sir. House was almost destroyed, but I got him out safe."
+        },
+        {
+          "character": "dumbledore",
+          "line": "Well done, Hagrid. Give him here \u2014 we'd better get this over with."
+        }
+      ],
+      "actions": [
+        {
+          "character": "hagrid",
+          "action": "fly",
+          "at_ms": 0
+        },
+        {
+          "character": "hagrid",
+          "action": "hand_over",
+          "at_ms": 2500
+        },
+        {
+          "character": "dumbledore",
+          "action": "look_at",
+          "at_ms": 3500
+        },
+        {
+          "character": "hagrid",
+          "action": "cry",
+          "at_ms": 5000
+        }
+      ],
+      "next": [
+        "c1_harry_left_on_doorstep"
+      ]
+    },
+    {
+      "id": "c1_harry_left_on_doorstep",
+      "chapter": 1,
+      "location": "privet_drive",
+      "thread": "main",
+      "summary": "Dumbledore leaves baby Harry, with a letter tucked in his blankets, on the Dursleys' doorstep and disappears into the night.",
+      "characters": [
+        "dumbledore",
+        "mcgonagall",
+        "hagrid"
+      ],
+      "dialogue": [
+        {
+          "character": "dumbledore",
+          "line": "Good luck, Harry."
+        },
+        {
+          "character": "hagrid",
+          "line": "I'll be taking Sirius's bike back \u2014 g'night, Professor."
+        }
+      ],
+      "actions": [
+        {
+          "character": "dumbledore",
+          "action": "kneel",
+          "at_ms": 0
+        },
+        {
+          "character": "dumbledore",
+          "action": "drop",
+          "at_ms": 1500
+        },
+        {
+          "character": "dumbledore",
+          "action": "stand",
+          "at_ms": 2500
+        },
+        {
+          "character": "hagrid",
+          "action": "fly",
+          "at_ms": 4000
+        },
+        {
+          "character": "dumbledore",
+          "action": "walk",
+          "at_ms": 5500
+        }
+      ],
+      "next": [
+        "c2_ten_years_later_cupboard"
+      ]
+    },
+    {
+      "id": "c2_ten_years_later_cupboard",
+      "chapter": 2,
+      "location": "privet_drive",
+      "thread": "main",
+      "summary": "Ten years on, Harry is woken in his cupboard under the stairs by Aunt Petunia's shrieking on Dudley's birthday.",
+      "characters": [
+        "harry",
+        "petunia",
+        "dudley"
+      ],
+      "dialogue": [
+        {
+          "character": "petunia",
+          "line": "Up! Get up, now! I want everything perfect for Duddy's birthday."
+        },
+        {
+          "character": "harry",
+          "line": "Nearly."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "wake",
+          "at_ms": 0
+        },
+        {
+          "character": "petunia",
+          "action": "shout",
+          "at_ms": 800
+        },
+        {
+          "character": "harry",
+          "action": "stand",
+          "at_ms": 2000
+        },
+        {
+          "character": "dudley",
+          "action": "laugh",
+          "at_ms": 3200
+        }
+      ],
+      "next": [
+        "c2_dudleys_birthday_chaos"
+      ]
+    },
+    {
+      "id": "c2_dudleys_birthday_chaos",
+      "chapter": 2,
+      "location": "privet_drive",
+      "thread": "main",
+      "summary": "Dudley counts his mountain of presents and throws a tantrum over the total, while Harry cooks breakfast.",
+      "characters": [
+        "harry",
+        "dudley",
+        "vernon",
+        "petunia"
+      ],
+      "dialogue": [
+        {
+          "character": "dudley",
+          "line": "Thirty-six? That's two less than last year!"
+        },
+        {
+          "character": "petunia",
+          "line": "We'll buy you two more presents while we're out today, popkin."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "eat",
+          "at_ms": 0
+        },
+        {
+          "character": "dudley",
+          "action": "shout",
+          "at_ms": 1200
+        },
+        {
+          "character": "petunia",
+          "action": "argue",
+          "at_ms": 2800
+        },
+        {
+          "character": "vernon",
+          "action": "laugh",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c2_zoo_trip_planned"
+      ]
+    },
+    {
+      "id": "c2_zoo_trip_planned",
+      "chapter": 2,
+      "location": "privet_drive",
+      "thread": "main",
+      "summary": "Mrs. Figg has broken her leg and can't take Harry, so the Dursleys reluctantly bring him along to the zoo.",
+      "characters": [
+        "harry",
+        "vernon",
+        "petunia",
+        "dudley"
+      ],
+      "dialogue": [
+        {
+          "character": "petunia",
+          "line": "Bad news, Vernon \u2014 Mrs. Figg's broken her leg. She can't take him."
+        },
+        {
+          "character": "vernon",
+          "line": "I'm warning you, boy \u2014 any funny business and it's the cupboard till Christmas."
+        }
+      ],
+      "actions": [
+        {
+          "character": "petunia",
+          "action": "speak",
+          "at_ms": 0
+        },
+        {
+          "character": "vernon",
+          "action": "glare",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "smile",
+          "at_ms": 3000
+        },
+        {
+          "character": "dudley",
+          "action": "scowl",
+          "at_ms": 4000
+        }
+      ],
+      "next": [
+        "c2_zoo_snake_incident"
+      ]
+    },
+    {
+      "id": "c2_zoo_snake_incident",
+      "chapter": 2,
+      "location": "zoo_reptile_house",
+      "thread": "main",
+      "summary": "Harry has a strange conversation with a boa constrictor, and when Dudley shoves him aside the glass vanishes, letting the snake loose.",
+      "characters": [
+        "harry",
+        "dudley",
+        "vernon"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "I know \u2014 it must be really annoying, everyone drumming on the glass."
+        },
+        {
+          "character": "dudley",
+          "line": "Out of the way, you!"
+        },
+        {
+          "character": "harry",
+          "line": "I didn't do anything \u2014 the glass was just there and then it wasn't!"
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "look_at",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "speak",
+          "at_ms": 1500
+        },
+        {
+          "character": "dudley",
+          "action": "punch",
+          "at_ms": 3000
+        },
+        {
+          "character": "harry",
+          "action": "fall",
+          "at_ms": 3500
+        },
+        {
+          "character": "vernon",
+          "action": "yell",
+          "at_ms": 5000
+        }
+      ],
+      "next": [
+        "c2_punished_after_zoo"
+      ]
+    },
+    {
+      "id": "c2_punished_after_zoo",
+      "chapter": 2,
+      "location": "privet_drive",
+      "thread": "main",
+      "summary": "Uncle Vernon, furious and certain Harry is to blame, locks him in the cupboard without meals.",
+      "characters": [
+        "harry",
+        "vernon"
+      ],
+      "dialogue": [
+        {
+          "character": "vernon",
+          "line": "Go \u2014 cupboard \u2014 stay \u2014 no meals."
+        },
+        {
+          "character": "harry",
+          "line": "I'm not going to do anything, honestly."
+        }
+      ],
+      "actions": [
+        {
+          "character": "vernon",
+          "action": "point",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "walk",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "sit",
+          "at_ms": 3000
+        },
+        {
+          "character": "vernon",
+          "action": "scowl",
+          "at_ms": 3500
+        }
+      ],
+      "next": [
+        "c3_first_letter_arrives"
+      ]
+    },
+    {
+      "id": "c3_first_letter_arrives",
+      "chapter": 3,
+      "location": "privet_drive",
+      "thread": "main",
+      "summary": "A letter addressed precisely to Harry's cupboard arrives; Uncle Vernon snatches it away before Harry can open it.",
+      "characters": [
+        "harry",
+        "vernon"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "That's mine \u2014 give it back!"
+        },
+        {
+          "character": "vernon",
+          "line": "Who'd be writing to you?"
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "grab",
+          "at_ms": 0
+        },
+        {
+          "character": "vernon",
+          "action": "grab",
+          "at_ms": 1200
+        },
+        {
+          "character": "harry",
+          "action": "shout",
+          "at_ms": 2500
+        },
+        {
+          "character": "vernon",
+          "action": "go_pale",
+          "at_ms": 3500
+        }
+      ],
+      "next": [
+        "c3_vernon_burns_letters"
+      ]
+    },
+    {
+      "id": "c3_vernon_burns_letters",
+      "chapter": 3,
+      "location": "privet_drive",
+      "thread": "main",
+      "summary": "Vernon boards up the mail slot and burns every letter that arrives, insisting the family will simply ignore them.",
+      "characters": [
+        "harry",
+        "vernon",
+        "petunia"
+      ],
+      "dialogue": [
+        {
+          "character": "vernon",
+          "line": "If they don't get an answer, they'll just give up."
+        },
+        {
+          "character": "petunia",
+          "line": "I'm not sure that'll work, Vernon."
+        }
+      ],
+      "actions": [
+        {
+          "character": "vernon",
+          "action": "knock",
+          "at_ms": 0
+        },
+        {
+          "character": "vernon",
+          "action": "argue",
+          "at_ms": 2000
+        },
+        {
+          "character": "petunia",
+          "action": "frown",
+          "at_ms": 3500
+        },
+        {
+          "character": "harry",
+          "action": "watch",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c3_letters_flood_the_house"
+      ]
+    },
+    {
+      "id": "c3_letters_flood_the_house",
+      "chapter": 3,
+      "location": "privet_drive",
+      "thread": "main",
+      "summary": "Dozens of letters pour down the chimney like bullets; a terrified Vernon declares the family is going away.",
+      "characters": [
+        "harry",
+        "vernon",
+        "petunia",
+        "dudley"
+      ],
+      "dialogue": [
+        {
+          "character": "vernon",
+          "line": "That does it \u2014 pack some clothes, we're leaving, no arguments!"
+        },
+        {
+          "character": "dudley",
+          "line": "Daddy's gone mad, hasn't he?"
+        }
+      ],
+      "actions": [
+        {
+          "character": "vernon",
+          "action": "shout",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "jump",
+          "at_ms": 1500
+        },
+        {
+          "character": "dudley",
+          "action": "gasp",
+          "at_ms": 3000
+        },
+        {
+          "character": "vernon",
+          "action": "run",
+          "at_ms": 4000
+        }
+      ],
+      "next": [
+        "c3_flee_to_hut_on_rock"
+      ]
+    },
+    {
+      "id": "c3_flee_to_hut_on_rock",
+      "chapter": 3,
+      "location": "hut_on_the_rock",
+      "thread": "main",
+      "summary": "After days of driving in circles, Vernon rows the family out to a miserable shack on a sea rock, sure no letter can follow them there.",
+      "characters": [
+        "harry",
+        "vernon",
+        "petunia",
+        "dudley"
+      ],
+      "dialogue": [
+        {
+          "character": "vernon",
+          "line": "Found the perfect place! Storm forecast for tonight \u2014 no post reaches us here."
+        },
+        {
+          "character": "harry",
+          "line": "Tomorrow's my birthday."
+        }
+      ],
+      "actions": [
+        {
+          "character": "vernon",
+          "action": "point",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "sit",
+          "at_ms": 2000
+        },
+        {
+          "character": "harry",
+          "action": "shiver",
+          "at_ms": 4000
+        },
+        {
+          "character": "dudley",
+          "action": "sleep",
+          "at_ms": 5500
+        }
+      ],
+      "next": [
+        "c4_hagrid_breaks_door"
+      ]
+    },
+    {
+      "id": "c4_hagrid_breaks_door",
+      "chapter": 4,
+      "location": "hut_on_the_rock",
+      "thread": "main",
+      "summary": "At midnight on Harry's birthday, Hagrid smashes down the door, brushing off Vernon's rifle and demanding tea.",
+      "characters": [
+        "harry",
+        "hagrid",
+        "vernon"
+      ],
+      "dialogue": [
+        {
+          "character": "vernon",
+          "line": "I warn you \u2014 I'm armed!"
+        },
+        {
+          "character": "hagrid",
+          "line": "Couldn't make us a cup o' tea, could yeh? Not been an easy journey."
+        },
+        {
+          "character": "hagrid",
+          "line": "Yeh look a lot like yer dad, but yeh've got yer mum's eyes."
+        }
+      ],
+      "actions": [
+        {
+          "character": "hagrid",
+          "action": "knock",
+          "at_ms": 0
+        },
+        {
+          "character": "hagrid",
+          "action": "walk",
+          "at_ms": 1200
+        },
+        {
+          "character": "vernon",
+          "action": "shout",
+          "at_ms": 2000
+        },
+        {
+          "character": "hagrid",
+          "action": "grab",
+          "at_ms": 3000
+        },
+        {
+          "character": "harry",
+          "action": "gasp",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c4_hagrid_reveals_wizard_world"
+      ]
+    },
+    {
+      "id": "c4_hagrid_reveals_wizard_world",
+      "chapter": 4,
+      "location": "hut_on_the_rock",
+      "thread": "main",
+      "summary": "Hagrid announces that Harry is a wizard accepted to Hogwarts, over Vernon's furious objections.",
+      "characters": [
+        "harry",
+        "hagrid",
+        "vernon"
+      ],
+      "dialogue": [
+        {
+          "character": "hagrid",
+          "line": "Harry \u2014 yer a wizard."
+        },
+        {
+          "character": "vernon",
+          "line": "He's not going, and that's final!"
+        },
+        {
+          "character": "hagrid",
+          "line": "A great Muggle like you won't stop Lily and James's son going to Hogwarts."
+        }
+      ],
+      "actions": [
+        {
+          "character": "hagrid",
+          "action": "speak",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "gasp",
+          "at_ms": 1800
+        },
+        {
+          "character": "vernon",
+          "action": "yell",
+          "at_ms": 3200
+        },
+        {
+          "character": "hagrid",
+          "action": "glare",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c4_hagrid_tells_voldemort_history"
+      ]
+    },
+    {
+      "id": "c4_hagrid_tells_voldemort_history",
+      "chapter": 4,
+      "location": "hut_on_the_rock",
+      "thread": "main",
+      "summary": "Hagrid tells Harry the truth about his parents' murder and how he alone survived Voldemort's curse as a baby.",
+      "characters": [
+        "harry",
+        "hagrid"
+      ],
+      "dialogue": [
+        {
+          "character": "hagrid",
+          "line": "Yer mum and dad didn't die in a car crash \u2014 they were killed."
+        },
+        {
+          "character": "harry",
+          "line": "But why? What happened?"
+        },
+        {
+          "character": "hagrid",
+          "line": "No one knows why you survived, Harry. But that's why yer famous."
+        }
+      ],
+      "actions": [
+        {
+          "character": "hagrid",
+          "action": "sit",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "go_pale",
+          "at_ms": 1500
+        },
+        {
+          "character": "hagrid",
+          "action": "cry",
+          "at_ms": 3000
+        },
+        {
+          "character": "harry",
+          "action": "ask",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c4_harry_reads_hogwarts_letter"
+      ]
+    },
+    {
+      "id": "c4_harry_reads_hogwarts_letter",
+      "chapter": 4,
+      "location": "hut_on_the_rock",
+      "thread": "main",
+      "summary": "Harry finally reads his acceptance letter by firelight while Hagrid mends a torn Ministry note with an owl.",
+      "characters": [
+        "harry",
+        "hagrid"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "We are pleased to inform you that you have been accepted at Hogwarts."
+        },
+        {
+          "character": "hagrid",
+          "line": "Course yeh are. Best be off tomorrow \u2014 lots ter buy in London."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "grab",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "look_at",
+          "at_ms": 1500
+        },
+        {
+          "character": "hagrid",
+          "action": "write",
+          "at_ms": 3000
+        },
+        {
+          "character": "hagrid",
+          "action": "wave",
+          "at_ms": 5000
+        }
+      ],
+      "next": [
+        "c5_gringotts_vault_visit"
+      ]
+    },
+    {
+      "id": "c5_gringotts_vault_visit",
+      "chapter": 5,
+      "location": "gringotts",
+      "thread": "main",
+      "summary": "Hagrid takes Harry to Gringotts, where Harry discovers his parents left him a small fortune, and Hagrid secretly empties a mysterious vault.",
+      "characters": [
+        "harry",
+        "hagrid"
+      ],
+      "dialogue": [
+        {
+          "character": "hagrid",
+          "line": "Yeh didn't think yer parents left yeh nothing, did yeh?"
+        },
+        {
+          "character": "harry",
+          "line": "Wizards have banks?"
+        }
+      ],
+      "actions": [
+        {
+          "character": "hagrid",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "gasp",
+          "at_ms": 2000
+        },
+        {
+          "character": "hagrid",
+          "action": "grab",
+          "at_ms": 3500
+        },
+        {
+          "character": "hagrid",
+          "action": "hide",
+          "at_ms": 5000
+        }
+      ],
+      "next": [
+        "c5_diagon_alley_shopping"
+      ]
+    },
+    {
+      "id": "c5_diagon_alley_shopping",
+      "chapter": 5,
+      "location": "diagon_alley",
+      "thread": "main",
+      "summary": "Harry wanders wide-eyed through Diagon Alley buying his school supplies and learns just how famous his name is.",
+      "characters": [
+        "harry",
+        "hagrid"
+      ],
+      "dialogue": [
+        {
+          "character": "hagrid",
+          "line": "Everyone in our world knows your name, Harry."
+        },
+        {
+          "character": "harry",
+          "line": "I don't understand why anyone would know who I am."
+        }
+      ],
+      "actions": [
+        {
+          "character": "hagrid",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "walk",
+          "at_ms": 300
+        },
+        {
+          "character": "harry",
+          "action": "look_at",
+          "at_ms": 2000
+        },
+        {
+          "character": "hagrid",
+          "action": "point",
+          "at_ms": 3500
+        }
+      ],
+      "next": [
+        "c5_madam_malkins_meets_malfoy"
+      ]
+    },
+    {
+      "id": "c5_madam_malkins_meets_malfoy",
+      "chapter": 5,
+      "location": "madam_malkins",
+      "thread": "main",
+      "summary": "While being fitted for robes, Harry meets a pale, arrogant boy who sneers at Hagrid and at Muggle-born wizards.",
+      "characters": [
+        "harry",
+        "malfoy"
+      ],
+      "dialogue": [
+        {
+          "character": "malfoy",
+          "line": "I really don't think they should let the other sort in, do you?"
+        },
+        {
+          "character": "harry",
+          "line": "They were a witch and wizard, if that's what you mean."
+        }
+      ],
+      "actions": [
+        {
+          "character": "malfoy",
+          "action": "stand",
+          "at_ms": 0
+        },
+        {
+          "character": "malfoy",
+          "action": "sneer",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "frown",
+          "at_ms": 3000
+        },
+        {
+          "character": "malfoy",
+          "action": "point",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c5_ollivanders_wand_chooses_harry"
+      ]
+    },
+    {
+      "id": "c5_ollivanders_wand_chooses_harry",
+      "chapter": 5,
+      "location": "ollivanders",
+      "thread": "main",
+      "summary": "After many failed wands, the holly-and-phoenix-feather wand chooses Harry \u2014 its twin gave him his scar.",
+      "characters": [
+        "harry"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "What's curious about it?"
+        },
+        {
+          "character": "harry",
+          "line": "So its brother gave me this scar."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "grab",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "raise_wand",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "cast_spell",
+          "at_ms": 3000
+        },
+        {
+          "character": "harry",
+          "action": "gasp",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c6_kings_cross_platform_confusion"
+      ]
+    },
+    {
+      "id": "c6_kings_cross_platform_confusion",
+      "chapter": 6,
+      "location": "kings_cross",
+      "thread": "main",
+      "summary": "Harry panics when he can't find platform nine and three-quarters among the ordinary Muggle crowds.",
+      "characters": [
+        "harry"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "Platform nine and three-quarters \u2014 but there's nothing between nine and ten."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "run",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "stare",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "freeze",
+          "at_ms": 3000
+        }
+      ],
+      "next": [
+        "c6_meets_weasley_family"
+      ]
+    },
+    {
+      "id": "c6_meets_weasley_family",
+      "chapter": 6,
+      "location": "kings_cross",
+      "thread": "main",
+      "summary": "Mrs. Weasley overhears Harry's trouble and shows him how to run straight at the barrier to reach the platform.",
+      "characters": [
+        "harry",
+        "ron"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "Excuse me \u2014 I don't know how to get onto the platform."
+        },
+        {
+          "character": "ron",
+          "line": "All you have to do is walk straight at it. Best do it at a run if you're nervous."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "ask",
+          "at_ms": 0
+        },
+        {
+          "character": "ron",
+          "action": "point",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "run",
+          "at_ms": 3000
+        },
+        {
+          "character": "harry",
+          "action": "gasp",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c6_train_meets_ron"
+      ]
+    },
+    {
+      "id": "c6_train_meets_ron",
+      "chapter": 6,
+      "location": "kings_cross",
+      "thread": "main",
+      "summary": "On the train, Harry shares a compartment with Ron Weasley and they swap stories about their families.",
+      "characters": [
+        "harry",
+        "ron"
+      ],
+      "dialogue": [
+        {
+          "character": "ron",
+          "line": "Are you really Harry Potter?"
+        },
+        {
+          "character": "harry",
+          "line": "I wish I'd had three wizard brothers instead of the Dursleys."
+        }
+      ],
+      "actions": [
+        {
+          "character": "ron",
+          "action": "sit",
+          "at_ms": 0
+        },
+        {
+          "character": "ron",
+          "action": "ask",
+          "at_ms": 1200
+        },
+        {
+          "character": "harry",
+          "action": "smile",
+          "at_ms": 2800
+        },
+        {
+          "character": "ron",
+          "action": "laugh",
+          "at_ms": 4000
+        }
+      ],
+      "next": [
+        "c6_malfoy_confronts_harry_on_train"
+      ]
+    },
+    {
+      "id": "c6_malfoy_confronts_harry_on_train",
+      "chapter": 6,
+      "location": "kings_cross",
+      "thread": "main",
+      "summary": "Draco Malfoy visits their compartment, insults Ron's family, and Harry refuses his offered friendship.",
+      "characters": [
+        "harry",
+        "ron",
+        "malfoy"
+      ],
+      "dialogue": [
+        {
+          "character": "malfoy",
+          "line": "You'll soon find some wizarding families are better than others, Potter."
+        },
+        {
+          "character": "harry",
+          "line": "I can judge the wrong sort for myself, thanks."
+        },
+        {
+          "character": "ron",
+          "line": "Say that again and I'll fight you."
+        }
+      ],
+      "actions": [
+        {
+          "character": "malfoy",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "malfoy",
+          "action": "sneer",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "glare",
+          "at_ms": 3000
+        },
+        {
+          "character": "ron",
+          "action": "shout",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c6_hermione_searches_for_toad"
+      ]
+    },
+    {
+      "id": "c6_hermione_searches_for_toad",
+      "chapter": 6,
+      "location": "kings_cross",
+      "thread": "main",
+      "summary": "A bossy girl named Hermione Granger barges in looking for a lost toad and lectures them on spellwork.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "hermione",
+          "line": "Has anyone seen a toad? Neville's lost one."
+        },
+        {
+          "character": "hermione",
+          "line": "I've learned all our course books by heart, of course."
+        }
+      ],
+      "actions": [
+        {
+          "character": "hermione",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "hermione",
+          "action": "speak",
+          "at_ms": 1500
+        },
+        {
+          "character": "ron",
+          "action": "frown",
+          "at_ms": 3200
+        },
+        {
+          "character": "harry",
+          "action": "look_at",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c7_entrance_hall_arrival"
+      ]
+    },
+    {
+      "id": "c7_entrance_hall_arrival",
+      "chapter": 7,
+      "location": "hogwarts_great_hall",
+      "thread": "main",
+      "summary": "Hagrid ferries the first years across the lake, and they get their first glimpse of Hogwarts castle lit up at night.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione",
+        "hagrid"
+      ],
+      "dialogue": [
+        {
+          "character": "hagrid",
+          "line": "Ye'll all get yer first sight o' Hogwarts in a sec \u2014 jus' round this bend."
+        },
+        {
+          "character": "harry",
+          "line": "It's incredible."
+        }
+      ],
+      "actions": [
+        {
+          "character": "hagrid",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "stare",
+          "at_ms": 2000
+        },
+        {
+          "character": "hermione",
+          "action": "gasp",
+          "at_ms": 3500
+        },
+        {
+          "character": "ron",
+          "action": "smile",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c7_sorting_ceremony"
+      ]
+    },
+    {
+      "id": "c7_sorting_ceremony",
+      "chapter": 7,
+      "location": "hogwarts_great_hall",
+      "thread": "main",
+      "summary": "The Sorting Hat places Harry in Gryffindor, along with Ron and Hermione, while Malfoy goes to Slytherin.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione",
+        "malfoy",
+        "dumbledore"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "Not Slytherin, not Slytherin."
+        },
+        {
+          "character": "dumbledore",
+          "line": "Welcome to a new year at Hogwarts!"
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "sit",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "freeze",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "stand",
+          "at_ms": 3200
+        },
+        {
+          "character": "ron",
+          "action": "laugh",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c7_start_of_term_feast"
+      ]
+    },
+    {
+      "id": "c7_start_of_term_feast",
+      "chapter": 7,
+      "location": "hogwarts_great_hall",
+      "thread": "main",
+      "summary": "The new Gryffindors enjoy the start-of-term feast and meet the school's resident ghosts.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "ron",
+          "line": "Great food, isn't it?"
+        },
+        {
+          "character": "harry",
+          "line": "I've never seen so much food in my life."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "eat",
+          "at_ms": 0
+        },
+        {
+          "character": "ron",
+          "action": "eat",
+          "at_ms": 1200
+        },
+        {
+          "character": "hermione",
+          "action": "speak",
+          "at_ms": 3000
+        },
+        {
+          "character": "harry",
+          "action": "look_at",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c7_snape_scar_pain_first_sign"
+      ]
+    },
+    {
+      "id": "c7_snape_scar_pain_first_sign",
+      "chapter": 7,
+      "location": "hogwarts_great_hall",
+      "thread": "mystery",
+      "summary": "Harry's scar burns sharply the moment Professor Snape looks his way across the High Table.",
+      "characters": [
+        "harry",
+        "snape",
+        "quirrell"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "Ouch!"
+        },
+        {
+          "character": "harry",
+          "line": "Who's that teacher talking to Professor Quirrell?"
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "wince",
+          "at_ms": 0
+        },
+        {
+          "character": "snape",
+          "action": "stare",
+          "at_ms": 1200
+        },
+        {
+          "character": "harry",
+          "action": "ask",
+          "at_ms": 3000
+        }
+      ],
+      "next": [
+        "c8_first_days_of_classes"
+      ]
+    },
+    {
+      "id": "c8_first_days_of_classes",
+      "chapter": 8,
+      "location": "gryffindor_common_room",
+      "thread": "main",
+      "summary": "Harry and Ron struggle to find their way around Hogwarts's shifting staircases and hidden classrooms.",
+      "characters": [
+        "harry",
+        "ron"
+      ],
+      "dialogue": [
+        {
+          "character": "ron",
+          "line": "There are a hundred and forty-two staircases and none of them stay put."
+        },
+        {
+          "character": "harry",
+          "line": "I'll never learn this place."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "ron",
+          "action": "point",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "look_at",
+          "at_ms": 3000
+        }
+      ],
+      "next": [
+        "c8_snape_first_class_hostility"
+      ]
+    },
+    {
+      "id": "c8_snape_first_class_hostility",
+      "chapter": 8,
+      "location": "dungeon_potions",
+      "thread": "mystery",
+      "summary": "Snape humiliates Harry in his first Potions lesson, singling him out with questions no first year could answer.",
+      "characters": [
+        "harry",
+        "snape"
+      ],
+      "dialogue": [
+        {
+          "character": "snape",
+          "line": "Our new celebrity, Mr. Potter."
+        },
+        {
+          "character": "harry",
+          "line": "I don't know, sir."
+        },
+        {
+          "character": "snape",
+          "line": "Tut, tut \u2014 fame clearly isn't everything."
+        }
+      ],
+      "actions": [
+        {
+          "character": "snape",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "snape",
+          "action": "glare",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "answer",
+          "at_ms": 3500
+        },
+        {
+          "character": "snape",
+          "action": "sneer",
+          "at_ms": 5000
+        }
+      ],
+      "next": [
+        "c8_tea_with_hagrid_snape_suspicion"
+      ]
+    },
+    {
+      "id": "c8_tea_with_hagrid_snape_suspicion",
+      "chapter": 8,
+      "location": "hagrids_hut",
+      "thread": "mystery",
+      "summary": "Over tea, Hagrid lets slip that a three-headed dog and Nicolas Flamel are somehow connected to Snape's bad leg.",
+      "characters": [
+        "harry",
+        "ron",
+        "hagrid"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "Snape seemed to really hate me."
+        },
+        {
+          "character": "hagrid",
+          "line": "Rubbish! Why should he?"
+        },
+        {
+          "character": "ron",
+          "line": "Wonder what's wrong with his leg?"
+        }
+      ],
+      "actions": [
+        {
+          "character": "hagrid",
+          "action": "sit",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "ask",
+          "at_ms": 1500
+        },
+        {
+          "character": "hagrid",
+          "action": "frown",
+          "at_ms": 3200
+        },
+        {
+          "character": "ron",
+          "action": "look_at",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c9_malfoy_challenges_duel"
+      ]
+    },
+    {
+      "id": "c9_malfoy_challenges_duel",
+      "chapter": 9,
+      "location": "hogwarts_great_hall",
+      "thread": "main",
+      "summary": "Malfoy challenges Harry to a midnight wizard's duel in the trophy room, with Ron as Harry's second.",
+      "characters": [
+        "harry",
+        "ron",
+        "malfoy"
+      ],
+      "dialogue": [
+        {
+          "character": "malfoy",
+          "line": "I'd take you on anytime. Tonight, if you want. Wizard's duel."
+        },
+        {
+          "character": "ron",
+          "line": "I'm his second \u2014 who's yours?"
+        }
+      ],
+      "actions": [
+        {
+          "character": "malfoy",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "malfoy",
+          "action": "point",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "glare",
+          "at_ms": 3000
+        },
+        {
+          "character": "ron",
+          "action": "speak",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c9_trophy_room_trap_troll_encounter"
+      ]
+    },
+    {
+      "id": "c9_trophy_room_trap_troll_encounter",
+      "chapter": 9,
+      "location": "hogwarts_great_hall",
+      "thread": "main",
+      "summary": "Malfoy never shows up \u2014 it was a trick to get them caught by Filch \u2014 and fleeing the trio stumbles onto something far worse.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "hermione",
+          "line": "Malfoy tricked you \u2014 he was never going to meet you."
+        },
+        {
+          "character": "ron",
+          "line": "Run!"
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "sneak",
+          "at_ms": 0
+        },
+        {
+          "character": "ron",
+          "action": "run",
+          "at_ms": 1500
+        },
+        {
+          "character": "hermione",
+          "action": "run",
+          "at_ms": 1800
+        },
+        {
+          "character": "harry",
+          "action": "freeze",
+          "at_ms": 4000
+        }
+      ],
+      "next": [
+        "c9_discover_fluffy_three_headed_dog"
+      ]
+    },
+    {
+      "id": "c9_discover_fluffy_three_headed_dog",
+      "chapter": 9,
+      "location": "third_floor_corridor",
+      "thread": "mystery",
+      "summary": "Fleeing Filch, they burst through a forbidden door and come face to face with an enormous three-headed dog standing on a trapdoor.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "hermione",
+          "line": "It was standing on a trapdoor \u2014 it's guarding something."
+        },
+        {
+          "character": "ron",
+          "line": "What do they think they're doing, keeping a thing like that in a school?"
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "freeze",
+          "at_ms": 0
+        },
+        {
+          "character": "ron",
+          "action": "gasp",
+          "at_ms": 1200
+        },
+        {
+          "character": "hermione",
+          "action": "point",
+          "at_ms": 3000
+        },
+        {
+          "character": "harry",
+          "action": "run",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c10_flying_lesson_remembrall_incident"
+      ]
+    },
+    {
+      "id": "c10_flying_lesson_remembrall_incident",
+      "chapter": 10,
+      "location": "quidditch_pitch",
+      "thread": "main",
+      "summary": "During flying lessons Neville is hurt and Malfoy steals his Remembrall, taunting Harry into a reckless chase.",
+      "characters": [
+        "harry",
+        "malfoy",
+        "neville"
+      ],
+      "dialogue": [
+        {
+          "character": "malfoy",
+          "line": "Catch it if you can, then!"
+        },
+        {
+          "character": "harry",
+          "line": "Give it here, Malfoy!"
+        }
+      ],
+      "actions": [
+        {
+          "character": "neville",
+          "action": "fall",
+          "at_ms": 0
+        },
+        {
+          "character": "malfoy",
+          "action": "throw",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "fly",
+          "at_ms": 2500
+        },
+        {
+          "character": "harry",
+          "action": "dive",
+          "at_ms": 4000
+        }
+      ],
+      "next": [
+        "c10_harry_becomes_seeker"
+      ]
+    },
+    {
+      "id": "c10_harry_becomes_seeker",
+      "chapter": 10,
+      "location": "quidditch_pitch",
+      "thread": "main",
+      "summary": "Professor McGonagall, astonished by the catch, makes Harry the youngest Seeker in a century for Gryffindor.",
+      "characters": [
+        "harry",
+        "mcgonagall"
+      ],
+      "dialogue": [
+        {
+          "character": "mcgonagall",
+          "line": "I've never seen anything like it. The boy's a natural."
+        },
+        {
+          "character": "harry",
+          "line": "Seeker? But first years never \u2014 "
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "stand",
+          "at_ms": 0
+        },
+        {
+          "character": "mcgonagall",
+          "action": "speak",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "gasp",
+          "at_ms": 3200
+        },
+        {
+          "character": "harry",
+          "action": "smile",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c10_halloween_troll_announcement"
+      ]
+    },
+    {
+      "id": "c10_halloween_troll_announcement",
+      "chapter": 10,
+      "location": "hogwarts_great_hall",
+      "thread": "main",
+      "summary": "Professor Quirrell bursts into the Halloween feast shouting that a troll has gotten into the dungeons.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione",
+        "quirrell",
+        "dumbledore"
+      ],
+      "dialogue": [
+        {
+          "character": "quirrell",
+          "line": "Troll \u2014 in the dungeons \u2014 thought you ought to know."
+        },
+        {
+          "character": "dumbledore",
+          "line": "Prefects, lead your houses back to the dormitories immediately!"
+        }
+      ],
+      "actions": [
+        {
+          "character": "quirrell",
+          "action": "run",
+          "at_ms": 0
+        },
+        {
+          "character": "quirrell",
+          "action": "collapse",
+          "at_ms": 1500
+        },
+        {
+          "character": "dumbledore",
+          "action": "shout",
+          "at_ms": 3000
+        }
+      ],
+      "next": [
+        "c10_mountain_troll_bathroom_rescue"
+      ]
+    },
+    {
+      "id": "c10_mountain_troll_bathroom_rescue",
+      "chapter": 10,
+      "location": "hogwarts_great_hall",
+      "thread": "main",
+      "summary": "Realizing Hermione doesn't know about the troll, Harry and Ron find her cornered by it in the girls' bathroom.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "ron",
+          "line": "It's the girls' bathroom \u2014 Hermione!"
+        },
+        {
+          "character": "ron",
+          "line": "Wingardium Leviosa!"
+        },
+        {
+          "character": "hermione",
+          "line": "I went looking for the troll myself, Professor \u2014 they saved me."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "run",
+          "at_ms": 0
+        },
+        {
+          "character": "ron",
+          "action": "run",
+          "at_ms": 200
+        },
+        {
+          "character": "hermione",
+          "action": "scream",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "jump",
+          "at_ms": 3000
+        },
+        {
+          "character": "ron",
+          "action": "cast_spell",
+          "at_ms": 4500
+        },
+        {
+          "character": "hermione",
+          "action": "gasp",
+          "at_ms": 6000
+        }
+      ],
+      "next": [
+        "c10_friendship_solidifies"
+      ]
+    },
+    {
+      "id": "c10_friendship_solidifies",
+      "chapter": 10,
+      "location": "gryffindor_common_room",
+      "thread": "main",
+      "summary": "Having faced the troll together, Harry, Ron, and Hermione become close friends for the first time.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "hermione",
+          "line": "Thanks \u2014 you two really saved me back there."
+        },
+        {
+          "character": "ron",
+          "line": "Anytime."
+        }
+      ],
+      "actions": [
+        {
+          "character": "hermione",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "hermione",
+          "action": "smile",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "smile",
+          "at_ms": 2500
+        },
+        {
+          "character": "ron",
+          "action": "laugh",
+          "at_ms": 3500
+        }
+      ],
+      "next": [
+        "c11_snape_referee_worry"
+      ]
+    },
+    {
+      "id": "c11_snape_referee_worry",
+      "chapter": 11,
+      "location": "gryffindor_common_room",
+      "thread": "mystery",
+      "summary": "The trio panics on learning Snape will referee Harry's next Quidditch match, fearing he'll target him.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "ron",
+          "line": "Snape's refereeing? He'll be looking for any excuse to hurt Gryffindor."
+        },
+        {
+          "character": "hermione",
+          "line": "Don't play, Harry."
+        }
+      ],
+      "actions": [
+        {
+          "character": "ron",
+          "action": "argue",
+          "at_ms": 0
+        },
+        {
+          "character": "hermione",
+          "action": "speak",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "frown",
+          "at_ms": 3000
+        }
+      ],
+      "next": [
+        "c11_quidditch_first_match_broom_jinx"
+      ]
+    },
+    {
+      "id": "c11_quidditch_first_match_broom_jinx",
+      "chapter": 11,
+      "location": "quidditch_pitch",
+      "thread": "mystery",
+      "summary": "Harry's broom bucks wildly mid-match; Hermione spots Snape muttering a curse and sets his robes alight to break it.",
+      "characters": [
+        "harry",
+        "hermione",
+        "snape",
+        "quirrell"
+      ],
+      "dialogue": [
+        {
+          "character": "hermione",
+          "line": "Snape's jinxing the broom \u2014 I have to stop him!"
+        },
+        {
+          "character": "harry",
+          "line": "I've got the Snitch!"
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "fly",
+          "at_ms": 0
+        },
+        {
+          "character": "snape",
+          "action": "mutter",
+          "at_ms": 1500
+        },
+        {
+          "character": "hermione",
+          "action": "sneak",
+          "at_ms": 3000
+        },
+        {
+          "character": "hermione",
+          "action": "cast_spell",
+          "at_ms": 4500
+        },
+        {
+          "character": "harry",
+          "action": "dive",
+          "at_ms": 6000
+        }
+      ],
+      "next": [
+        "c11_hagrid_reveals_fluffy_flamel_hint"
+      ]
+    },
+    {
+      "id": "c11_hagrid_reveals_fluffy_flamel_hint",
+      "chapter": 11,
+      "location": "hagrids_hut",
+      "thread": "mystery",
+      "summary": "Hagrid accidentally confirms the dog is named Fluffy and blurts out the name Nicolas Flamel before catching himself.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione",
+        "hagrid"
+      ],
+      "dialogue": [
+        {
+          "character": "hagrid",
+          "line": "That's between Professor Dumbledore an' Nicolas Flamel \u2014 "
+        },
+        {
+          "character": "harry",
+          "line": "Aha! So there's someone called Nicolas Flamel involved, is there?"
+        }
+      ],
+      "actions": [
+        {
+          "character": "hagrid",
+          "action": "speak",
+          "at_ms": 0
+        },
+        {
+          "character": "hagrid",
+          "action": "go_pale",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "grin",
+          "at_ms": 3000
+        },
+        {
+          "character": "hermione",
+          "action": "gasp",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c12_christmas_gifts_invisibility_cloak",
+        "c13_hermione_finds_flamel"
+      ]
+    },
+    {
+      "id": "c12_christmas_gifts_invisibility_cloak",
+      "chapter": 12,
+      "location": "gryffindor_common_room",
+      "thread": "main",
+      "summary": "On Christmas morning Harry receives an anonymous gift: his late father's invisibility cloak.",
+      "characters": [
+        "harry",
+        "ron"
+      ],
+      "dialogue": [
+        {
+          "character": "ron",
+          "line": "I've heard of those \u2014 they're really rare and really valuable."
+        },
+        {
+          "character": "harry",
+          "line": "It was my father's."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "grab",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "gasp",
+          "at_ms": 1500
+        },
+        {
+          "character": "ron",
+          "action": "look_at",
+          "at_ms": 3000
+        },
+        {
+          "character": "harry",
+          "action": "hide",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c12_mirror_of_erised_discovery"
+      ]
+    },
+    {
+      "id": "c12_mirror_of_erised_discovery",
+      "chapter": 12,
+      "location": "mirror_of_erised_room",
+      "thread": "main",
+      "summary": "Exploring at night under the cloak, Harry finds a strange mirror that shows him his parents alive and smiling.",
+      "characters": [
+        "harry"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "Mom? Dad?"
+        },
+        {
+          "character": "harry",
+          "line": "I'll come back."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "sneak",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "stare",
+          "at_ms": 1800
+        },
+        {
+          "character": "harry",
+          "action": "kneel",
+          "at_ms": 3500
+        },
+        {
+          "character": "harry",
+          "action": "cry",
+          "at_ms": 5000
+        }
+      ],
+      "next": [
+        "c12_dumbledore_explains_mirror"
+      ]
+    },
+    {
+      "id": "c12_dumbledore_explains_mirror",
+      "chapter": 12,
+      "location": "mirror_of_erised_room",
+      "thread": "main",
+      "summary": "Dumbledore finds Harry before the mirror and explains it shows only the deepest desire of the heart, warning him away from it.",
+      "characters": [
+        "harry",
+        "dumbledore"
+      ],
+      "dialogue": [
+        {
+          "character": "dumbledore",
+          "line": "It shows us nothing more or less than the deepest desire of our hearts."
+        },
+        {
+          "character": "dumbledore",
+          "line": "It does not do to dwell on dreams and forget to live."
+        }
+      ],
+      "actions": [
+        {
+          "character": "dumbledore",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "dumbledore",
+          "action": "sit",
+          "at_ms": 1500
+        },
+        {
+          "character": "dumbledore",
+          "action": "speak",
+          "at_ms": 3000
+        },
+        {
+          "character": "harry",
+          "action": "stand",
+          "at_ms": 5500
+        }
+      ],
+      "next": [
+        "c14_hagrid_wins_dragon_egg"
+      ]
+    },
+    {
+      "id": "c13_hermione_finds_flamel",
+      "chapter": 13,
+      "location": "gryffindor_common_room",
+      "thread": "mystery",
+      "summary": "Hermione finally finds Nicolas Flamel's name in an old library book about famous wizards.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "hermione",
+          "line": "I've found him! I've found Flamel!"
+        },
+        {
+          "character": "ron",
+          "line": "Are we allowed to speak yet?"
+        }
+      ],
+      "actions": [
+        {
+          "character": "hermione",
+          "action": "run",
+          "at_ms": 0
+        },
+        {
+          "character": "hermione",
+          "action": "grab",
+          "at_ms": 1200
+        },
+        {
+          "character": "hermione",
+          "action": "speak",
+          "at_ms": 3000
+        },
+        {
+          "character": "harry",
+          "action": "gasp",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c13_discover_sorcerers_stone_purpose"
+      ]
+    },
+    {
+      "id": "c13_discover_sorcerers_stone_purpose",
+      "chapter": 13,
+      "location": "gryffindor_common_room",
+      "thread": "mystery",
+      "summary": "They learn Flamel is the maker of the legendary Sorcerer's Stone, which grants gold and eternal life.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "hermione",
+          "line": "Nicolas Flamel is the only known maker of the Sorcerer's Stone!"
+        },
+        {
+          "character": "ron",
+          "line": "So that's what Fluffy's guarding."
+        }
+      ],
+      "actions": [
+        {
+          "character": "hermione",
+          "action": "point",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "gasp",
+          "at_ms": 1500
+        },
+        {
+          "character": "ron",
+          "action": "speak",
+          "at_ms": 3000
+        }
+      ],
+      "next": [
+        "c13_second_quidditch_win"
+      ]
+    },
+    {
+      "id": "c13_second_quidditch_win",
+      "chapter": 13,
+      "location": "quidditch_pitch",
+      "thread": "main",
+      "summary": "Harry catches another spectacular win for Gryffindor, briefly lifting the mood before winter break.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "ron",
+          "line": "Brilliant catch, Harry!"
+        },
+        {
+          "character": "harry",
+          "line": "Just glad Snape wasn't reffing this one."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "fly",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "dive",
+          "at_ms": 1500
+        },
+        {
+          "character": "ron",
+          "action": "jump",
+          "at_ms": 3200
+        },
+        {
+          "character": "hermione",
+          "action": "laugh",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c14_hagrid_wins_dragon_egg"
+      ]
+    },
+    {
+      "id": "c14_hagrid_wins_dragon_egg",
+      "chapter": 14,
+      "location": "hagrids_hut",
+      "thread": "main",
+      "summary": "Hagrid wins a dragon egg in a card game with a mysterious stranger who asked odd questions about Fluffy.",
+      "characters": [
+        "harry",
+        "ron",
+        "hagrid"
+      ],
+      "dialogue": [
+        {
+          "character": "hagrid",
+          "line": "Won it off a stranger las' night \u2014 never even saw his face."
+        },
+        {
+          "character": "harry",
+          "line": "And did he seem interested in Fluffy?"
+        }
+      ],
+      "actions": [
+        {
+          "character": "hagrid",
+          "action": "sit",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "look_at",
+          "at_ms": 1500
+        },
+        {
+          "character": "hagrid",
+          "action": "speak",
+          "at_ms": 3000
+        },
+        {
+          "character": "ron",
+          "action": "frown",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c14_norbert_hatches"
+      ]
+    },
+    {
+      "id": "c14_norbert_hatches",
+      "chapter": 14,
+      "location": "hagrids_hut",
+      "thread": "main",
+      "summary": "The egg hatches into a baby dragon Hagrid names Norbert, growing dangerously fast in his wooden hut.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione",
+        "hagrid"
+      ],
+      "dialogue": [
+        {
+          "character": "hagrid",
+          "line": "Isn't he beautiful? Bless him, look, he knows his mommy!"
+        },
+        {
+          "character": "hermione",
+          "line": "Hagrid, you live in a wooden house."
+        }
+      ],
+      "actions": [
+        {
+          "character": "hagrid",
+          "action": "cry",
+          "at_ms": 0
+        },
+        {
+          "character": "hermione",
+          "action": "frown",
+          "at_ms": 1500
+        },
+        {
+          "character": "ron",
+          "action": "point",
+          "at_ms": 3000
+        },
+        {
+          "character": "harry",
+          "action": "look_at",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c14_malfoy_spots_norbert"
+      ]
+    },
+    {
+      "id": "c14_malfoy_spots_norbert",
+      "chapter": 14,
+      "location": "hagrids_hut",
+      "thread": "main",
+      "summary": "Malfoy peers through Hagrid's window and sees the dragon, giving him ammunition to threaten the trio.",
+      "characters": [
+        "harry",
+        "malfoy"
+      ],
+      "dialogue": [
+        {
+          "character": "malfoy",
+          "line": "Wait till Dumbledore hears about this."
+        },
+        {
+          "character": "harry",
+          "line": "We have to get Norbert out of here \u2014 fast."
+        }
+      ],
+      "actions": [
+        {
+          "character": "malfoy",
+          "action": "look_at",
+          "at_ms": 0
+        },
+        {
+          "character": "malfoy",
+          "action": "grin",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "go_pale",
+          "at_ms": 3000
+        }
+      ],
+      "next": [
+        "c14_norbert_sent_to_charlie"
+      ]
+    },
+    {
+      "id": "c14_norbert_sent_to_charlie",
+      "chapter": 14,
+      "location": "third_floor_corridor",
+      "thread": "main",
+      "summary": "Under the invisibility cloak, Harry and Hermione smuggle Norbert to the tallest tower to be collected by Charlie Weasley's friends.",
+      "characters": [
+        "harry",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "hermione",
+          "line": "Norbert's going... going... gone."
+        },
+        {
+          "character": "harry",
+          "line": "No more dragon \u2014 now let's just hope Malfoy didn't see anything."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "sneak",
+          "at_ms": 0
+        },
+        {
+          "character": "hermione",
+          "action": "sneak",
+          "at_ms": 300
+        },
+        {
+          "character": "harry",
+          "action": "hand_over",
+          "at_ms": 3000
+        },
+        {
+          "character": "hermione",
+          "action": "smile",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c15_malfoy_reports_norbert_trap"
+      ]
+    },
+    {
+      "id": "c15_malfoy_reports_norbert_trap",
+      "chapter": 15,
+      "location": "hagrids_hut",
+      "thread": "main",
+      "summary": "Malfoy corners Harry to gloat, but is caught himself by McGonagall while trying to report the dragon.",
+      "characters": [
+        "harry",
+        "malfoy",
+        "mcgonagall"
+      ],
+      "dialogue": [
+        {
+          "character": "malfoy",
+          "line": "Harry Potter's got a dragon!"
+        },
+        {
+          "character": "mcgonagall",
+          "line": "What utter rubbish! Detention, Malfoy \u2014 twenty points from Slytherin!"
+        }
+      ],
+      "actions": [
+        {
+          "character": "malfoy",
+          "action": "shout",
+          "at_ms": 0
+        },
+        {
+          "character": "mcgonagall",
+          "action": "argue",
+          "at_ms": 1500
+        },
+        {
+          "character": "malfoy",
+          "action": "go_pale",
+          "at_ms": 3200
+        }
+      ],
+      "next": [
+        "c15_detention_assigned_forest"
+      ]
+    },
+    {
+      "id": "c15_detention_assigned_forest",
+      "chapter": 15,
+      "location": "hogwarts_great_hall",
+      "thread": "main",
+      "summary": "Harry, Hermione, and Neville are caught out of bed too and are all sentenced to detention in the Forbidden Forest with Hagrid.",
+      "characters": [
+        "harry",
+        "hermione",
+        "neville",
+        "hagrid",
+        "mcgonagall"
+      ],
+      "dialogue": [
+        {
+          "character": "mcgonagall",
+          "line": "Four students out of bed in one night! Fifty points from Gryffindor."
+        },
+        {
+          "character": "hagrid",
+          "line": "It's inter the forest yeh're going."
+        }
+      ],
+      "actions": [
+        {
+          "character": "hagrid",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "neville",
+          "action": "shiver",
+          "at_ms": 1500
+        },
+        {
+          "character": "hermione",
+          "action": "frown",
+          "at_ms": 3000
+        },
+        {
+          "character": "harry",
+          "action": "frown",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c15_forest_unicorn_blood_discovery"
+      ]
+    },
+    {
+      "id": "c15_forest_unicorn_blood_discovery",
+      "chapter": 15,
+      "location": "forbidden_forest",
+      "thread": "mystery",
+      "summary": "Deep in the forest, Harry finds a dead unicorn and watches in horror as a hooded figure drinks its silvery blood.",
+      "characters": [
+        "harry",
+        "hagrid"
+      ],
+      "dialogue": [
+        {
+          "character": "hagrid",
+          "line": "That's unicorn blood. There's a unicorn in there been hurt badly by summat."
+        },
+        {
+          "character": "harry",
+          "line": "What was that thing?"
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "creep",
+          "at_ms": 0
+        },
+        {
+          "character": "hagrid",
+          "action": "point",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "freeze",
+          "at_ms": 3200
+        },
+        {
+          "character": "harry",
+          "action": "gasp",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c15_firenze_saves_harry"
+      ]
+    },
+    {
+      "id": "c15_firenze_saves_harry",
+      "chapter": 15,
+      "location": "forbidden_forest",
+      "thread": "mystery",
+      "summary": "The cloaked figure lunges at Harry, but the centaur Firenze charges in and carries him to safety.",
+      "characters": [
+        "harry",
+        "firenze"
+      ],
+      "dialogue": [
+        {
+          "character": "firenze",
+          "line": "You are the Potter boy \u2014 you had better get back to Hagrid."
+        },
+        {
+          "character": "firenze",
+          "line": "Can you think of no one who has waited years to return to power?"
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "freeze",
+          "at_ms": 0
+        },
+        {
+          "character": "firenze",
+          "action": "run",
+          "at_ms": 1200
+        },
+        {
+          "character": "harry",
+          "action": "climb",
+          "at_ms": 2800
+        },
+        {
+          "character": "firenze",
+          "action": "speak",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c15_points_deducted_aftermath"
+      ]
+    },
+    {
+      "id": "c15_points_deducted_aftermath",
+      "chapter": 15,
+      "location": "gryffindor_common_room",
+      "thread": "main",
+      "summary": "Shaken by what he's seen and stripped of house points, Harry realizes Voldemort himself may be hiding in the forest.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "Firenze thinks the Stone's the only thing keeping him from coming back fully."
+        },
+        {
+          "character": "hermione",
+          "line": "Harry, everyone says Dumbledore's the only one You-Know-Who was ever afraid of."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "sit",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "speak",
+          "at_ms": 1500
+        },
+        {
+          "character": "hermione",
+          "action": "frown",
+          "at_ms": 3200
+        },
+        {
+          "character": "ron",
+          "action": "go_pale",
+          "at_ms": 4500
+        }
+      ],
+      "next": [
+        "c16_suspect_snape_confrontation_quirrell_forest"
+      ]
+    },
+    {
+      "id": "c16_suspect_snape_confrontation_quirrell_forest",
+      "chapter": 16,
+      "location": "forbidden_forest",
+      "thread": "mystery",
+      "summary": "Harry overhears Snape pressuring Quirrell about breaking a protective spell, seemingly confirming Snape is after the Stone.",
+      "characters": [
+        "snape",
+        "quirrell"
+      ],
+      "dialogue": [
+        {
+          "character": "snape",
+          "line": "Have you found out how to get past Hagrid's creature yet?"
+        },
+        {
+          "character": "quirrell",
+          "line": "I d-don't know what you mean, Severus."
+        }
+      ],
+      "actions": [
+        {
+          "character": "snape",
+          "action": "sneak",
+          "at_ms": 0
+        },
+        {
+          "character": "quirrell",
+          "action": "shiver",
+          "at_ms": 1800
+        },
+        {
+          "character": "snape",
+          "action": "glare",
+          "at_ms": 3500
+        },
+        {
+          "character": "quirrell",
+          "action": "stagger",
+          "at_ms": 5000
+        }
+      ],
+      "next": [
+        "c16_decision_to_go_after_stone"
+      ]
+    },
+    {
+      "id": "c16_decision_to_go_after_stone",
+      "chapter": 16,
+      "location": "gryffindor_common_room",
+      "thread": "main",
+      "summary": "Believing Snape will steal the Stone that very night with Dumbledore called away, the trio decides to go after it themselves.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "If Snape gets the Stone, Voldemort comes back. I'm going tonight."
+        },
+        {
+          "character": "hermione",
+          "line": "Then we're coming with you."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "stand",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "speak",
+          "at_ms": 1200
+        },
+        {
+          "character": "hermione",
+          "action": "stand",
+          "at_ms": 3500
+        },
+        {
+          "character": "ron",
+          "action": "stand",
+          "at_ms": 4200
+        }
+      ],
+      "next": [
+        "c16_fluffy_and_devils_snare"
+      ]
+    },
+    {
+      "id": "c16_fluffy_and_devils_snare",
+      "chapter": 16,
+      "location": "third_floor_corridor",
+      "thread": "main",
+      "summary": "Past the now-sleeping three-headed dog they fall into a pit of Devil's Snare; Hermione's fire charm frees them just in time.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "ron",
+          "line": "Are you a witch or not? Light a fire!"
+        },
+        {
+          "character": "hermione",
+          "line": "Of course \u2014 I wasn't thinking straight."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "fall",
+          "at_ms": 0
+        },
+        {
+          "character": "ron",
+          "action": "fall",
+          "at_ms": 400
+        },
+        {
+          "character": "hermione",
+          "action": "fall",
+          "at_ms": 800
+        },
+        {
+          "character": "ron",
+          "action": "yell",
+          "at_ms": 2500
+        },
+        {
+          "character": "hermione",
+          "action": "cast_spell",
+          "at_ms": 4000
+        },
+        {
+          "character": "harry",
+          "action": "stand",
+          "at_ms": 5500
+        }
+      ],
+      "next": [
+        "c16_flying_keys_trial"
+      ]
+    },
+    {
+      "id": "c16_flying_keys_trial",
+      "chapter": 16,
+      "location": "flying_keys_chamber",
+      "thread": "main",
+      "summary": "Harry uses his Seeker instincts to chase down and catch the single key that opens the next locked door.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "That one \u2014 the one with the bent wing!"
+        },
+        {
+          "character": "ron",
+          "line": "Brilliant, Harry!"
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "look_at",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "fly",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "swoop",
+          "at_ms": 3500
+        },
+        {
+          "character": "harry",
+          "action": "grab",
+          "at_ms": 5000
+        },
+        {
+          "character": "ron",
+          "action": "laugh",
+          "at_ms": 6000
+        }
+      ],
+      "next": [
+        "c16_wizard_chess_trial_ron_sacrifice"
+      ]
+    },
+    {
+      "id": "c16_wizard_chess_trial_ron_sacrifice",
+      "chapter": 16,
+      "location": "chessboard_chamber",
+      "thread": "main",
+      "summary": "Ron directs a deadly game of life-size wizard's chess and deliberately sacrifices himself so Harry can win.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "ron",
+          "line": "I've got to be taken \u2014 that leaves you free to finish it, Harry."
+        },
+        {
+          "character": "harry",
+          "line": "Ron, no!"
+        }
+      ],
+      "actions": [
+        {
+          "character": "ron",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "ron",
+          "action": "point",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "shout",
+          "at_ms": 3500
+        },
+        {
+          "character": "ron",
+          "action": "collapse",
+          "at_ms": 5500
+        },
+        {
+          "character": "hermione",
+          "action": "scream",
+          "at_ms": 6200
+        },
+        {
+          "character": "harry",
+          "action": "walk",
+          "at_ms": 7500
+        }
+      ],
+      "next": [
+        "c16_potion_riddle_trial"
+      ]
+    },
+    {
+      "id": "c16_potion_riddle_trial",
+      "chapter": 16,
+      "location": "mirror_of_erised_room",
+      "thread": "main",
+      "summary": "Hermione solves a logic puzzle among seven bottles of potion; she goes back for help while Harry drinks on alone.",
+      "characters": [
+        "harry",
+        "hermione"
+      ],
+      "dialogue": [
+        {
+          "character": "hermione",
+          "line": "This isn't magic, it's logic \u2014 a puzzle."
+        },
+        {
+          "character": "harry",
+          "line": "Go, get Ron, and get help. I'll hold him off."
+        }
+      ],
+      "actions": [
+        {
+          "character": "hermione",
+          "action": "look_at",
+          "at_ms": 0
+        },
+        {
+          "character": "hermione",
+          "action": "smile",
+          "at_ms": 2000
+        },
+        {
+          "character": "hermione",
+          "action": "drink",
+          "at_ms": 4000
+        },
+        {
+          "character": "harry",
+          "action": "drink",
+          "at_ms": 5500
+        },
+        {
+          "character": "harry",
+          "action": "walk",
+          "at_ms": 7000
+        }
+      ],
+      "next": [
+        "c17_quirrell_reveal_voldemort"
+      ]
+    },
+    {
+      "id": "c17_quirrell_reveal_voldemort",
+      "chapter": 17,
+      "location": "mirror_of_erised_room",
+      "thread": "main",
+      "summary": "Harry finds Quirrell, not Snape, guarding the Stone \u2014 and sees Voldemort's face on the back of Quirrell's head.",
+      "characters": [
+        "harry",
+        "quirrell",
+        "voldemort"
+      ],
+      "dialogue": [
+        {
+          "character": "quirrell",
+          "line": "Next to Snape, who would suspect poor, stuttering Professor Quirrell?"
+        },
+        {
+          "character": "voldemort",
+          "line": "Harry Potter \u2014 see what I have become."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "freeze",
+          "at_ms": 1500
+        },
+        {
+          "character": "quirrell",
+          "action": "laugh",
+          "at_ms": 3000
+        },
+        {
+          "character": "voldemort",
+          "action": "speak",
+          "at_ms": 5500
+        },
+        {
+          "character": "harry",
+          "action": "go_pale",
+          "at_ms": 7000
+        }
+      ],
+      "next": [
+        "c17_mirror_stone_retrieval"
+      ]
+    },
+    {
+      "id": "c17_mirror_stone_retrieval",
+      "chapter": 17,
+      "location": "mirror_of_erised_room",
+      "thread": "main",
+      "summary": "The Mirror of Erised gives Harry the Stone because he wants only to find it, not to use it.",
+      "characters": [
+        "harry"
+      ],
+      "dialogue": [
+        {
+          "character": "harry",
+          "line": "I see myself finding it \u2014 it's in my pocket."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "stare",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "gasp",
+          "at_ms": 2000
+        },
+        {
+          "character": "harry",
+          "action": "hide",
+          "at_ms": 3500
+        }
+      ],
+      "next": [
+        "c17_voldemort_confrontation_harry_faints"
+      ]
+    },
+    {
+      "id": "c17_voldemort_confrontation_harry_faints",
+      "chapter": 17,
+      "location": "mirror_of_erised_room",
+      "thread": "main",
+      "summary": "Voldemort demands the Stone through Quirrell; when Quirrell touches Harry, his mother's old protection burns him, and Harry blacks out.",
+      "characters": [
+        "harry",
+        "quirrell",
+        "voldemort"
+      ],
+      "dialogue": [
+        {
+          "character": "voldemort",
+          "line": "Give me the Stone, unless you want her to have died in vain."
+        },
+        {
+          "character": "harry",
+          "line": "Never!"
+        }
+      ],
+      "actions": [
+        {
+          "character": "voldemort",
+          "action": "speak",
+          "at_ms": 0
+        },
+        {
+          "character": "harry",
+          "action": "shout",
+          "at_ms": 2500
+        },
+        {
+          "character": "quirrell",
+          "action": "tackle",
+          "at_ms": 4000
+        },
+        {
+          "character": "harry",
+          "action": "grab",
+          "at_ms": 5000
+        },
+        {
+          "character": "quirrell",
+          "action": "scream",
+          "at_ms": 6000
+        },
+        {
+          "character": "harry",
+          "action": "collapse",
+          "at_ms": 7500
+        }
+      ],
+      "next": [
+        "c17_dumbledore_hospital_explanation"
+      ]
+    },
+    {
+      "id": "c17_dumbledore_hospital_explanation",
+      "chapter": 17,
+      "location": "hospital_wing",
+      "thread": "main",
+      "summary": "Harry wakes in the hospital wing; Dumbledore explains the Stone's destruction and why Voldemort could not touch him.",
+      "characters": [
+        "harry",
+        "dumbledore"
+      ],
+      "dialogue": [
+        {
+          "character": "dumbledore",
+          "line": "Your mother died to save you \u2014 that love left its mark on you still."
+        },
+        {
+          "character": "harry",
+          "line": "So Voldemort's still out there somewhere."
+        },
+        {
+          "character": "dumbledore",
+          "line": "He is \u2014 but you have delayed his return to power."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "wake",
+          "at_ms": 0
+        },
+        {
+          "character": "dumbledore",
+          "action": "sit",
+          "at_ms": 1500
+        },
+        {
+          "character": "harry",
+          "action": "ask",
+          "at_ms": 3000
+        },
+        {
+          "character": "dumbledore",
+          "action": "speak",
+          "at_ms": 5000
+        },
+        {
+          "character": "harry",
+          "action": "lie_down",
+          "at_ms": 8000
+        }
+      ],
+      "next": [
+        "c17_house_cup_awarded_gryffindor_wins"
+      ]
+    },
+    {
+      "id": "c17_house_cup_awarded_gryffindor_wins",
+      "chapter": 17,
+      "location": "hogwarts_great_hall",
+      "thread": "main",
+      "summary": "Dumbledore awards last-minute points for courage; Gryffindor overtakes Slytherin to win the house cup.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione",
+        "neville",
+        "dumbledore"
+      ],
+      "dialogue": [
+        {
+          "character": "dumbledore",
+          "line": "It takes a great deal of bravery to stand up to our friends \u2014 ten points to Neville Longbottom."
+        },
+        {
+          "character": "ron",
+          "line": "We won!"
+        }
+      ],
+      "actions": [
+        {
+          "character": "dumbledore",
+          "action": "stand",
+          "at_ms": 0
+        },
+        {
+          "character": "dumbledore",
+          "action": "speak",
+          "at_ms": 1200
+        },
+        {
+          "character": "neville",
+          "action": "gasp",
+          "at_ms": 3500
+        },
+        {
+          "character": "harry",
+          "action": "laugh",
+          "at_ms": 4500
+        },
+        {
+          "character": "ron",
+          "action": "jump",
+          "at_ms": 5000
+        },
+        {
+          "character": "hermione",
+          "action": "cry",
+          "at_ms": 5500
+        }
+      ],
+      "next": [
+        "c17_return_to_dursleys"
+      ]
+    },
+    {
+      "id": "c17_return_to_dursleys",
+      "chapter": 17,
+      "location": "kings_cross",
+      "thread": "main",
+      "summary": "Harry heads back to the Dursleys for the summer, promising Ron and Hermione he'll see them again.",
+      "characters": [
+        "harry",
+        "ron",
+        "hermione",
+        "vernon"
+      ],
+      "dialogue": [
+        {
+          "character": "ron",
+          "line": "You must come and stay this summer \u2014 I'll send an owl."
+        },
+        {
+          "character": "harry",
+          "line": "They don't know we're not allowed magic at home. I'm going to have some fun."
+        }
+      ],
+      "actions": [
+        {
+          "character": "harry",
+          "action": "walk",
+          "at_ms": 0
+        },
+        {
+          "character": "ron",
+          "action": "wave",
+          "at_ms": 1500
+        },
+        {
+          "character": "hermione",
+          "action": "wave",
+          "at_ms": 2000
+        },
+        {
+          "character": "harry",
+          "action": "grin",
+          "at_ms": 4000
+        },
+        {
+          "character": "vernon",
+          "action": "scowl",
+          "at_ms": 5000
+        }
+      ],
+      "next": []
+    }
+  ]
+}

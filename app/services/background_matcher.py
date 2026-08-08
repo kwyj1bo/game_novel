@@ -3,6 +3,8 @@ import re
 from collections import Counter
 from pathlib import Path
 
+from app.services.asset_catalog import get_assets_for_category
+
 ASSETS_DIR = Path(__file__).resolve().parents[2] / "assets"
 
 CATEGORY_KEYWORDS = {
@@ -104,9 +106,11 @@ def suggest_background(text: str) -> dict | None:
 
     best_category, _ = scores.most_common(1)[0]
     packs = discover_asset_categories().get(best_category, [])
+    assets = get_assets_for_category(best_category, packs)
 
     return {
         "category": best_category,
         "scores": dict(scores),
         "packs": packs,
+        "assets": assets,
     }

@@ -1,0 +1,39 @@
+{
+  "characters": {
+    "harry": { "color": "#274e13", "skin": "#e8c9a0", "hair": "#1a1408", "shape": "person", "scale": 1.0, "glasses": "round", "scar": true },
+    "ron": { "color": "#7a2f2f", "skin": "#e8c9a0", "hair": "#b34a1a", "shape": "person", "scale": 1.05, "freckles": true },
+    "hermione": { "color": "#5c3a7a", "skin": "#e3bf99", "hair": "#3a2415", "shape": "person", "scale": 0.95, "hairBushy": true },
+    "hagrid": { "color": "#3a2a1a", "skin": "#c9a876", "hair": "#2a1a0a", "shape": "person", "scale": 1.9, "beard": true },
+    "dumbledore": { "color": "#6a4a9a", "skin": "#e8c9a0", "hair": "#e6e6e6", "shape": "person", "scale": 1.2, "beard": true, "beardLong": true, "glasses": "halfmoon" },
+    "mcgonagall": { "color": "#1a5c3a", "skin": "#e3c39f", "hair": "#5a5a5a", "shape": "person", "scale": 1.05, "glasses": "square", "hairBun": true },
+    "snape": { "color": "#0a0a0a", "skin": "#d8c9b8", "hair": "#0a0a0a", "shape": "person", "scale": 1.1, "hairLong": true },
+    "quirrell": { "color": "#8a7a5c", "skin": "#b8a888", "hair": "#6a5a3a", "shape": "person", "scale": 1.0, "turban": true },
+    "malfoy": { "color": "#2a3a2a", "skin": "#e8d6c6", "hair": "#e0d6a0", "shape": "person", "scale": 1.0 },
+    "dudley": { "color": "#c9a876", "skin": "#e8c9a0", "hair": "#8a6a3a", "shape": "person", "scale": 1.3 },
+    "vernon": { "color": "#5a3a2a", "skin": "#d8ac86", "hair": "#3a2a1a", "shape": "person", "scale": 1.2, "mustache": true },
+    "petunia": { "color": "#c9c9a0", "skin": "#e8c9a0", "hair": "#b8a860", "shape": "person", "scale": 1.0 },
+    "neville": { "color": "#8a9a6a", "skin": "#e8c9a0", "hair": "#8a6a3a", "shape": "person", "scale": 0.95 },
+    "filch": { "color": "#4a4a4a", "skin": "#a89878", "hair": "#5a5a5a", "shape": "person", "scale": 1.0 },
+    "voldemort": { "color": "#0a0a0a", "skin": "#d8d8c8", "accent": "#cc0000", "shape": "person", "scale": 1.1, "bald": true, "eyesGlow": true },
+    "weasley_twins": { "color": "#9a3a1a", "skin": "#e8c9a0", "hair": "#b34a1a", "shape": "person", "scale": 1.05 },
+    "percy": { "color": "#3a3a7a", "skin": "#e8c9a0", "hair": "#b34a1a", "shape": "person", "scale": 1.05, "glasses": "round" },
+    "hedwig": { "color": "#ffffff", "shape": "bird", "scale": 0.6 },
+    "fang": { "color": "#2a1a0a", "shape": "beast", "scale": 1.0 },
+    "firenze": { "color": "#c9a876", "shape": "centaur", "scale": 1.4 },
+    "mrs_norris": { "color": "#8a7a5c", "shape": "cat", "scale": 0.5 }
+  },
+  "objects": {
+    "wand": { "color": "#5c3a1a", "shape": "stick" },
+    "broomstick": { "color": "#6b4226", "shape": "broom" },
+    "cauldron": { "color": "#1a1a1a", "shape": "pot" },
+    "owl": { "color": "#c9a876", "shape": "bird" },
+    "dragon_egg": { "color": "#2a3a2a", "shape": "egg" },
+    "sorcerers_stone": { "color": "#cc2222", "shape": "gem" },
+    "golden_snitch": { "color": "#d4af37", "shape": "sphere_small" },
+    "chocolate_frog": { "color": "#4a2a1a", "shape": "box_small" },
+    "invisibility_cloak": { "color": "#cccccc", "shape": "cloth" },
+    "key": { "color": "#d4af37", "shape": "key" },
+    "troll": { "color": "#8a8a7a", "shape": "beast_large" },
+    "unicorn": { "color": "#f5f5f5", "shape": "beast" }
+  }
+}

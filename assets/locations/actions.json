@@ -1,0 +1,1420 @@
+{
+  "locomotion": {
+    "walk": {
+      "params": [
+        "character",
+        "from",
+        "to",
+        "speed"
+      ],
+      "animation": {
+        "clip": "translate",
+        "duration_ms": 1000,
+        "loop": false
+      }
+    },
+    "run": {
+      "params": [
+        "character",
+        "from",
+        "to",
+        "speed"
+      ],
+      "animation": {
+        "clip": "translate",
+        "duration_ms": 600,
+        "loop": false
+      }
+    },
+    "sprint": {
+      "params": [
+        "character",
+        "from",
+        "to"
+      ],
+      "animation": {
+        "clip": "translate",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "dash": {
+      "params": [
+        "character",
+        "from",
+        "to"
+      ],
+      "animation": {
+        "clip": "translate",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "bolt": {
+      "params": [
+        "character",
+        "from",
+        "to",
+        "trigger"
+      ],
+      "animation": {
+        "clip": "translate",
+        "duration_ms": 450,
+        "loop": false
+      }
+    },
+    "jog": {
+      "params": [
+        "character",
+        "from",
+        "to"
+      ],
+      "animation": {
+        "clip": "translate",
+        "duration_ms": 800,
+        "loop": false
+      }
+    },
+    "stumble": {
+      "params": [
+        "character",
+        "cause"
+      ],
+      "animation": {
+        "clip": "fall_down",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "stagger": {
+      "params": [
+        "character",
+        "cause",
+        "direction"
+      ],
+      "animation": {
+        "clip": "fall_down",
+        "duration_ms": 600,
+        "loop": false
+      }
+    },
+    "trip": {
+      "params": [
+        "character",
+        "obstacle"
+      ],
+      "animation": {
+        "clip": "fall_down",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "creep": {
+      "params": [
+        "character",
+        "from",
+        "to"
+      ],
+      "animation": {
+        "clip": "translate",
+        "duration_ms": 1400,
+        "loop": false
+      }
+    },
+    "sneak": {
+      "params": [
+        "character",
+        "from",
+        "to",
+        "past"
+      ],
+      "animation": {
+        "clip": "translate",
+        "duration_ms": 1300,
+        "loop": false
+      }
+    },
+    "tiptoe": {
+      "params": [
+        "character",
+        "from",
+        "to"
+      ],
+      "animation": {
+        "clip": "translate",
+        "duration_ms": 1300,
+        "loop": false
+      }
+    },
+    "slip": {
+      "params": [
+        "character",
+        "past_object_or_character"
+      ],
+      "animation": {
+        "clip": "translate",
+        "duration_ms": 900,
+        "loop": false
+      }
+    },
+    "climb": {
+      "params": [
+        "character",
+        "object",
+        "to"
+      ],
+      "animation": {
+        "clip": "arc_jump",
+        "duration_ms": 900,
+        "loop": false
+      }
+    },
+    "crawl": {
+      "params": [
+        "character",
+        "from",
+        "to"
+      ],
+      "animation": {
+        "clip": "crouch_dip",
+        "duration_ms": 1200,
+        "loop": false
+      }
+    },
+    "jump": {
+      "params": [
+        "character",
+        "from",
+        "to",
+        "over"
+      ],
+      "animation": {
+        "clip": "arc_jump",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "leap": {
+      "params": [
+        "character",
+        "over",
+        "onto"
+      ],
+      "animation": {
+        "clip": "arc_jump",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "dive": {
+      "params": [
+        "character",
+        "target",
+        "direction"
+      ],
+      "animation": {
+        "clip": "arc_jump",
+        "duration_ms": 600,
+        "loop": false
+      }
+    },
+    "fly": {
+      "params": [
+        "character",
+        "vehicle",
+        "from",
+        "to",
+        "altitude"
+      ],
+      "animation": {
+        "clip": "float_bob",
+        "duration_ms": 1000,
+        "loop": true
+      }
+    },
+    "soar": {
+      "params": [
+        "character",
+        "vehicle",
+        "over"
+      ],
+      "animation": {
+        "clip": "float_bob",
+        "duration_ms": 1000,
+        "loop": true
+      }
+    },
+    "swoop": {
+      "params": [
+        "character",
+        "vehicle",
+        "target"
+      ],
+      "animation": {
+        "clip": "arc_jump",
+        "duration_ms": 700,
+        "loop": false
+      }
+    },
+    "glide": {
+      "params": [
+        "character",
+        "vehicle",
+        "from",
+        "to"
+      ],
+      "animation": {
+        "clip": "float_bob",
+        "duration_ms": 1000,
+        "loop": true
+      }
+    },
+    "hover": {
+      "params": [
+        "character",
+        "vehicle",
+        "location"
+      ],
+      "animation": {
+        "clip": "float_bob",
+        "duration_ms": 1000,
+        "loop": true
+      }
+    },
+    "swim": {
+      "params": [
+        "character",
+        "from",
+        "to"
+      ],
+      "animation": {
+        "clip": "translate",
+        "duration_ms": 1200,
+        "loop": true
+      }
+    },
+    "fall": {
+      "params": [
+        "character",
+        "from",
+        "to",
+        "cause"
+      ],
+      "animation": {
+        "clip": "fall_down",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "plunge": {
+      "params": [
+        "character",
+        "into"
+      ],
+      "animation": {
+        "clip": "fall_down",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "collapse": {
+      "params": [
+        "character",
+        "location",
+        "cause"
+      ],
+      "animation": {
+        "clip": "fall_down",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "duck": {
+      "params": [
+        "character",
+        "away_from"
+      ],
+      "animation": {
+        "clip": "crouch_dip",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "dodge": {
+      "params": [
+        "character",
+        "away_from"
+      ],
+      "animation": {
+        "clip": "crouch_dip",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "kick_off": {
+      "params": [
+        "character",
+        "vehicle",
+        "surface"
+      ],
+      "animation": {
+        "clip": "arc_jump",
+        "duration_ms": 400,
+        "loop": false
+      }
+    }
+  },
+  "posture": {
+    "sit": {
+      "params": [
+        "character",
+        "on"
+      ],
+      "animation": {
+        "clip": "lower_pose",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "stand": {
+      "params": [
+        "character",
+        "from"
+      ],
+      "animation": {
+        "clip": "rise_pose",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "kneel": {
+      "params": [
+        "character",
+        "surface"
+      ],
+      "animation": {
+        "clip": "lower_pose",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "lie_down": {
+      "params": [
+        "character",
+        "surface"
+      ],
+      "animation": {
+        "clip": "lower_pose",
+        "duration_ms": 600,
+        "loop": false
+      }
+    },
+    "sprawl": {
+      "params": [
+        "character",
+        "surface"
+      ],
+      "animation": {
+        "clip": "lower_pose",
+        "duration_ms": 600,
+        "loop": false
+      }
+    },
+    "lean": {
+      "params": [
+        "character",
+        "direction",
+        "against"
+      ],
+      "animation": {
+        "clip": "tilt_pose",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "crouch": {
+      "params": [
+        "character",
+        "toward"
+      ],
+      "animation": {
+        "clip": "crouch_dip",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "hunch": {
+      "params": [
+        "character"
+      ],
+      "animation": {
+        "clip": "tilt_pose",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "freeze": {
+      "params": [
+        "character",
+        "cause"
+      ],
+      "animation": {
+        "clip": "hold_still",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "shiver": {
+      "params": [
+        "character",
+        "cause"
+      ],
+      "animation": {
+        "clip": "jitter",
+        "duration_ms": 800,
+        "loop": true
+      }
+    },
+    "sway": {
+      "params": [
+        "character"
+      ],
+      "animation": {
+        "clip": "jitter",
+        "duration_ms": 800,
+        "loop": true
+      }
+    }
+  },
+  "object_interaction": {
+    "grab": {
+      "params": [
+        "character",
+        "object",
+        "from"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "pick_up": {
+      "params": [
+        "character",
+        "object",
+        "location"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "drop": {
+      "params": [
+        "character",
+        "object",
+        "location"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "throw": {
+      "params": [
+        "character",
+        "object",
+        "target",
+        "distance"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "hand_over": {
+      "params": [
+        "character",
+        "object",
+        "recipient"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "push": {
+      "params": [
+        "character",
+        "object",
+        "direction"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "pull": {
+      "params": [
+        "character",
+        "object",
+        "direction"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "open_door": {
+      "params": [
+        "character",
+        "door",
+        "location"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "close_door": {
+      "params": [
+        "character",
+        "door",
+        "location"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "knock": {
+      "params": [
+        "character",
+        "surface",
+        "count"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "point": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "wave": {
+      "params": [
+        "character",
+        "hand_or_wand",
+        "target"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "wrap": {
+      "params": [
+        "character",
+        "object",
+        "wrapping"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "hide": {
+      "params": [
+        "character",
+        "object",
+        "location"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "write": {
+      "params": [
+        "character",
+        "surface",
+        "content"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 700,
+        "loop": true
+      }
+    },
+    "draw_wand": {
+      "params": [
+        "character"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 300,
+        "loop": false
+      }
+    }
+  },
+  "magic": {
+    "raise_wand": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "wand_cast",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "tap": {
+      "params": [
+        "character",
+        "wand",
+        "target",
+        "count"
+      ],
+      "animation": {
+        "clip": "wand_cast",
+        "duration_ms": 250,
+        "loop": false
+      }
+    },
+    "flick_wand": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "wand_cast",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "cast_spell": {
+      "params": [
+        "character",
+        "spell_name",
+        "target",
+        "incantation"
+      ],
+      "animation": {
+        "clip": "wand_cast",
+        "duration_ms": 600,
+        "loop": false
+      }
+    },
+    "duel": {
+      "params": [
+        "character_a",
+        "character_b",
+        "location"
+      ],
+      "animation": {
+        "clip": "wand_cast",
+        "duration_ms": 800,
+        "loop": false
+      }
+    },
+    "block_curse": {
+      "params": [
+        "character",
+        "incoming_spell",
+        "source"
+      ],
+      "animation": {
+        "clip": "wand_cast",
+        "duration_ms": 350,
+        "loop": false
+      }
+    },
+    "transfigure": {
+      "params": [
+        "character",
+        "object",
+        "into"
+      ],
+      "animation": {
+        "clip": "wand_cast",
+        "duration_ms": 700,
+        "loop": false
+      }
+    }
+  },
+  "combat": {
+    "fight": {
+      "params": [
+        "character_a",
+        "character_b",
+        "location"
+      ],
+      "animation": {
+        "clip": "attack_lunge",
+        "duration_ms": 500,
+        "loop": true
+      }
+    },
+    "wrestle": {
+      "params": [
+        "character_a",
+        "character_b"
+      ],
+      "animation": {
+        "clip": "attack_lunge",
+        "duration_ms": 500,
+        "loop": true
+      }
+    },
+    "tackle": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "attack_lunge",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "punch": {
+      "params": [
+        "character",
+        "target",
+        "body_part"
+      ],
+      "animation": {
+        "clip": "attack_lunge",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "hit": {
+      "params": [
+        "character",
+        "target",
+        "weapon"
+      ],
+      "animation": {
+        "clip": "attack_lunge",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "bite": {
+      "params": [
+        "creature",
+        "target",
+        "body_part"
+      ],
+      "animation": {
+        "clip": "attack_lunge",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "claw": {
+      "params": [
+        "creature",
+        "target"
+      ],
+      "animation": {
+        "clip": "attack_lunge",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "choke": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "attack_lunge",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "pin_down": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "attack_lunge",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "block": {
+      "params": [
+        "character",
+        "incoming_attack"
+      ],
+      "animation": {
+        "clip": "hold_still",
+        "duration_ms": 300,
+        "loop": false
+      }
+    }
+  },
+  "expression": {
+    "smile": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "face_pulse",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "grin": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "face_pulse",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "smirk": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "face_pulse",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "sneer": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "face_pulse",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "frown": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "face_pulse",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "scowl": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "face_pulse",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "glare": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "face_pulse",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "wink": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "face_pulse",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "blush": {
+      "params": [
+        "character",
+        "cause"
+      ],
+      "animation": {
+        "clip": "color_shift",
+        "duration_ms": 600,
+        "loop": false
+      }
+    },
+    "go_pale": {
+      "params": [
+        "character",
+        "cause"
+      ],
+      "animation": {
+        "clip": "color_shift",
+        "duration_ms": 600,
+        "loop": false
+      }
+    },
+    "cry": {
+      "params": [
+        "character",
+        "cause",
+        "intensity"
+      ],
+      "animation": {
+        "clip": "bob_shake",
+        "duration_ms": 900,
+        "loop": true
+      }
+    },
+    "laugh": {
+      "params": [
+        "character",
+        "cause",
+        "intensity"
+      ],
+      "animation": {
+        "clip": "bob_shake",
+        "duration_ms": 700,
+        "loop": true
+      }
+    },
+    "gasp": {
+      "params": [
+        "character",
+        "cause"
+      ],
+      "animation": {
+        "clip": "bob_shake",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "wince": {
+      "params": [
+        "character",
+        "cause"
+      ],
+      "animation": {
+        "clip": "bob_shake",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "flinch": {
+      "params": [
+        "character",
+        "cause"
+      ],
+      "animation": {
+        "clip": "bob_shake",
+        "duration_ms": 300,
+        "loop": false
+      }
+    }
+  },
+  "communication": {
+    "speak": {
+      "params": [
+        "character",
+        "listener",
+        "content",
+        "volume"
+      ],
+      "animation": {
+        "clip": "head_bob",
+        "duration_ms": 500,
+        "loop": true
+      }
+    },
+    "whisper": {
+      "params": [
+        "character",
+        "listener",
+        "content"
+      ],
+      "animation": {
+        "clip": "head_bob",
+        "duration_ms": 400,
+        "loop": true
+      }
+    },
+    "mutter": {
+      "params": [
+        "character",
+        "content"
+      ],
+      "animation": {
+        "clip": "head_bob",
+        "duration_ms": 400,
+        "loop": true
+      }
+    },
+    "shout": {
+      "params": [
+        "character",
+        "listener",
+        "content"
+      ],
+      "animation": {
+        "clip": "head_bob",
+        "duration_ms": 400,
+        "loop": true
+      }
+    },
+    "yell": {
+      "params": [
+        "character",
+        "listener",
+        "content"
+      ],
+      "animation": {
+        "clip": "head_bob",
+        "duration_ms": 400,
+        "loop": true
+      }
+    },
+    "roar": {
+      "params": [
+        "character",
+        "content"
+      ],
+      "animation": {
+        "clip": "head_bob",
+        "duration_ms": 500,
+        "loop": true
+      }
+    },
+    "scream": {
+      "params": [
+        "character",
+        "cause"
+      ],
+      "animation": {
+        "clip": "bob_shake",
+        "duration_ms": 500,
+        "loop": true
+      }
+    },
+    "ask": {
+      "params": [
+        "character",
+        "listener",
+        "question"
+      ],
+      "animation": {
+        "clip": "head_bob",
+        "duration_ms": 400,
+        "loop": true
+      }
+    },
+    "answer": {
+      "params": [
+        "character",
+        "listener",
+        "content"
+      ],
+      "animation": {
+        "clip": "head_bob",
+        "duration_ms": 400,
+        "loop": true
+      }
+    },
+    "greet": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "shake_hands": {
+      "params": [
+        "character_a",
+        "character_b"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "argue": {
+      "params": [
+        "character_a",
+        "character_b",
+        "topic"
+      ],
+      "animation": {
+        "clip": "head_bob",
+        "duration_ms": 500,
+        "loop": true
+      }
+    },
+    "hiss": {
+      "params": [
+        "character",
+        "listener",
+        "content"
+      ],
+      "animation": {
+        "clip": "head_bob",
+        "duration_ms": 400,
+        "loop": true
+      }
+    }
+  },
+  "sensory": {
+    "look_at": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "head_turn",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "stare": {
+      "params": [
+        "character",
+        "target",
+        "duration"
+      ],
+      "animation": {
+        "clip": "head_turn",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "peer": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "head_turn",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "squint": {
+      "params": [
+        "character",
+        "target"
+      ],
+      "animation": {
+        "clip": "head_turn",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "watch": {
+      "params": [
+        "character",
+        "target",
+        "duration"
+      ],
+      "animation": {
+        "clip": "head_turn",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "listen": {
+      "params": [
+        "character",
+        "source"
+      ],
+      "animation": {
+        "clip": "head_turn",
+        "duration_ms": 300,
+        "loop": false
+      }
+    },
+    "sniff": {
+      "params": [
+        "character",
+        "source"
+      ],
+      "animation": {
+        "clip": "head_turn",
+        "duration_ms": 300,
+        "loop": false
+      }
+    }
+  },
+  "consumption": {
+    "eat": {
+      "params": [
+        "character",
+        "item"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 500,
+        "loop": true
+      }
+    },
+    "bite_into": {
+      "params": [
+        "character",
+        "item"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "nibble": {
+      "params": [
+        "character",
+        "item"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 500,
+        "loop": true
+      }
+    },
+    "drink": {
+      "params": [
+        "character",
+        "item"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "gulp": {
+      "params": [
+        "character",
+        "item"
+      ],
+      "animation": {
+        "clip": "arm_gesture",
+        "duration_ms": 400,
+        "loop": false
+      }
+    },
+    "swallow": {
+      "params": [
+        "character",
+        "item"
+      ],
+      "animation": {
+        "clip": "head_bob",
+        "duration_ms": 300,
+        "loop": false
+      }
+    }
+  },
+  "rest": {
+    "sleep": {
+      "params": [
+        "character",
+        "location"
+      ],
+      "animation": {
+        "clip": "lower_pose",
+        "duration_ms": 600,
+        "loop": false
+      }
+    },
+    "doze": {
+      "params": [
+        "character",
+        "location"
+      ],
+      "animation": {
+        "clip": "lower_pose",
+        "duration_ms": 600,
+        "loop": false
+      }
+    },
+    "snore": {
+      "params": [
+        "character"
+      ],
+      "animation": {
+        "clip": "jitter",
+        "duration_ms": 800,
+        "loop": true
+      }
+    },
+    "wake": {
+      "params": [
+        "character",
+        "cause"
+      ],
+      "animation": {
+        "clip": "rise_pose",
+        "duration_ms": 500,
+        "loop": false
+      }
+    },
+    "yawn": {
+      "params": [
+        "character"
+      ],
+      "animation": {
+        "clip": "stretch_pose",
+        "duration_ms": 600,
+        "loop": false
+      }
+    },
+    "stretch": {
+      "params": [
+        "character"
+      ],
+      "animation": {
+        "clip": "stretch_pose",
+        "duration_ms": 600,
+        "loop": false
+      }
+    }
+  }
+}
