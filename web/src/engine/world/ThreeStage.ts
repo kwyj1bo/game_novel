@@ -132,7 +132,13 @@ export class ThreeStage implements Stage {
   moveActor(id: string, to: Target, run: boolean, instant: boolean): Promise<void> {
     const a = this.need(id);
     const dest = this.floorPoint(to);
-    // Air marks keep their height (flying); floor marks snap to the ground.
+    // Moving to another actor stops at arm's length instead of walking into them.
+    const other = typeof to === "string" && to !== id ? this.actors.get(to) : undefined;
+    if (other) {
+      const back = a.position.clone().sub(other.position).setY(0);
+      if (back.lengthSq() < 1e-4) back.set(0, 0, 1);
+      dest.copy(other.position).addScaledVector(back.normalize(), 0.7 + other.height * 0.2).setY(0);
+    }
     return a.moveTo(dest, run, instant);
   }
 

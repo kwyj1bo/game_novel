@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { damp, noise1, rng } from "../engine/core/math";
 import { hdr } from "../engine/fx/Particles";
 import type { LocationDef } from "../engine/world/Location";
-import { flagstoneMaterial, mesh, stoneMaterial, torch, v3 } from "./kit";
+import { flagstoneMaterial, mesh, stoneMaterial, torch, autoMarks, v3 } from "./kit";
 
 const MARKS = {
   hole: v3(0, 6.6, 0),
@@ -15,6 +15,7 @@ const MARKS = {
   passage_ron: v3(0.7, 0, -4.7),
   passage_hermione: v3(0.1, 0, -3.7),
   drag: v3(2.4, 0, -2.6),
+  ...autoMarks(v3(0, 0, 0.6), v3(3.6, 3.6, 4.4), v3(0, 0, -5.4), 1.7),
 };
 
 const SEGMENTS = 36;
@@ -124,6 +125,7 @@ export const devilsSnare: LocationDef = {
   title: "Devil's Snare",
   info: {
     marks: Object.keys(MARKS),
+    keywords: ["plant","snare","vines","tendrils","creepers","pit"],
     props: {
       vines: ["rest", "grip", "retreat"],
       light: ["dark", "bright"],

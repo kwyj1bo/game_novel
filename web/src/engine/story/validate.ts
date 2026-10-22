@@ -4,6 +4,8 @@ import type { Beat, Scene, Story, Target } from "./schema";
 export interface LocationInfo {
   marks: readonly string[];
   props: Readonly<Record<string, readonly string[]>>;
+  // Words in a text that suggest this place (used by the novel pipeline).
+  keywords?: readonly string[];
 }
 
 export type LocationRegistryInfo = Readonly<Record<string, LocationInfo>>;
@@ -76,7 +78,8 @@ function checkScene(
   };
   const checkTarget = (t: Target | undefined, where: string) => {
     if (t === undefined || Array.isArray(t)) return;
-    if (!loc.marks.includes(t) && !present.has(t) && !story.actors[t]) {
+    // An actor who is not on stage cannot be framed or targeted.
+    if (!loc.marks.includes(t) && !present.has(t)) {
       err(`${where}: "${t}" is not a mark in ${scene.location} or an actor on stage`);
     }
   };

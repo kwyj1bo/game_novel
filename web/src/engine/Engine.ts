@@ -1,8 +1,8 @@
 import { AudioEngine } from "./audio/AudioEngine";
 import { Renderer } from "./render/Renderer";
 import { StoryRuntime, type RuntimeEvent } from "./story/StoryRuntime";
-import type { Story } from "./story/schema";
-import { validateStory } from "./story/validate";
+import { StorySchema, type Story } from "./story/schema";
+import { validateStory, type LocationRegistryInfo } from "./story/validate";
 import { DomHud } from "./ui/Hud";
 import type { LocationDef } from "./world/Location";
 import { ThreeStage } from "./world/ThreeStage";
@@ -20,6 +20,14 @@ export interface EngineOptions {
   locations: Record<string, LocationDef>;
   fast?: boolean;
   muted?: boolean;
+  // Endpoint that turns an uploaded novel into stories (the novel pipeline).
+  uploadUrl?: string;
+}
+
+interface UploadResponse {
+  source: string;
+  stories: { heading: string; story: unknown }[];
+  skipped: { heading: string; error: string }[];
 }
 
 const PROGRESS_KEY = "novel-engine:progress";
@@ -55,13 +63,14 @@ export class Engine {
   events: RuntimeEvent[] = [];
   story: Story;
   runtime: StoryRuntime;
+  private readonly locationInfo: LocationRegistryInfo;
   private last = performance.now();
   private fpsFrames = 0;
   private fpsTime = 0;
   fps = 0;
 
   constructor(private readonly opts: EngineOptions) {
-    const info = Object.fromEntries(Object.entries(opts.locations).map(([id, d]) => [id, d.info]));
+    const info = (this.locationInfo = Object.fromEntries(Object.entries(opts.locations).map(([id, d]) => [id, d.info])));
     for (const { story } of opts.chapters) {
       const issues = validateStory(story, info);
       if (issues.length) {
@@ -103,6 +112,28 @@ export class Engine {
     resize();
   }
 
+  // Sends a novel to the pipeline and adds every valid chapter it returns.
+  private async upload(file: File) {
+    const body = new FormData();
+    body.append("file", file);
+    const res = await fetch(this.opts.uploadUrl!, { method: "POST", body });
+    if (!res.ok) {
+      const detail = await res.json().catch(() => ({}));
+      throw new Error(detail.detail ?? `Upload failed (${res.status})`);
+    }
+    const data = (await res.json()) as UploadResponse;
+    const added = [];
+    for (const { heading, story: raw } of data.stories) {
+      const parsed = StorySchema.safeParse(raw);
+      if (!parsed.success || validateStory(parsed.data, this.locationInfo).length) continue;
+      const chapter = { number: `${data.source} · ${heading}`, story: parsed.data };
+      this.opts.chapters.push(chapter);
+      added.push({ id: chapter.story.id, number: chapter.number, title: chapter.story.title });
+    }
+    if (!added.length) throw new Error("No playable chapters could be made from that file.");
+    return added;
+  }
+
   private makeRuntime(story: Story): StoryRuntime {
     this.story = story;
     this.events = [];
@@ -142,6 +173,7 @@ export class Engine {
       const pick = await this.hud.showMenu(
         this.opts.title,
         this.opts.chapters.map((c) => ({ id: c.story.id, number: c.number, title: c.story.title, resumeLabel: progress[c.story.id]?.title })),
+        this.opts.uploadUrl ? (file) => this.upload(file) : undefined,
       );
       const story = this.opts.chapters.find((c) => c.story.id === pick.id)!.story;
       const from = pick.resume ? progress[story.id]?.scene : undefined;

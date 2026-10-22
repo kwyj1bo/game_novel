@@ -1,0 +1,31 @@
+name: pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: pip install -r requirements.txt
+      - run: python -m spacy download en_core_web_sm
+      - run: python -c "import nltk; nltk.download('wordnet', quiet=True)"
+      # The engine validator checks generated stories.
+      - run: npm ci
+        working-directory: web
+      - name: catalog.json matches the engine
+        working-directory: web
+        run: npm run catalog && git diff --exit-code catalog.json
+      - run: python -m pytest -q

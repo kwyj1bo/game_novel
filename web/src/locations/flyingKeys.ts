@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { damp, noise1, rng } from "../engine/core/math";
 import type { LocationDef } from "../engine/world/Location";
-import { dust, flagstoneMaterial, mesh, pillar, room, stoneMaterial, v3, woodMaterial } from "./kit";
+import { dust, flagstoneMaterial, mesh, pillar, room, stoneMaterial, autoMarks, v3, woodMaterial } from "./kit";
 
 const MARKS = {
   entry: v3(0, 0, 6.5),
@@ -20,6 +20,7 @@ const MARKS = {
   ron_door: v3(1.4, 0, -5.0),
   hermione_door: v3(-1.3, 0, -5.0),
   keyhole: v3(0, 1.3, -7.6),
+  ...autoMarks(v3(0, 0, 2.6), v3(2.4, 2.2, 7.2), v3(0, 0, 6.5), 2.0),
 };
 
 const N_KEYS = 170;
@@ -51,6 +52,7 @@ export const flyingKeys: LocationDef = {
   title: "The Chamber of Winged Keys",
   info: {
     marks: Object.keys(MARKS),
+    keywords: ["keys","winged","broomstick","brooms","fluttering"],
     props: {
       keys: ["swarm", "attack"],
       special_key: ["flying", "caught", "in_lock"],
