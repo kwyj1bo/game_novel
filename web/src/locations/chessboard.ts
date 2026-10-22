@@ -99,7 +99,6 @@ export const chessboard: LocationDef = {
   title: "The Giant Chessboard",
   info: {
     marks: Object.keys(MARKS),
-    keywords: ["chess","chessboard","knight","queen","bishop","pawn","checkmate"],
     props: {
       black_knight: ["d4", "c5", "toppled"],
       white_queen: ["e7", "c5", "f3"],

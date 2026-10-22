@@ -52,7 +52,6 @@ export const flyingKeys: LocationDef = {
   title: "The Chamber of Winged Keys",
   info: {
     marks: Object.keys(MARKS),
-    keywords: ["keys","winged","broomstick","brooms","fluttering"],
     props: {
       keys: ["swarm", "attack"],
       special_key: ["flying", "caught", "in_lock"],

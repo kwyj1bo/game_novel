@@ -72,6 +72,12 @@ export abstract class Actor {
     if (instant) this.yaw = this.targetYaw;
   }
 
+  // Where the actor is turning to face (the camera frames this, not the
+  // half-finished turn).
+  get facing(): number {
+    return this.targetYaw;
+  }
+
   setYaw(yaw: number): void {
     this.yaw = this.targetYaw = yaw;
   }

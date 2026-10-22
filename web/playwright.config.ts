@@ -9,23 +9,26 @@ export default defineConfig({
   retries: 1,
   reporter: [["list"]],
   use: {
-    baseURL: "http://localhost:5173",
+    // Own ports, backend and library: test uploads never touch your real library.
+    baseURL: "http://localhost:5174",
     viewport: { width: 1280, height: 720 },
     trace: "on-first-retry",
     launchOptions: { args: ["--use-angle=metal", "--enable-gpu", "--ignore-gpu-blocklist"] },
   },
   webServer: [
     {
-      command: "npx vite --port 5173 --strictPort",
-      url: "http://localhost:5173",
-      reuseExistingServer: true,
+      command: "npx vite --port 5174 --strictPort",
+      url: "http://localhost:5174",
+      env: { API_TARGET: "http://localhost:8001" },
+      reuseExistingServer: false,
     },
     {
-      // The novel pipeline behind the upload button.
-      command: "../venv/bin/uvicorn app.main:app --port 8000",
+      // The novel pipeline behind the upload button, with a throwaway library.
+      command: "rm -rf web/test-results/library && venv/bin/uvicorn app.main:app --port 8001",
       cwd: "..",
-      url: "http://localhost:8000/docs",
-      reuseExistingServer: true,
+      url: "http://localhost:8001/docs",
+      env: { NOVEL_LIBRARY: "web/test-results/library" },
+      reuseExistingServer: false,
     },
   ],
 });

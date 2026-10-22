@@ -400,10 +400,12 @@ export class Human extends Actor {
       add(this.head, new THREE.SphereGeometry(r * 0.66, 16, 10), hair, [0, -r * 0.55, r * 0.45], [1, 0.8, 0.7]);
     } else {
       const rand = rng(this.seed + 7);
-      for (let i = 0; i < 22; i++) {
-        const a = lerp(-1.4, 1.4, rand());
-        const y = lerp(-1.25, -0.1, rand());
-        add(this.head, new THREE.SphereGeometry(r * lerp(0.3, 0.45, rand()), 10, 8), hair, [Math.sin(a) * r * 0.85, y * r, Math.cos(a) * r * 0.72]);
+      // Bushy beard on the jaw and cheeks, below the eyes.
+      for (let i = 0; i < 26; i++) {
+        const a = lerp(-1.5, 1.5, rand());
+        const y = lerp(-1.2, -0.38, rand());
+        const front = Math.cos(a);
+        add(this.head, new THREE.SphereGeometry(r * lerp(0.24, 0.36, rand()), 10, 8), hair, [Math.sin(a) * r * 0.86, y * r - front * r * 0.08, front * r * 0.78]);
       }
     }
     // Moustache, with a gap so the mouth still shows.

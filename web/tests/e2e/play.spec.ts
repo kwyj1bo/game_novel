@@ -55,7 +55,7 @@ for (const chapter of chapters) {
 
   test(`${chapter.id}: full correct playthrough reaches the victory ending`, async ({ page }) => {
     const errors = trackErrors(page);
-    await page.goto("/?fast&mute");
+    await page.goto("/?fast&mute&demos");
     await beginChapter(page, chapter.id);
     const visited: string[] = [];
     for (let i = 0; i < choiceScenes.length; i++) visited.push(await choose(page, true, i));
@@ -103,7 +103,7 @@ test("letting the timer run out picks the wrong option", async ({ page }) => {
 });
 
 test("progress is saved at a choice and resumes from the chamber's entrance", async ({ page }) => {
-  await page.goto("/?fast&mute");
+  await page.goto("/?fast&mute&demos");
   await beginChapter(page, "hp1-trapdoor");
   await choose(page, true, 0);
   // Reach the second chamber's choice, then leave.
@@ -127,11 +127,31 @@ test("uploading a novel adds generated chapters that play to the end", async ({ 
   await page.goto("/?fast&mute");
   await page.locator(".chapter.upload input[type=file]").setInputFiles(new URL("../../../tests/pipeline/fixtures/lighthouse.txt", import.meta.url).pathname);
   await expect(page.locator(".upload-status")).toHaveText("Added 1 chapter.", { timeout: 60_000 });
+  // The book is kept: after a reload it is still in the menu, once.
+  await page.reload();
+  await expect(page.locator(".chapter", { hasText: "The Keeper's Hall" })).toHaveCount(1, { timeout: 15_000 });
   const card = page.locator(".chapter", { hasText: "The Keeper's Hall" });
   await card.getByRole("button", { name: "Begin" }).click();
   await choose(page, true, 0);
   await waitForHud(page, "ending");
   const { events } = await engine(page);
+  expect(events.filter((e) => e.type === "ending").at(-1).ending.kind).toBe("victory");
+  expect(errors).toEqual([]);
+});
+
+test("a whole book uploads as one card per chapter, each staged from the manifest", async ({ page }) => {
+  const errors = trackErrors(page);
+  await page.goto("/?fast&mute");
+  await page.locator(".chapter.upload input[type=file]").setInputFiles(new URL("../../../tests/pipeline/fixtures/hp_book.txt", import.meta.url).pathname);
+  await expect(page.locator(".upload-status")).toHaveText("Added 3 chapters.", { timeout: 90_000 });
+  for (const title of ["The Letters", "The Alley", "The Forest"]) await expect(page.locator(".chapter", { hasText: title })).toHaveCount(1);
+  await page.locator(".chapter", { hasText: "The Alley" }).getByRole("button", { name: "Begin" }).click();
+  await choose(page, true, 0);
+  await waitForHud(page, "ending");
+  await page.screenshot({ path: `${shotDir}/hp-book-alley-victory.png` });
+  const { events } = await engine(page);
+  const scenes = events.filter((e) => e.type === "scene").map((e) => e.id);
+  expect(scenes.length).toBeGreaterThan(2);
   expect(events.filter((e) => e.type === "ending").at(-1).ending.kind).toBe("victory");
   expect(errors).toEqual([]);
 });

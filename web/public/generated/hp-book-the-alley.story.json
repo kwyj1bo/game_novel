@@ -1,0 +1,323 @@
+{
+  "$schema": "../../../story.schema.json",
+  "id": "hp-book-the-alley",
+  "title": "The Alley",
+  "subtitle": "Hp Book",
+  "start": "scene_1",
+  "actors": {
+    "goblin": {
+      "name": "The Goblin",
+      "height": 1.59,
+      "robe": "#22262e",
+      "skin": "#e3b08c",
+      "hair": "#d8c080",
+      "hairStyle": "messy",
+      "outfit": "adult",
+      "voice": 0.95,
+      "subtitleColor": "#e0e0e0"
+    },
+    "harry": {
+      "name": "Harry",
+      "kind": "human",
+      "height": 1.45,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#e3b08c",
+      "hair": "#120d08",
+      "hairStyle": "messy",
+      "eyes": "#2e7d32",
+      "glasses": "round",
+      "beard": "none",
+      "outfit": "student",
+      "hat": "none",
+      "scar": true,
+      "voice": 1.15,
+      "subtitleColor": "#f3d27a"
+    },
+    "hagrid": {
+      "name": "Hagrid",
+      "kind": "human",
+      "height": 2.6,
+      "robe": "#4a3626",
+      "trim": "#3a2a1a",
+      "skin": "#d8a888",
+      "hair": "#24160c",
+      "hairStyle": "messy",
+      "eyes": "#1a1a1a",
+      "glasses": "none",
+      "beard": "short",
+      "outfit": "adult",
+      "hat": "none",
+      "scar": false,
+      "voice": 0.7,
+      "subtitleColor": "#e8b878"
+    },
+    "witch": {
+      "name": "The Witch",
+      "height": 1.52,
+      "robe": "#3a3044",
+      "skin": "#e3b08c",
+      "hair": "#c2501e",
+      "hairStyle": "messy",
+      "outfit": "adult",
+      "voice": 0.95,
+      "subtitleColor": "#f3d27a"
+    }
+  },
+  "scenes": {
+    "scene_1": {
+      "location": "diagon_alley",
+      "cast": {
+        "harry": "auto_1",
+        "hagrid": "auto_2",
+        "witch": "auto_3"
+      },
+      "beats": [
+        {
+          "camera": "wide",
+          "ms": 0
+        },
+        {
+          "music": "mystery"
+        },
+        {
+          "narrate": "Hagrid led Harry through the crowded alley."
+        },
+        {
+          "narrate": "Shop windows glittered on both sides of the cobbled street, full of cauldrons, owls and broomsticks."
+        },
+        {
+          "look": "hagrid",
+          "at": "harry"
+        },
+        {
+          "camera": "close",
+          "on": "hagrid",
+          "ms": 500
+        },
+        {
+          "say": "hagrid",
+          "text": "Welcome to Diagon Alley,"
+        },
+        {
+          "narrate": "said Hagrid, grinning down at him."
+        },
+        {
+          "narrate": "Harry stared at everything."
+        },
+        {
+          "narrate": "A witch was selling dragon livers from a stall, and a crowd of boys pressed their noses against a shop window."
+        },
+        {
+          "look": "hagrid",
+          "at": "harry"
+        },
+        {
+          "camera": "close",
+          "on": "hagrid",
+          "ms": 500
+        },
+        {
+          "say": "hagrid",
+          "text": "First, the bank,"
+        },
+        {
+          "look": "hagrid",
+          "at": "harry"
+        },
+        {
+          "camera": "close",
+          "on": "hagrid",
+          "ms": 500
+        },
+        {
+          "say": "hagrid",
+          "text": "Can't buy anything without gold."
+        },
+        {
+          "narrate": "At the end of the street stood a white marble building."
+        },
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 700
+        },
+        {
+          "narrate": "Harry followed Hagrid up the steps and into Gringotts."
+        }
+      ],
+      "title": "Diagon Alley",
+      "goto": "scene_2"
+    },
+    "scene_2_wrong": {
+      "location": "gringotts",
+      "cast": {
+        "hagrid": "auto_2",
+        "goblin": "auto_3",
+        "harry": "auto_1"
+      },
+      "beats": [
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 500
+        },
+        {
+          "narrate": "Harry hesitates — and chooses to refuse the key."
+        },
+        {
+          "anim": "harry",
+          "clip": "shake"
+        },
+        {
+          "narrate": "The moment slips away, and it cannot be taken back."
+        },
+        {
+          "fx": "fade_out",
+          "ms": 1500
+        }
+      ],
+      "ending": {
+        "kind": "failure",
+        "title": "A Different Ending",
+        "text": "In the book, Harry chose to take the key from Hagrid. Choosing to refuse the key ended the story here."
+      }
+    },
+    "scene_2": {
+      "location": "gringotts",
+      "cast": {
+        "harry": "auto_1",
+        "hagrid": "auto_2",
+        "goblin": "auto_3"
+      },
+      "beats": [
+        {
+          "camera": "wide",
+          "ms": 0
+        },
+        {
+          "music": "mystery"
+        },
+        {
+          "narrate": "The marble hall was enormous."
+        },
+        {
+          "narrate": "Goblins sat at long counters, weighing coins and writing in ledgers."
+        },
+        {
+          "look": "hagrid",
+          "at": "goblin"
+        },
+        {
+          "camera": "close",
+          "on": "hagrid",
+          "ms": 500
+        },
+        {
+          "say": "hagrid",
+          "text": "Mr. Potter wishes to make a withdrawal,"
+        },
+        {
+          "narrate": "He pulled a tiny golden key from his coat."
+        },
+        {
+          "narrate": "A goblin peered down at them."
+        },
+        {
+          "look": "goblin",
+          "at": "hagrid"
+        },
+        {
+          "camera": "close",
+          "on": "goblin",
+          "ms": 500
+        },
+        {
+          "say": "goblin",
+          "text": "And does Mr. Potter have his key?"
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 600
+        }
+      ],
+      "title": "Gringotts Bank",
+      "choice": {
+        "prompt": "What should Harry do?",
+        "seconds": 10,
+        "options": [
+          {
+            "label": "Take the key from Hagrid",
+            "correct": true,
+            "goto": "scene_3"
+          },
+          {
+            "label": "Refuse the key",
+            "correct": false,
+            "goto": "scene_2_wrong"
+          }
+        ]
+      }
+    },
+    "scene_3": {
+      "location": "gringotts",
+      "cast": {
+        "harry": "auto_1",
+        "hagrid": "auto_2",
+        "goblin": "auto_3"
+      },
+      "beats": [
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 700
+        },
+        {
+          "anim": "harry",
+          "clip": "reach",
+          "async": true
+        },
+        {
+          "anim": "harry",
+          "clip": "reach",
+          "async": true
+        },
+        {
+          "narrate": "Harry took the key from Hagrid and held it up."
+        },
+        {
+          "camera": "medium",
+          "on": "goblin",
+          "ms": 700
+        },
+        {
+          "anim": "goblin",
+          "clip": "nod",
+          "async": true
+        },
+        {
+          "narrate": "The goblin nodded slowly."
+        },
+        {
+          "look": "goblin",
+          "at": "hagrid"
+        },
+        {
+          "camera": "close",
+          "on": "goblin",
+          "ms": 500
+        },
+        {
+          "say": "goblin",
+          "text": "Very well. Follow me."
+        }
+      ],
+      "ending": {
+        "kind": "victory",
+        "title": "The Alley",
+        "text": "You followed Harry through “The Alley” the way the book tells it."
+      }
+    }
+  }
+}

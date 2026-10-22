@@ -28,7 +28,6 @@ export const fluffyRoom: LocationDef = {
   title: "The Forbidden Corridor",
   info: {
     marks: Object.keys(MARKS),
-    keywords: ["three-headed","dog","harp","trapdoor","third floor","forbidden corridor"],
     props: {
       trapdoor: ["closed", "open"],
       harp: ["playing", "silent"],
