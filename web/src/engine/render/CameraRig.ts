@@ -87,6 +87,13 @@ export class CameraRig {
     return new Promise((r) => (this.resolve = r));
   }
 
+  // Slow orbit around a point, starting from `from` (used behind menus).
+  drift(center: THREE.Vector3, from: THREE.Vector3): void {
+    this.cut(from, center);
+    const d = from.clone().sub(center);
+    this.orbit = { center: center.clone(), radius: Math.hypot(d.x, d.z), height: d.y, angle: Math.atan2(d.x, d.z) };
+  }
+
   // Keeps the camera following a moving subject at its current offset.
   follow(subject: ShotSubject): void {
     this.track = { subject, offset: this.toPos.clone().sub(subject.point) };

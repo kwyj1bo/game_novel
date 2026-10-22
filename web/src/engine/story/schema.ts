@@ -183,6 +183,8 @@ export const ActorSpecSchema = z
     eyes: z.string().default("#3a5a2a"),
     glasses: z.enum(["none", "round", "halfmoon", "square"]).default("none"),
     beard: z.enum(["none", "short", "long"]).default("none"),
+    // Students wear the school jumper and shirt under the robe.
+    outfit: z.enum(["student", "adult"]).default("student"),
     scar: z.boolean().default(false),
     voice: z.number().default(1),
     subtitleColor: z.string().default("#ffffff"),

@@ -304,7 +304,7 @@ canvas.view {
   to { opacity: 0; }
 }
 .title-screen {
-  background: radial-gradient(ellipse at 50% 40%, rgba(40, 28, 10, 0.55), rgba(0, 0, 0, 0.92) 70%);
+  background: radial-gradient(ellipse at 50% 45%, rgba(10, 8, 4, 0.35), rgba(0, 0, 0, 0.88) 80%);
 }
 .screen .eyebrow {
   font-family: var(--display);
