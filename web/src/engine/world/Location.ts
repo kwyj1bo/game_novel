@@ -32,5 +32,7 @@ export interface LocationDef {
   title: string;
   // Static description, used by the validator without building any 3D.
   info: LocationInfo;
+  // Async setup that must finish before build (loading a model file).
+  preload?(): Promise<void>;
   build(ctx: LocationContext): LocationInstance;
 }

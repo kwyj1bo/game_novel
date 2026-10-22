@@ -14,7 +14,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from .analyze import analyze
+from .analyze import analyze, hero_score
 from .build import build_story
 from .text import load_chapters
 
@@ -26,10 +26,28 @@ def load_catalog(path: Path = CATALOG) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def build_chapter(chapter, catalog, source: str):
+def build_chapter(chapter, catalog, source: str, hero: str | None = None):
     a = analyze(chapter.paragraphs, catalog)
+    if hero and hero in a.characters:
+        a.protagonist = hero
     story, scenes, moments = build_story(chapter.paragraphs, a, catalog, chapter.title, source)
     return story, a, scenes, moments
+
+
+def book_hero(chapters, catalog) -> str | None:
+    """The character the whole book follows: most mentions across all chapters.
+    A chapter where someone else talks more still keeps the same hero."""
+    totals: dict[str, float] = {}
+    for ch in chapters:
+        for c in analyze(ch.paragraphs, catalog).characters.values():
+            if c.kind == "human":
+                totals[c.id] = totals.get(c.id, 0) + hero_score(c)
+    return max(totals, key=totals.get) if totals else None
+
+
+def build_book(chapters, catalog, source: str):
+    hero = book_hero(chapters, catalog)
+    return [build_chapter(ch, catalog, source, hero) for ch in chapters]
 
 
 def validate(path: Path) -> bool:
@@ -63,8 +81,10 @@ def main(argv=None) -> int:
     source = args.source.stem.replace("_", " ").replace("-", " ").title()
     args.out.mkdir(parents=True, exist_ok=True)
     ok = True
+    # The hero is decided from the whole book, even when building one chapter.
+    hero = book_hero(chapters, catalog)
     for ch in picked:
-        story, a, scenes, moments = build_chapter(ch, catalog, source)
+        story, a, scenes, moments = build_chapter(ch, catalog, source, hero)
         path = args.out / f"{story['id']}.story.json"
         path.write_text(json.dumps(story, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"{path}: {len(story['scenes'])} scenes, {len(moments)} choices, hero {a.protagonist}")

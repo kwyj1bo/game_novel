@@ -16,6 +16,18 @@ SPEECH_VERBS = {
     "answer", "mutter", "murmur", "snap", "hiss", "gasp", "add", "exclaim",
     "shriek", "roar", "bellow", "groan", "moan", "breathe", "laugh", "sob",
     "plead", "beg", "insist", "demand", "announce", "declare", "growl", "squeak",
+    "tell", "explain", "promise", "admit", "agree", "suggest", "continue", "repeat", "order", "command",
+}
+
+# Words that mark an action as not happening ("before he went", "if she ran").
+HYPOTHETICAL_MARKS = {"before", "if", "unless", "until", "though", "although", "whether", "lest"}
+HYPOTHETICAL_AUX = {"would", "could", "might", "should", "may"}
+
+# Unnamed people who can speak and act ("the innkeeper said").
+ROLE_NOUNS = {
+    "innkeeper", "goblin", "sailor", "guard", "witch", "wizard", "shopkeeper", "servant", "soldier",
+    "knight", "king", "queen", "priest", "farmer", "merchant", "stranger", "driver", "waiter",
+    "landlord", "landlady", "teacher", "doctor", "nurse", "policeman", "thief", "beggar", "hunter",
 }
 
 # Speech verb -> subtitle mood.
@@ -37,34 +49,13 @@ MOVE_VERBS = {
 # Moves that take the actor away from the action.
 AWAY_VERBS = {"flee", "retreat", "back", "escape", "slink", "bolt"}
 
-# Verb -> engine animation clip. Some need a specific object (see ANIM_WITH_OBJECT).
-ANIM_VERBS = {
-    "point": "point", "wave": "wave", "nod": "nod", "beckon": "wave",
-    "fall": "fall", "collapse": "fall", "topple": "fall", "trip": "fall", "stumble": "fall", "faint": "fall",
-    "kneel": "kneel", "crouch": "cower", "cower": "cower", "flinch": "cower", "cringe": "cower",
-    "tremble": "cower", "shiver": "cower", "shrink": "cower",
-    "laugh": "laugh", "grin": "laugh", "chuckle": "laugh",
-    "cast": "cast", "throw": "cast", "hurl": "cast", "fling": "cast", "toss": "cast",
-    "drink": "drink", "sip": "drink", "swallow": "drink", "gulp": "drink",
-    "grab": "reach", "seize": "reach", "snatch": "reach", "reach": "reach", "catch": "reach",
-    "take": "reach", "pick": "reach", "grip": "reach", "clutch": "reach", "lift": "reach", "hold": "reach",
-    "struggle": "struggle", "fight": "struggle", "wrestle": "struggle", "kick": "struggle", "thrash": "struggle",
-    "jump": "jump", "leap": "jump", "spring": "jump", "hop": "jump",
-    "cheer": "celebrate", "celebrate": "celebrate",
-    "roar": "roar", "howl": "roar", "bellow": "roar",
-    "swing": "lunge", "lunge": "lunge", "pounce": "lunge", "strike": "lunge", "smash": "lunge",
-}
-# (verb, object word) -> clip, checked before ANIM_VERBS.
-ANIM_WITH_OBJECT = {
-    ("raise", "wand"): "cast", ("point", "wand"): "cast", ("wave", "wand"): "cast", ("lift", "wand"): "cast",
-    ("shake", "head"): "shake", ("nod", "head"): "nod", ("play", "flute"): "play_flute",
-}
-
-# Words in narration that trigger a sound effect.
-SOUND_WORDS = {
-    "scream": "scream", "shriek": "scream", "crash": "crash", "smash": "crash", "shatter": "shatter",
-    "roar": "roar", "growl": "growl", "snarl": "growl", "bang": "thud", "thud": "thud", "slam": "thud",
-    "creak": "creak", "whoosh": "whoosh", "flutter": "flutter", "laugh": "laugh", "thunder": "thud",
+# Verbs only a living thing does: an acting subject of these is a character.
+# (Which animation a verb plays is asset data: see "actions" in the manifest.)
+ACTION_VERBS = {
+    "point", "wave", "nod", "fall", "kneel", "crouch", "cower", "flinch", "tremble", "laugh", "grin",
+    "cast", "throw", "drink", "grab", "seize", "snatch", "reach", "catch", "take", "pick", "grip",
+    "struggle", "fight", "kick", "jump", "leap", "cheer", "frown", "smile", "stare", "glare", "sigh",
+    "push", "pull", "open", "close", "turn", "look", "watch", "nod", "shrug", "wink", "sob", "weep",
 }
 
 DANGER_WORDS = {
@@ -82,6 +73,15 @@ TIME_MARKERS = (
 )
 
 SCENE_SEPARATORS = {"***", "* * *", "#", "~", "---", "* * * *", "◆"}
+
+# (verb, object word) opposites checked before the verb table.
+OPPOSITES_WITH = {
+    ("take", "hand"): "Refuse the handshake",
+    ("shake", "hand"): "Refuse the handshake",
+    ("take", "key"): "Refuse the key",
+    ("raise", "wand"): "Lower your wand",
+    ("drop", "rope"): "Keep hold of the rope",
+}
 
 # Verbs strong enough to be a story decision, and how to say their opposite.
 # "{obj}" is the object phrase (or "it"); "{target}" a prepositional target.
@@ -124,7 +124,6 @@ OPPOSITES = {
     "cast": "Lower your wand",
     "play": "Stop playing",
     "speak": "Stay silent",
-    "tell": "Say nothing",
     "shout": "Keep quiet",
     "call": "Keep quiet",
     "warn": "Keep quiet",

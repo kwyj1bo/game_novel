@@ -1,14 +1,15 @@
 {
+  "defaultScenery": "generic_room",
   "locations": {
     "fluffy_room": {
       "title": "The Forbidden Corridor",
       "keywords": [
         "three-headed",
-        "dog",
         "harp",
         "trapdoor",
-        "third floor",
-        "forbidden corridor"
+        "third-floor corridor",
+        "forbidden corridor",
+        "fluffy"
       ],
       "marks": [
         "door",
@@ -52,12 +53,10 @@
     "devils_snare": {
       "title": "Devil's Snare",
       "keywords": [
-        "plant",
+        "devil's snare",
         "snare",
-        "vines",
         "tendrils",
-        "creepers",
-        "pit"
+        "creepers"
       ],
       "marks": [
         "hole",
@@ -93,10 +92,9 @@
     "flying_keys": {
       "title": "The Chamber of Winged Keys",
       "keywords": [
+        "winged keys",
         "keys",
-        "winged",
-        "broomstick",
-        "brooms",
+        "broomsticks",
         "fluttering"
       ],
       "marks": [
@@ -146,8 +144,8 @@
     "chessboard": {
       "title": "The Giant Chessboard",
       "keywords": [
-        "chess",
         "chessboard",
+        "chess",
         "knight",
         "queen",
         "bishop",
@@ -195,12 +193,12 @@
     "potions_room": {
       "title": "The Riddle of the Potions",
       "keywords": [
+        "seven bottles",
         "bottles",
-        "potion",
-        "potions",
+        "potion bottles",
         "riddle",
         "flask",
-        "poison"
+        "black fire"
       ],
       "marks": [
         "entry",
@@ -249,9 +247,9 @@
     "mirror_chamber": {
       "title": "The Last Chamber",
       "keywords": [
+        "mirror of erised",
         "mirror",
-        "reflection",
-        "chamber"
+        "reflection"
       ],
       "marks": [
         "entry",
@@ -279,47 +277,6 @@
         "flames": [
           "off",
           "on"
-        ]
-      }
-    },
-    "castle_corridor": {
-      "title": "A Castle Corridor",
-      "keywords": [
-        "corridor",
-        "hall",
-        "hallway",
-        "passage",
-        "staircase",
-        "stairs",
-        "castle",
-        "statue",
-        "window",
-        "door"
-      ],
-      "marks": [
-        "start_harry",
-        "start_ron",
-        "hide_harry",
-        "hide_ron",
-        "troll_enter",
-        "troll_door",
-        "bathroom_door",
-        "lock_harry",
-        "lock_ron",
-        "teachers",
-        "auto_1",
-        "auto_2",
-        "auto_3",
-        "auto_4",
-        "auto_5",
-        "auto_threat",
-        "auto_entry"
-      ],
-      "props": {
-        "bathroom_door": [
-          "open",
-          "closed",
-          "locked"
         ]
       }
     },
@@ -366,6 +323,903 @@
           "smashed"
         ]
       }
+    },
+    "castle_corridor": {
+      "title": "A Castle Corridor",
+      "keywords": [
+        "corridor",
+        "hallway",
+        "passage",
+        "staircase",
+        "stairs",
+        "statue",
+        "suit of armour"
+      ],
+      "marks": [
+        "start_harry",
+        "start_ron",
+        "hide_harry",
+        "hide_ron",
+        "troll_enter",
+        "troll_door",
+        "bathroom_door",
+        "lock_harry",
+        "lock_ron",
+        "teachers",
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {
+        "bathroom_door": [
+          "open",
+          "closed",
+          "locked"
+        ]
+      }
+    },
+    "privet_drive": {
+      "title": "Number Four, Privet Drive",
+      "keywords": [
+        "privet drive",
+        "number four",
+        "dursleys",
+        "kitchen",
+        "living room",
+        "front door",
+        "sitting room"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "cupboard": {
+      "title": "The Cupboard Under the Stairs",
+      "keywords": [
+        "cupboard",
+        "cupboard under the stairs",
+        "spiders"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "zoo": {
+      "title": "The Reptile House",
+      "keywords": [
+        "zoo",
+        "reptile house",
+        "snake",
+        "boa constrictor",
+        "glass",
+        "tank"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "hut_on_the_rock": {
+      "title": "The Hut on the Rock",
+      "keywords": [
+        "hut on the rock",
+        "the rock",
+        "storm",
+        "shack",
+        "waves"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "diagon_alley": {
+      "title": "Diagon Alley",
+      "keywords": [
+        "diagon alley",
+        "alley",
+        "shop windows",
+        "leaky cauldron",
+        "cobbled street"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "gringotts": {
+      "title": "Gringotts Bank",
+      "keywords": [
+        "gringotts",
+        "bank",
+        "goblin",
+        "goblins",
+        "vault",
+        "marble hall"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "ollivanders": {
+      "title": "Ollivanders",
+      "keywords": [
+        "ollivanders",
+        "wand shop",
+        "wands",
+        "boxes"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "madam_malkins": {
+      "title": "Madam Malkin's Robes",
+      "keywords": [
+        "madam malkin",
+        "robes for all occasions",
+        "fitting",
+        "footstool"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "kings_cross": {
+      "title": "King's Cross",
+      "keywords": [
+        "king's cross",
+        "platform",
+        "barrier",
+        "station",
+        "platform nine and three-quarters",
+        "trolley"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "hogwarts_express": {
+      "title": "The Hogwarts Express",
+      "keywords": [
+        "hogwarts express",
+        "train",
+        "compartment",
+        "trolley witch",
+        "chocolate frog"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "boathouse_lake": {
+      "title": "The Black Lake",
+      "keywords": [
+        "lake",
+        "boats",
+        "boathouse",
+        "black lake",
+        "dark water"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "great_hall": {
+      "title": "The Great Hall",
+      "keywords": [
+        "great hall",
+        "feast",
+        "house tables",
+        "enchanted ceiling",
+        "sorting hat",
+        "staff table",
+        "floating candles"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "common_room": {
+      "title": "The Gryffindor Common Room",
+      "keywords": [
+        "common room",
+        "portrait hole",
+        "fat lady",
+        "armchair",
+        "armchairs",
+        "fire"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "dormitory": {
+      "title": "The Dormitory",
+      "keywords": [
+        "dormitory",
+        "four-poster",
+        "four-posters",
+        "bed",
+        "beds"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "potions_dungeon": {
+      "title": "The Potions Dungeon",
+      "keywords": [
+        "dungeon",
+        "dungeons",
+        "cauldron",
+        "cauldrons",
+        "potions class",
+        "pickled"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "classroom": {
+      "title": "A Classroom",
+      "keywords": [
+        "classroom",
+        "charms",
+        "transfiguration",
+        "history of magic",
+        "lesson",
+        "blackboard"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "greenhouse": {
+      "title": "The Greenhouses",
+      "keywords": [
+        "greenhouse",
+        "greenhouses",
+        "herbology",
+        "plants"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "hospital_wing": {
+      "title": "The Hospital Wing",
+      "keywords": [
+        "hospital wing",
+        "madam pomfrey",
+        "bedside",
+        "sweets"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "library_hogwarts": {
+      "title": "The Library",
+      "keywords": [
+        "library",
+        "restricted section",
+        "bookshelves",
+        "books",
+        "madam pince"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "quidditch_pitch": {
+      "title": "The Quidditch Pitch",
+      "keywords": [
+        "quidditch",
+        "pitch",
+        "snitch",
+        "bludger",
+        "goal hoops",
+        "stands",
+        "broom"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "forbidden_forest": {
+      "title": "The Forbidden Forest",
+      "keywords": [
+        "forbidden forest",
+        "forest",
+        "trees",
+        "unicorn",
+        "centaur",
+        "clearing"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "hagrids_hut": {
+      "title": "Hagrid's Hut",
+      "keywords": [
+        "hagrid's hut",
+        "hut",
+        "rock cakes",
+        "kettle",
+        "dragon egg"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "astronomy_tower": {
+      "title": "The Astronomy Tower",
+      "keywords": [
+        "astronomy tower",
+        "tower",
+        "battlements",
+        "night sky"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_room": {
+      "title": "A Room",
+      "keywords": [
+        "room",
+        "chamber",
+        "study",
+        "office"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_hall": {
+      "title": "A Hall",
+      "keywords": [
+        "hall",
+        "throne",
+        "palace",
+        "ballroom",
+        "courtroom"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_tavern": {
+      "title": "A Tavern",
+      "keywords": [
+        "tavern",
+        "inn",
+        "pub",
+        "bar",
+        "alehouse"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_library": {
+      "title": "A Library",
+      "keywords": [
+        "library",
+        "study",
+        "archive"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_kitchen": {
+      "title": "A Kitchen",
+      "keywords": [
+        "kitchen",
+        "stove",
+        "pantry",
+        "oven"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_bedroom": {
+      "title": "A Bedroom",
+      "keywords": [
+        "bedroom",
+        "bed",
+        "pillow",
+        "blanket"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_cellar": {
+      "title": "A Cellar",
+      "keywords": [
+        "cellar",
+        "basement",
+        "vault",
+        "crypt"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_classroom": {
+      "title": "A Classroom",
+      "keywords": [
+        "classroom",
+        "school",
+        "lesson",
+        "teacher"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_shop": {
+      "title": "A Shop",
+      "keywords": [
+        "shop",
+        "store",
+        "counter",
+        "shopkeeper"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_chapel": {
+      "title": "A Chapel",
+      "keywords": [
+        "chapel",
+        "church",
+        "altar",
+        "cathedral"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_cave": {
+      "title": "A Cave",
+      "keywords": [
+        "cave",
+        "cavern",
+        "tunnel",
+        "grotto"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_forest": {
+      "title": "A Forest",
+      "keywords": [
+        "forest",
+        "woods",
+        "wood",
+        "trees",
+        "thicket"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_field": {
+      "title": "Open Fields",
+      "keywords": [
+        "field",
+        "fields",
+        "meadow",
+        "farm",
+        "countryside",
+        "hill"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_street": {
+      "title": "A Street",
+      "keywords": [
+        "street",
+        "road",
+        "alley",
+        "square",
+        "town"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_village": {
+      "title": "A Village",
+      "keywords": [
+        "village",
+        "cottage",
+        "cottages",
+        "hamlet"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_shore": {
+      "title": "The Shore",
+      "keywords": [
+        "beach",
+        "shore",
+        "sea",
+        "sand",
+        "waves",
+        "harbour",
+        "harbor"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_lake": {
+      "title": "A Lake",
+      "keywords": [
+        "lake",
+        "pond",
+        "river",
+        "riverbank"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_mountain": {
+      "title": "The Mountains",
+      "keywords": [
+        "mountain",
+        "mountains",
+        "cliff",
+        "peak",
+        "ridge",
+        "rocks"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_garden": {
+      "title": "A Garden",
+      "keywords": [
+        "garden",
+        "hedge",
+        "roses",
+        "lawn",
+        "orchard"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
+    },
+    "generic_deck": {
+      "title": "A Ship's Deck",
+      "keywords": [
+        "ship",
+        "deck",
+        "sail",
+        "mast",
+        "captain",
+        "sailor"
+      ],
+      "marks": [
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {}
     }
   },
   "autoMarks": [
@@ -379,96 +1233,952 @@
   ],
   "characters": {
     "harry": {
-      "name": "Harry",
-      "height": 1.45,
-      "robe": "#18181f",
-      "trim": "#7f0909",
-      "skin": "#e3b08c",
-      "hair": "#120d08",
-      "hairStyle": "messy",
-      "eyes": "#2e7d32",
-      "glasses": "round",
-      "scar": true,
-      "voice": 1.15,
-      "subtitleColor": "#f3d27a"
+      "names": [
+        "Harry",
+        "Harry Potter",
+        "Potter"
+      ],
+      "spec": {
+        "name": "Harry",
+        "kind": "human",
+        "height": 1.45,
+        "robe": "#18181f",
+        "trim": "#7f0909",
+        "skin": "#e3b08c",
+        "hair": "#120d08",
+        "hairStyle": "messy",
+        "eyes": "#2e7d32",
+        "glasses": "round",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": true,
+        "voice": 1.15,
+        "subtitleColor": "#f3d27a"
+      }
     },
     "ron": {
-      "name": "Ron",
-      "height": 1.53,
-      "robe": "#18181f",
-      "trim": "#7f0909",
-      "skin": "#ecbb9a",
-      "hair": "#c2501e",
-      "hairStyle": "ginger_mop",
-      "eyes": "#4a7ab0",
-      "voice": 0.95,
-      "subtitleColor": "#ff9a6a"
+      "names": [
+        "Ron",
+        "Ron Weasley",
+        "Ronald"
+      ],
+      "spec": {
+        "name": "Ron",
+        "kind": "human",
+        "height": 1.53,
+        "robe": "#18181f",
+        "trim": "#7f0909",
+        "skin": "#ecbb9a",
+        "hair": "#c2501e",
+        "hairStyle": "ginger_mop",
+        "eyes": "#4a7ab0",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 0.95,
+        "subtitleColor": "#ff9a6a"
+      }
     },
     "hermione": {
-      "name": "Hermione",
-      "height": 1.42,
-      "robe": "#18181f",
-      "trim": "#7f0909",
-      "skin": "#dca47e",
-      "hair": "#5a3418",
-      "hairStyle": "bushy",
-      "eyes": "#6a4a2a",
-      "voice": 1.4,
-      "subtitleColor": "#c9a8ff"
-    },
-    "troll": {
-      "name": "Troll",
-      "kind": "troll",
-      "height": 3.6,
-      "skin": "#7d8572",
-      "robe": "#4a3a28"
+      "names": [
+        "Hermione",
+        "Hermione Granger",
+        "Granger"
+      ],
+      "spec": {
+        "name": "Hermione",
+        "kind": "human",
+        "height": 1.42,
+        "robe": "#18181f",
+        "trim": "#7f0909",
+        "skin": "#dca47e",
+        "hair": "#5a3418",
+        "hairStyle": "bushy",
+        "eyes": "#6a4a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 1.4,
+        "subtitleColor": "#c9a8ff"
+      }
     },
     "mcgonagall": {
-      "name": "McGonagall",
-      "height": 1.74,
-      "robe": "#1f4a33",
-      "trim": "#1a3a28",
-      "skin": "#e2bea0",
-      "hair": "#5a5a5a",
-      "hairStyle": "bun",
-      "eyes": "#4a5a4a",
-      "glasses": "square",
-      "outfit": "adult",
-      "hat": "witch",
-      "voice": 0.9,
-      "subtitleColor": "#8fd6a8"
-    },
-    "fluffy": {
-      "name": "Fluffy",
-      "kind": "dog3",
-      "height": 3.4,
-      "robe": "#3e2c1f"
+      "names": [
+        "McGonagall",
+        "Professor McGonagall",
+        "Minerva"
+      ],
+      "spec": {
+        "name": "McGonagall",
+        "kind": "human",
+        "height": 1.74,
+        "robe": "#1f4a33",
+        "trim": "#1a3a28",
+        "skin": "#e2bea0",
+        "hair": "#5a5a5a",
+        "hairStyle": "bun",
+        "eyes": "#4a5a4a",
+        "glasses": "square",
+        "beard": "none",
+        "outfit": "adult",
+        "hat": "witch",
+        "scar": false,
+        "voice": 0.9,
+        "subtitleColor": "#8fd6a8"
+      }
     },
     "quirrell": {
-      "name": "Quirrell",
-      "height": 1.74,
-      "robe": "#2a2238",
-      "trim": "#4a2a5a",
-      "skin": "#d6bc9c",
-      "hair": "#4a3a2a",
-      "hairStyle": "turban",
-      "eyes": "#5a4a3a",
-      "voice": 0.85,
-      "subtitleColor": "#c8b8e8",
-      "outfit": "adult"
+      "names": [
+        "Quirrell",
+        "Professor Quirrell"
+      ],
+      "spec": {
+        "name": "Quirrell",
+        "kind": "human",
+        "height": 1.74,
+        "robe": "#2a2238",
+        "trim": "#4a2a5a",
+        "skin": "#d6bc9c",
+        "hair": "#4a3a2a",
+        "hairStyle": "turban",
+        "eyes": "#5a4a3a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "adult",
+        "hat": "none",
+        "scar": false,
+        "voice": 0.85,
+        "subtitleColor": "#c8b8e8"
+      }
+    },
+    "hagrid": {
+      "names": [
+        "Hagrid",
+        "Rubeus Hagrid",
+        "Rubeus"
+      ],
+      "spec": {
+        "name": "Hagrid",
+        "kind": "human",
+        "height": 2.6,
+        "robe": "#4a3626",
+        "trim": "#3a2a1a",
+        "skin": "#d8a888",
+        "hair": "#24160c",
+        "hairStyle": "messy",
+        "eyes": "#1a1a1a",
+        "glasses": "none",
+        "beard": "short",
+        "outfit": "adult",
+        "hat": "none",
+        "scar": false,
+        "voice": 0.7,
+        "subtitleColor": "#e8b878"
+      }
+    },
+    "dumbledore": {
+      "names": [
+        "Dumbledore",
+        "Albus Dumbledore",
+        "Professor Dumbledore",
+        "Albus"
+      ],
+      "spec": {
+        "name": "Dumbledore",
+        "kind": "human",
+        "height": 1.85,
+        "robe": "#4a2a7a",
+        "trim": "#c8a040",
+        "skin": "#ecd2b8",
+        "hair": "#e8e8e8",
+        "hairStyle": "long",
+        "eyes": "#6a9ad8",
+        "glasses": "halfmoon",
+        "beard": "long",
+        "outfit": "adult",
+        "hat": "witch",
+        "scar": false,
+        "voice": 0.85,
+        "subtitleColor": "#c8b8ff"
+      }
+    },
+    "snape": {
+      "names": [
+        "Snape",
+        "Severus Snape",
+        "Professor Snape",
+        "Severus"
+      ],
+      "spec": {
+        "name": "Snape",
+        "kind": "human",
+        "height": 1.82,
+        "robe": "#0c0c10",
+        "trim": "#0c0c10",
+        "skin": "#e4d6c4",
+        "hair": "#0e0e10",
+        "hairStyle": "long",
+        "eyes": "#141414",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "adult",
+        "hat": "none",
+        "scar": false,
+        "voice": 0.8,
+        "subtitleColor": "#a0b0a0"
+      }
+    },
+    "malfoy": {
+      "names": [
+        "Malfoy",
+        "Draco Malfoy",
+        "Draco"
+      ],
+      "spec": {
+        "name": "Malfoy",
+        "kind": "human",
+        "height": 1.45,
+        "robe": "#18181f",
+        "trim": "#1a472a",
+        "skin": "#f0d8c8",
+        "hair": "#e8dca0",
+        "hairStyle": "short",
+        "eyes": "#8a9aa8",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 1.05,
+        "subtitleColor": "#b8d8b8"
+      }
+    },
+    "neville": {
+      "names": [
+        "Neville",
+        "Neville Longbottom",
+        "Longbottom"
+      ],
+      "spec": {
+        "name": "Neville",
+        "kind": "human",
+        "height": 1.45,
+        "robe": "#18181f",
+        "trim": "#7f0909",
+        "skin": "#f0cdb2",
+        "hair": "#6a4a2a",
+        "hairStyle": "short",
+        "eyes": "#5a4a3a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 1.1,
+        "subtitleColor": "#e8c8a0"
+      }
+    },
+    "crabbe": {
+      "names": [
+        "Crabbe"
+      ],
+      "spec": {
+        "name": "Crabbe",
+        "kind": "human",
+        "height": 1.62,
+        "robe": "#18181f",
+        "trim": "#1a472a",
+        "skin": "#e8c0a0",
+        "hair": "#3a2a1a",
+        "hairStyle": "short",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 0.8,
+        "subtitleColor": "#ffffff"
+      }
+    },
+    "goyle": {
+      "names": [
+        "Goyle"
+      ],
+      "spec": {
+        "name": "Goyle",
+        "kind": "human",
+        "height": 1.64,
+        "robe": "#18181f",
+        "trim": "#1a472a",
+        "skin": "#e0b898",
+        "hair": "#2a2a2a",
+        "hairStyle": "short",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 0.78,
+        "subtitleColor": "#ffffff"
+      }
+    },
+    "fred": {
+      "names": [
+        "Fred",
+        "Fred Weasley"
+      ],
+      "spec": {
+        "name": "Fred",
+        "kind": "human",
+        "height": 1.6,
+        "robe": "#18181f",
+        "trim": "#7f0909",
+        "skin": "#f0cdb2",
+        "hair": "#c2501e",
+        "hairStyle": "ginger_mop",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 1,
+        "subtitleColor": "#ff9a6a"
+      }
+    },
+    "george": {
+      "names": [
+        "George",
+        "George Weasley"
+      ],
+      "spec": {
+        "name": "George",
+        "kind": "human",
+        "height": 1.6,
+        "robe": "#18181f",
+        "trim": "#7f0909",
+        "skin": "#f0cdb2",
+        "hair": "#c2501e",
+        "hairStyle": "ginger_mop",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 1,
+        "subtitleColor": "#ffb07a"
+      }
+    },
+    "percy": {
+      "names": [
+        "Percy",
+        "Percy Weasley"
+      ],
+      "spec": {
+        "name": "Percy",
+        "kind": "human",
+        "height": 1.7,
+        "robe": "#18181f",
+        "trim": "#7f0909",
+        "skin": "#f0cdb2",
+        "hair": "#c2501e",
+        "hairStyle": "short",
+        "eyes": "#3a5a2a",
+        "glasses": "round",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 0.95,
+        "subtitleColor": "#ffa080"
+      }
+    },
+    "molly": {
+      "names": [
+        "Mrs. Weasley",
+        "Mrs Weasley",
+        "Molly"
+      ],
+      "spec": {
+        "name": "Mrs Weasley",
+        "kind": "human",
+        "height": 1.6,
+        "robe": "#6a3a4a",
+        "skin": "#f0cdb2",
+        "hair": "#c2501e",
+        "hairStyle": "bun",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "adult",
+        "hat": "none",
+        "scar": false,
+        "voice": 1.25,
+        "subtitleColor": "#ffb0a0"
+      }
+    },
+    "dudley": {
+      "names": [
+        "Dudley",
+        "Dudley Dursley",
+        "Duddy"
+      ],
+      "spec": {
+        "name": "Dudley",
+        "kind": "human",
+        "height": 1.5,
+        "robe": "#5a6a8a",
+        "skin": "#f2c8b0",
+        "hair": "#d0b070",
+        "hairStyle": "short",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "adult",
+        "hat": "none",
+        "scar": false,
+        "voice": 1,
+        "subtitleColor": "#d8c8a8"
+      }
+    },
+    "vernon": {
+      "names": [
+        "Vernon",
+        "Uncle Vernon",
+        "Mr. Dursley",
+        "Mr Dursley"
+      ],
+      "spec": {
+        "name": "Uncle Vernon",
+        "kind": "human",
+        "height": 1.75,
+        "robe": "#3a3a4a",
+        "skin": "#e8b498",
+        "hair": "#3a2a1a",
+        "hairStyle": "short",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "short",
+        "outfit": "adult",
+        "hat": "none",
+        "scar": false,
+        "voice": 0.8,
+        "subtitleColor": "#d8a888"
+      }
+    },
+    "petunia": {
+      "names": [
+        "Petunia",
+        "Aunt Petunia",
+        "Mrs. Dursley",
+        "Mrs Dursley"
+      ],
+      "spec": {
+        "name": "Aunt Petunia",
+        "kind": "human",
+        "height": 1.7,
+        "robe": "#8a8a6a",
+        "skin": "#efd4c0",
+        "hair": "#c8b070",
+        "hairStyle": "bun",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "adult",
+        "hat": "none",
+        "scar": false,
+        "voice": 1.3,
+        "subtitleColor": "#e8e0a8"
+      }
+    },
+    "filch": {
+      "names": [
+        "Filch",
+        "Argus Filch"
+      ],
+      "spec": {
+        "name": "Filch",
+        "kind": "human",
+        "height": 1.7,
+        "robe": "#4a4038",
+        "skin": "#d8c0a0",
+        "hair": "#6a6a6a",
+        "hairStyle": "long",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "adult",
+        "hat": "none",
+        "scar": false,
+        "voice": 0.75,
+        "subtitleColor": "#b8b090"
+      }
+    },
+    "ollivander": {
+      "names": [
+        "Ollivander",
+        "Mr. Ollivander",
+        "Mr Ollivander"
+      ],
+      "spec": {
+        "name": "Mr Ollivander",
+        "kind": "human",
+        "height": 1.7,
+        "robe": "#3a3448",
+        "skin": "#ecd8c4",
+        "hair": "#d8d8d8",
+        "hairStyle": "bushy",
+        "eyes": "#b8c8d8",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "adult",
+        "hat": "none",
+        "scar": false,
+        "voice": 0.9,
+        "subtitleColor": "#d8d8f0"
+      }
+    },
+    "hooch": {
+      "names": [
+        "Madam Hooch",
+        "Hooch"
+      ],
+      "spec": {
+        "name": "Madam Hooch",
+        "kind": "human",
+        "height": 1.68,
+        "robe": "#3a3a3a",
+        "skin": "#e0b890",
+        "hair": "#d0d0d0",
+        "hairStyle": "short",
+        "eyes": "#d8a020",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "adult",
+        "hat": "none",
+        "scar": false,
+        "voice": 1.1,
+        "subtitleColor": "#ffffff"
+      }
+    },
+    "pomfrey": {
+      "names": [
+        "Madam Pomfrey",
+        "Pomfrey"
+      ],
+      "spec": {
+        "name": "Madam Pomfrey",
+        "kind": "human",
+        "height": 1.65,
+        "robe": "#e8e4dc",
+        "skin": "#efd4c0",
+        "hair": "#8a6a4a",
+        "hairStyle": "bun",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "adult",
+        "hat": "none",
+        "scar": false,
+        "voice": 1.25,
+        "subtitleColor": "#ffffff"
+      }
+    },
+    "wood": {
+      "names": [
+        "Oliver Wood",
+        "Wood"
+      ],
+      "spec": {
+        "name": "Oliver Wood",
+        "kind": "human",
+        "height": 1.75,
+        "robe": "#18181f",
+        "trim": "#7f0909",
+        "skin": "#e8c4a0",
+        "hair": "#4a3018",
+        "hairStyle": "short",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 0.95,
+        "subtitleColor": "#ffffff"
+      }
+    },
+    "seamus": {
+      "names": [
+        "Seamus",
+        "Seamus Finnigan"
+      ],
+      "spec": {
+        "name": "Seamus",
+        "kind": "human",
+        "height": 1.45,
+        "robe": "#18181f",
+        "trim": "#7f0909",
+        "skin": "#f0d0b8",
+        "hair": "#c8a870",
+        "hairStyle": "short",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 1.05,
+        "subtitleColor": "#ffffff"
+      }
+    },
+    "dean": {
+      "names": [
+        "Dean",
+        "Dean Thomas"
+      ],
+      "spec": {
+        "name": "Dean",
+        "kind": "human",
+        "height": 1.52,
+        "robe": "#18181f",
+        "trim": "#7f0909",
+        "skin": "#8a5a3a",
+        "hair": "#1a1410",
+        "hairStyle": "short",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 0.98,
+        "subtitleColor": "#ffffff"
+      }
+    },
+    "figg": {
+      "names": [
+        "Mrs. Figg",
+        "Mrs Figg"
+      ],
+      "spec": {
+        "name": "Mrs Figg",
+        "kind": "human",
+        "height": 1.55,
+        "robe": "#6a5a6a",
+        "skin": "#ecd2bc",
+        "hair": "#c8c8c8",
+        "hairStyle": "bun",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "adult",
+        "hat": "none",
+        "scar": false,
+        "voice": 1.2,
+        "subtitleColor": "#ffffff"
+      }
     }
   },
   "creatures": {
-    "dog3": [
-      "dog",
-      "hound",
-      "three-headed"
-    ],
-    "troll": [
-      "troll",
-      "ogre"
-    ]
+    "fluffy": {
+      "words": [
+        "fluffy",
+        "three-headed dog",
+        "dog",
+        "hound"
+      ],
+      "spec": {
+        "name": "Fluffy",
+        "kind": "dog3",
+        "height": 3.4,
+        "robe": "#3e2c1f",
+        "skin": "#e8c4a0",
+        "hair": "#3a2a1a",
+        "hairStyle": "short",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 1,
+        "subtitleColor": "#ffffff"
+      }
+    },
+    "troll": {
+      "words": [
+        "troll",
+        "mountain troll"
+      ],
+      "spec": {
+        "name": "Troll",
+        "kind": "troll",
+        "height": 3.6,
+        "robe": "#4a3a28",
+        "skin": "#7d8572",
+        "hair": "#3a2a1a",
+        "hairStyle": "short",
+        "eyes": "#3a5a2a",
+        "glasses": "none",
+        "beard": "none",
+        "outfit": "student",
+        "hat": "none",
+        "scar": false,
+        "voice": 1,
+        "subtitleColor": "#ffffff"
+      }
+    }
   },
+  "actions": [
+    {
+      "clip": "point",
+      "verbs": [
+        "point"
+      ],
+      "with": {}
+    },
+    {
+      "clip": "wave",
+      "verbs": [
+        "wave",
+        "beckon"
+      ],
+      "with": {}
+    },
+    {
+      "clip": "nod",
+      "verbs": [
+        "nod"
+      ],
+      "with": {
+        "nod": "head"
+      }
+    },
+    {
+      "clip": "fall",
+      "verbs": [
+        "fall",
+        "collapse",
+        "topple",
+        "trip",
+        "stumble",
+        "faint"
+      ],
+      "with": {}
+    },
+    {
+      "clip": "kneel",
+      "verbs": [
+        "kneel"
+      ],
+      "with": {}
+    },
+    {
+      "clip": "cower",
+      "verbs": [
+        "crouch",
+        "cower",
+        "flinch",
+        "cringe",
+        "tremble",
+        "shiver",
+        "shrink"
+      ],
+      "with": {}
+    },
+    {
+      "clip": "laugh",
+      "verbs": [
+        "laugh",
+        "grin",
+        "chuckle"
+      ],
+      "with": {}
+    },
+    {
+      "clip": "cast",
+      "verbs": [
+        "cast",
+        "throw",
+        "hurl",
+        "fling",
+        "toss"
+      ],
+      "with": {
+        "raise": "wand",
+        "point": "wand",
+        "wave": "wand",
+        "lift": "wand"
+      }
+    },
+    {
+      "clip": "drink",
+      "verbs": [
+        "drink",
+        "sip",
+        "swallow",
+        "gulp"
+      ],
+      "with": {}
+    },
+    {
+      "clip": "reach",
+      "verbs": [
+        "grab",
+        "seize",
+        "snatch",
+        "reach",
+        "catch",
+        "take",
+        "pick",
+        "grip",
+        "clutch",
+        "lift",
+        "hold"
+      ],
+      "with": {}
+    },
+    {
+      "clip": "struggle",
+      "verbs": [
+        "struggle",
+        "fight",
+        "wrestle",
+        "kick",
+        "thrash"
+      ],
+      "with": {}
+    },
+    {
+      "clip": "jump",
+      "verbs": [
+        "jump",
+        "leap",
+        "spring",
+        "hop"
+      ],
+      "with": {}
+    },
+    {
+      "clip": "celebrate",
+      "verbs": [
+        "cheer",
+        "celebrate"
+      ],
+      "with": {}
+    },
+    {
+      "clip": "roar",
+      "verbs": [
+        "roar",
+        "howl",
+        "bellow"
+      ],
+      "with": {}
+    },
+    {
+      "clip": "lunge",
+      "verbs": [
+        "swing",
+        "lunge",
+        "pounce",
+        "strike",
+        "smash"
+      ],
+      "with": {}
+    },
+    {
+      "clip": "shake",
+      "verbs": [],
+      "with": {
+        "shake": "head"
+      }
+    },
+    {
+      "clip": "play_flute",
+      "verbs": [],
+      "with": {
+        "play": "flute"
+      }
+    }
+  ],
+  "sounds": [
+    {
+      "id": "scream",
+      "words": [
+        "scream",
+        "shriek"
+      ]
+    },
+    {
+      "id": "crash",
+      "words": [
+        "crash",
+        "smash"
+      ]
+    },
+    {
+      "id": "shatter",
+      "words": [
+        "shatter"
+      ]
+    },
+    {
+      "id": "roar",
+      "words": [
+        "roar"
+      ]
+    },
+    {
+      "id": "growl",
+      "words": [
+        "growl",
+        "snarl"
+      ]
+    },
+    {
+      "id": "thud",
+      "words": [
+        "bang",
+        "thud",
+        "slam",
+        "thunder"
+      ]
+    },
+    {
+      "id": "creak",
+      "words": [
+        "creak"
+      ]
+    },
+    {
+      "id": "whoosh",
+      "words": [
+        "whoosh"
+      ]
+    },
+    {
+      "id": "flutter",
+      "words": [
+        "flutter"
+      ]
+    },
+    {
+      "id": "laugh",
+      "words": [
+        "laugh"
+      ]
+    }
+  ],
   "clips": [
     "idle",
     "wave",

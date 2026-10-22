@@ -9,26 +9,44 @@ import { ThreeStage } from "./world/ThreeStage";
 
 export interface Chapter {
   number: string;
-  story: Story;
+  // Either the story itself, or where to fetch it when the player picks it.
+  story?: Story;
+  url?: string;
+  // Stable id for the menu and saved progress (defaults to the story id).
+  key?: string;
+  title?: string;
 }
 
 export interface EngineOptions {
   host: HTMLElement;
-  // Heading for the chapter menu, e.g. the book title.
+  // Heading for the chapter menu.
   title: string;
   chapters: Chapter[];
   locations: Record<string, LocationDef>;
+  // Scenery that plays behind the menu when there is no chapter to borrow from.
+  menuScenery: string;
   fast?: boolean;
   muted?: boolean;
   // Endpoint that turns an uploaded novel into stories (the novel pipeline).
   uploadUrl?: string;
+  // Endpoint listing books built so far; their chapters join the menu.
+  libraryUrl?: string;
+}
+
+interface LibraryBook {
+  id: string;
+  source: string;
+  chapters: { heading: string; title: string; file: string }[];
 }
 
 interface UploadResponse {
   source: string;
+  book: LibraryBook | null;
   stories: { heading: string; story: unknown }[];
   skipped: { heading: string; error: string }[];
 }
+
+const keyOf = (c: Chapter) => c.key ?? c.story!.id;
 
 const PROGRESS_KEY = "novel-engine:progress";
 
@@ -61,8 +79,9 @@ export class Engine {
   readonly audio = new AudioEngine();
   // Events of the chapter being played (reset when a chapter starts).
   events: RuntimeEvent[] = [];
-  story: Story;
-  runtime: StoryRuntime;
+  // The chapter being played (set once one starts).
+  story!: Story;
+  runtime!: StoryRuntime;
   private readonly locationInfo: LocationRegistryInfo;
   private last = performance.now();
   private fpsFrames = 0;
@@ -72,6 +91,7 @@ export class Engine {
   constructor(private readonly opts: EngineOptions) {
     const info = (this.locationInfo = Object.fromEntries(Object.entries(opts.locations).map(([id, d]) => [id, d.info])));
     for (const { story } of opts.chapters) {
+      if (!story) continue;
       const issues = validateStory(story, info);
       if (issues.length) {
         throw new Error(`story "${story.id}" is invalid:\n` + issues.map((i) => `  ${i.scene ?? "-"}: ${i.message}`).join("\n"));
@@ -97,8 +117,6 @@ export class Engine {
         this.stage.rig.handheld = on ? 2.5 : 1;
       },
     });
-    this.story = opts.chapters[0].story;
-    this.runtime = this.makeRuntime(this.story);
 
     const resize = () => {
       const w = host.clientWidth;
@@ -123,18 +141,62 @@ export class Engine {
     }
     const data = (await res.json()) as UploadResponse;
     const added = [];
-    for (const { heading, story: raw } of data.stories) {
-      const parsed = StorySchema.safeParse(raw);
-      if (!parsed.success || validateStory(parsed.data, this.locationInfo).length) continue;
-      const chapter = { number: `${data.source} · ${heading}`, story: parsed.data };
-      this.opts.chapters.push(chapter);
-      added.push({ id: chapter.story.id, number: chapter.number, title: chapter.story.title });
+    for (const [i, { heading, story: raw }] of data.stories.entries()) {
+      const story = this.check(raw);
+      if (!story) continue;
+      // Same key as the library entry, so a reload doesn't list the chapter twice.
+      const key = data.book?.chapters[i]?.file ?? story.id;
+      const known = this.opts.chapters.findIndex((c) => keyOf(c) === key);
+      const chapter: Chapter = { key, number: `${data.source} · ${heading}`, title: story.title, story };
+      if (known >= 0) this.opts.chapters[known] = chapter;
+      else this.opts.chapters.push(chapter);
+      added.push({ id: key, number: chapter.number, title: story.title });
     }
     if (!added.length) throw new Error("No playable chapters could be made from that file.");
     return added;
   }
 
-  private makeRuntime(story: Story): StoryRuntime {
+  // Parses and validates a story from outside; null when it can't be played.
+  private check(raw: unknown): Story | null {
+    const parsed = StorySchema.safeParse(raw);
+    if (!parsed.success) return null;
+    const issues = validateStory(parsed.data, this.locationInfo);
+    if (issues.length) {
+      console.warn(`story ${parsed.data.id} skipped:`, issues);
+      return null;
+    }
+    return parsed.data;
+  }
+
+  // Adds chapters of books in the library that the menu doesn't have yet.
+  private async syncLibrary(): Promise<void> {
+    if (!this.opts.libraryUrl) return;
+    try {
+      const res = await fetch(this.opts.libraryUrl);
+      if (!res.ok) return;
+      const books = (await res.json()) as LibraryBook[];
+      for (const b of books) {
+        for (const c of b.chapters) {
+          if (this.opts.chapters.some((x) => keyOf(x) === c.file)) continue;
+          this.opts.chapters.push({ key: c.file, number: `${b.source} · ${c.heading}`, title: c.title, url: `${this.opts.libraryUrl}/${c.file}` });
+        }
+      }
+    } catch {
+      // No backend running: the menu still works with what it has.
+    }
+  }
+
+  private async load(c: Chapter): Promise<Story> {
+    if (c.story) return c.story;
+    const res = await fetch(c.url!);
+    if (!res.ok) throw new Error(`could not load ${c.url}`);
+    const story = this.check(await res.json());
+    if (!story) throw new Error(`${c.title ?? c.url} is not a playable story`);
+    c.story = story;
+    return story;
+  }
+
+  private makeRuntime(story: Story, key = story.id): StoryRuntime {
     this.story = story;
     this.events = [];
     const rt = new StoryRuntime(story, this.stage, this.hud);
@@ -142,11 +204,11 @@ export class Engine {
       this.events.push(e);
       const progress = loadProgress();
       if (e.type === "choice") {
-        progress[story.id] = { scene: e.checkpoint, title: story.scenes[e.checkpoint].title ?? story.title };
+        progress[key] = { scene: e.checkpoint, title: story.scenes[e.checkpoint].title ?? story.title };
         saveProgress(progress);
       }
       if (e.type === "ending" && e.ending.kind === "victory") {
-        delete progress[story.id];
+        delete progress[key];
         saveProgress(progress);
       }
     });
@@ -154,30 +216,44 @@ export class Engine {
     return rt;
   }
 
+  // Shows one scenery with a drifting camera and nothing else (asset preview).
+  async preview(sceneryId: string): Promise<void> {
+    requestAnimationFrame(this.frame);
+    await this.stage.showcase(sceneryId);
+  }
+
   // With `from`, jumps straight into the chapter containing that scene;
   // otherwise shows the chapter menu, and returns to it after a chapter.
   async start(opts: { from?: string } = {}): Promise<void> {
     requestAnimationFrame(this.frame);
     if (opts.from) {
-      const chapter = this.opts.chapters.find((c) => opts.from! in c.story.scenes);
+      const chapter = this.opts.chapters.find((c) => c.story && opts.from! in c.story.scenes);
       if (!chapter) throw new Error(`no chapter has a scene "${opts.from}"`);
       this.hud.setLetterbox(true);
       this.audio.unlock();
-      await this.makeRuntime(chapter.story).start({ skipTitle: true, from: opts.from });
+      await this.makeRuntime(chapter.story!, keyOf(chapter)).start({ skipTitle: true, from: opts.from });
     }
     for (;;) {
-      // The opening room of the first chapter plays behind the menu.
-      const first = this.opts.chapters[0].story;
-      await this.stage.showcase(first.scenes[first.start].location);
+      await this.syncLibrary();
+      // The first loaded chapter's opening room plays behind the menu.
+      const first = this.opts.chapters.find((c) => c.story)?.story;
+      await this.stage.showcase(first ? first.scenes[first.start].location : this.opts.menuScenery);
       const progress = loadProgress();
       const pick = await this.hud.showMenu(
         this.opts.title,
-        this.opts.chapters.map((c) => ({ id: c.story.id, number: c.number, title: c.story.title, resumeLabel: progress[c.story.id]?.title })),
+        this.opts.chapters.map((c) => ({ id: keyOf(c), number: c.number, title: c.title ?? c.story!.title, resumeLabel: progress[keyOf(c)]?.title })),
         this.opts.uploadUrl ? (file) => this.upload(file) : undefined,
       );
-      const story = this.opts.chapters.find((c) => c.story.id === pick.id)!.story;
-      const from = pick.resume ? progress[story.id]?.scene : undefined;
-      await this.makeRuntime(story).start({ skipTitle: true, from });
+      const chapter = this.opts.chapters.find((c) => keyOf(c) === pick.id)!;
+      let story: Story;
+      try {
+        story = await this.load(chapter);
+      } catch (e) {
+        console.error(e);
+        continue;
+      }
+      const from = pick.resume ? progress[keyOf(chapter)]?.scene : undefined;
+      await this.makeRuntime(story, keyOf(chapter)).start({ skipTitle: true, from });
     }
   }
 

@@ -63,7 +63,9 @@ export class ThreeStage implements Stage {
     const def = this.locations[id];
     if (!def) throw new Error(`unknown location ${id}`);
     const covered = this.locationId !== null;
+    const loading = def.preload?.();
     if (covered) await this.fxs.fade("#000000", 1, 450);
+    await loading;
     if (this.location) {
       this.location.dispose?.();
       this.scene.remove(this.location.root);
@@ -278,7 +280,7 @@ export class ThreeStage implements Stage {
 
   private subject(t: Target): ShotSubject {
     const a = typeof t === "string" ? this.actors.get(t) : undefined;
-    if (a) return { point: a.headPosition(new THREE.Vector3()), yaw: a.yaw, height: a.height };
+    if (a) return { point: a.headPosition(new THREE.Vector3()), yaw: a.facing, height: a.height };
     // Places get wider framing than faces.
     return { point: this.focusPoint(t), height: 2.6 };
   }

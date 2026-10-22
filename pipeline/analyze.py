@@ -36,6 +36,24 @@ class Character:
     gender: str = "x"  # m, f or x (unknown)
     mentions: int = 0
     aliases: set[str] = field(default_factory=set)
+    # Manifest asset this character uses (character or creature id), if any.
+    asset: str | None = None
+    # Actions the narration gives this character (drives who the hero is).
+    actions: int = 0
+
+
+def asset_tables(catalog) -> tuple[dict, dict, dict]:
+    """verb -> clip, (verb, object) -> clip and word -> sound, from the manifest."""
+    anim, anim_with, sounds = {}, {}, {}
+    for a in catalog["actions"]:
+        for v in a["verbs"]:
+            anim[v] = a["clip"]
+        for v, obj in a.get("with", {}).items():
+            anim_with[(v, obj)] = a["clip"]
+    for s in catalog["sounds"]:
+        for w in s["words"]:
+            sounds[w] = s["id"]
+    return anim, anim_with, sounds
 
 
 @dataclass
@@ -101,7 +119,10 @@ class _Detector:
         self.catalog = catalog
         self.chars: dict[str, Character] = {}
         self.alias: dict[str, str] = {}
-        self.creature_words = {w: kind for kind, words in catalog["creatures"].items() for w in words}
+        # Single-word names for creature assets ("troll", "dog") -> asset id.
+        self.creature_words = {w: cid for cid, c in catalog["creatures"].items() for w in c["words"] if " " not in w}
+        self.creature_kind = {cid: c["spec"]["kind"] for cid, c in catalog["creatures"].items()}
+        self.place_words = {k.lower() for loc in catalog["locations"].values() for k in loc["keywords"]}
 
     def run(self) -> dict[str, Character]:
         names: Counter[tuple[str, ...]] = Counter()
@@ -122,7 +143,7 @@ class _Detector:
                 # Places don't whisper or grab arms: an acting subject is a character
                 # whatever the entity label says.
                 head = tok.head.lemma_.lower()
-                acts = tok.dep_ == "nsubj" and (head in L.SPEECH_VERBS or head in L.MOVE_VERBS or head in L.ANIM_VERBS or head in L.OPPOSITES)
+                acts = tok.dep_ == "nsubj" and (head in L.SPEECH_VERBS or head in L.MOVE_VERBS or head in L.ACTION_VERBS or head in L.OPPOSITES)
                 if acts:
                     names[(tok.text,)] += 1
                 elif tok.dep_ in ("nsubj", "dobj", "pobj", "poss") and tok.ent_type_ not in ("GPE", "LOC", "DATE", "TIME", "FAC", "WORK_OF_ART"):
@@ -136,8 +157,8 @@ class _Detector:
             if owner and len(n) == 1:
                 self.chars[owner].mentions += names[n]
                 continue
-            if key in self.creature_words or key in L.HONORIFICS:
-                continue
+            if key in self.creature_words or key in L.HONORIFICS or " ".join(n).lower() in self.place_words:
+                continue  # "Gringotts" is somewhere you go, not someone
             c = self.chars.get(key) or Character(id=key, name=" ".join(n) if len(n) == 1 else n[0])
             if n in honors:
                 c.name = f"{honors[n].capitalize()} {n[-1]}" if honors[n] in ("professor", "madam", "doctor") else n[-1]
@@ -147,18 +168,60 @@ class _Detector:
                 self.alias.setdefault(w.lower(), key)
             self.chars[key] = c
         self._creatures()
+        self._match_assets()
         self._genders()
-        # Drop one-off noise; keep anyone who speaks (fixed up later by attribution).
-        self.chars = {k: c for k, c in self.chars.items() if c.mentions >= 1.5 or c.kind != "human"}
+        # Drop one-off noise. A name the manifest knows needs less evidence.
+        self.chars = {k: c for k, c in self.chars.items() if c.kind != "human" or c.mentions >= 1 or (c.asset and c.mentions >= 0.5)}
         return self.chars
+
+    def _match_assets(self):
+        """Points each character at a manifest character by name, and merges
+        characters that turn out to be the same asset ("Mr. Dursley" and
+        "Uncle Vernon")."""
+        by_name = {}
+        for aid, a in self.catalog["characters"].items():
+            for n in a["names"]:
+                words, _ = _strip_name(n.replace(".", "").split())
+                by_name.setdefault(" ".join(words).lower(), aid)
+        merged: dict[str, Character] = {}
+        for c in self.chars.values():
+            if c.kind == "human":
+                keys = [c.name.lower(), c.id, *[a for a in self.alias if self.alias[a] == c.id]]
+                c.asset = next((by_name[k] for k in keys if k in by_name), None)
+            key = c.asset if c.kind == "human" and c.asset else c.id
+            if key in merged:
+                m = merged[key]
+                m.mentions += c.mentions
+                if m.gender == "x":
+                    m.gender = c.gender
+            else:
+                c.id = key
+                merged[key] = c
+        for a, cid in list(self.alias.items()):
+            old = self.chars.get(cid)
+            if old is not None:
+                self.alias[a] = old.id
+        self.chars = merged
 
     def _creatures(self):
         for doc, spans in self.docs:
             for tok in doc:
-                kind = self.creature_words.get(tok.lemma_.lower())
-                if kind and tok.pos_ == "NOUN" and tok.dep_ in ("nsubj", "dobj", "pobj") and not _in_quotes(tok, spans):
+                # Unnamed people who speak or act: "the innkeeper laughed".
+                lem = tok.lemma_.lower()
+                # Singular only ("Sailors crowded" is a crowd, not a character). The
+                # small parser mislabels some subjects, so a role noun right before
+                # a verb also counts ("The innkeeper laughed").
+                nxt = doc[tok.i + 1] if tok.i + 1 < len(doc) else None
+                acting = tok.dep_ == "nsubj" or (nxt is not None and nxt.pos_ == "VERB")
+                if lem in L.ROLE_NOUNS and tok.tag_ == "NN" and acting and not _in_quotes(tok, spans):
+                    c = self.chars.setdefault(lem, Character(id=lem, name=f"The {lem.capitalize()}"))
+                    c.mentions += 1
+                    self.alias[lem] = lem
+                    continue
+                asset = self.creature_words.get(tok.lemma_.lower())
+                if asset and tok.pos_ in ("NOUN", "PROPN") and tok.dep_ in ("nsubj", "dobj", "pobj") and not _in_quotes(tok, spans):
                     cid = tok.lemma_.lower()
-                    c = self.chars.setdefault(cid, Character(id=cid, name=cid.capitalize(), kind=kind, gender="n"))
+                    c = self.chars.setdefault(cid, Character(id=cid, name=cid.capitalize(), kind=self.creature_kind[asset], gender="n", asset=asset))
                     c.mentions += 1
                     self.alias[cid] = cid
 
@@ -198,7 +261,7 @@ class _Detector:
         if low in self.alias:
             return self.alias[low]
         lem = tok.lemma_.lower()
-        if lem in self.creature_words and lem in self.chars:
+        if (lem in self.creature_words or lem in L.ROLE_NOUNS) and lem in self.chars:
             return lem
         return None
 
@@ -213,6 +276,7 @@ class _Reader:
         self.recent: list[str] = []
         self.last_speakers: list[str] = []
         self.creature_clips = {"troll": {"roar", "lunge", "fall", "shake", "nod", "cower"}, "dog3": {"sleep", "wake", "lunge", "roar", "shake", "nod"}}
+        self.anim, self.anim_with, self.sounds = asset_tables(catalog)
 
     def _see(self, cid: str | None):
         if not cid:
@@ -225,10 +289,14 @@ class _Reader:
         want = {"he": "m", "him": "m", "his": "m", "himself": "m", "she": "f", "her": "f", "herself": "f", "it": "n", "its": "n"}.get(low)
         if not want:
             return None
+        # A known gender match beats someone whose gender is unknown.
         for cid in reversed(self.recent):
-            g = self.chars[cid].gender
-            if g == want or (want in "mf" and g == "x"):
+            if self.chars[cid].gender == want:
                 return cid
+        if want in "mf":
+            for cid in reversed(self.recent):
+                if self.chars[cid].gender == "x":
+                    return cid
         return None
 
     def who(self, tok) -> str | None:
@@ -276,9 +344,12 @@ class _Reader:
                     self._see(cid)
             # A short sentence like "Ron asked." names the speaker of the quotes before it.
             if not quotes and tag_speaker and self._only_tag(sent, spans):
+                gestures = self._events(sent, spans, participles=True)
                 for ln in pending:
                     ln.speaker = tag_speaker
                     ln.mood = L.SPEECH_MOOD.get(tag_verb or "") or ln.mood
+                if pending:
+                    pending[0].events.extend(gestures)
                 pending = []
                 para_speaker = tag_speaker
                 continue
@@ -305,6 +376,10 @@ class _Reader:
                 rest = self._outside(sent, spans)
                 if rest and not self._only_tag(sent, spans):
                     lines.append(Line(kind="narrate", text=rest, para=idx, events=self._events(sent, spans), danger=danger))
+                elif rest:
+                    # A tag's gesture ("grinning", "shaking his head") plays with the line.
+                    first_quote = next(ln for ln in reversed(lines) if ln.kind == "say")
+                    first_quote.events.extend(e for e in self._events(sent, spans, participles=True) if e.kind == "anim")
             else:
                 text = sent.text.strip()
                 if text and text not in L.SCENE_SEPARATORS:
@@ -313,7 +388,7 @@ class _Reader:
 
     def _guess_speaker(self, doc, spans) -> str | None:
         # Someone named in this paragraph's narration, else alternate speakers.
-        named = [self.who(t) for t in doc if not _in_quotes(t, spans) and t.dep_ == "nsubj"]
+        named = [self.who(t) for t in doc if not _in_quotes(t, spans) and (t.dep_ == "nsubj" or t.lemma_.lower() in L.ROLE_NOUNS)]
         named = [n for n in named if n and self.chars[n].kind == "human"]
         if named:
             return named[0]
@@ -333,9 +408,14 @@ class _Reader:
         return (text + ".") if text else ""
 
     def _only_tag(self, sent, spans) -> bool:
-        """True when the words outside the quotes are only a speech tag."""
+        """True when the words outside the quotes are a speech tag, maybe with a
+        trailing clause ("said Hagrid, grinning down at him"): a speech verb and
+        no other finite verb."""
         words = [t for t in sent if not _in_quotes(t, spans) and not t.is_punct]
-        return len(words) <= 4 and any(t.lemma_.lower() in L.SPEECH_VERBS for t in words)
+        if not any(t.lemma_.lower() in L.SPEECH_VERBS for t in words):
+            return False
+        finite = [t for t in words if t.tag_ in ("VBD", "VBZ", "VBP") and t.lemma_.lower() not in L.SPEECH_VERBS]
+        return len(words) <= 4 or not finite
 
     @staticmethod
     def _spell(q: str) -> bool:
@@ -358,32 +438,42 @@ class _Reader:
             return verb.head
         return None
 
-    def _events(self, sent, spans) -> list[Event]:
+    def _events(self, sent, spans, participles: bool = False) -> list[Event]:
         events: list[Event] = []
         for tok in sent:
             if _in_quotes(tok, spans):
                 continue
             lem = tok.lemma_.lower()
-            if tok.pos_ == "NOUN" and lem in L.SOUND_WORDS:
-                events.append(Event(actor=None, kind="sound", sfx=L.SOUND_WORDS[lem], verb=lem))
+            if tok.pos_ == "NOUN" and lem in self.sounds:
+                events.append(Event(actor=None, kind="sound", sfx=self.sounds[lem], verb=lem))
                 continue
             if tok.pos_ != "VERB" or lem in L.SPEECH_VERBS:
                 continue
+            # "did not run", "before he went", "he could have run": none of these happened.
+            if any(c.dep_ == "neg" for c in tok.children):
+                continue
+            if any(c.dep_ == "mark" and c.lemma_.lower() in L.HYPOTHETICAL_MARKS for c in tok.children):
+                continue
+            if any(c.dep_ == "aux" and c.lemma_.lower() in L.HYPOTHETICAL_AUX for c in tok.children):
+                continue
             subj = self._subject(tok)
             actor = self.who(subj) if subj is not None else None
+            # "said Hagrid, grinning": the participle's actor is the speaker.
+            if actor is None and participles and tok.tag_ == "VBG" and tok.head.lemma_.lower() in L.SPEECH_VERBS:
+                actor = next((self.who(c) for c in tok.head.children if c.dep_ == "nsubj"), None)
             obj_tok = next((c for c in tok.children if c.dep_ in ("dobj", "obj")), None)
             obj = self._phrase(obj_tok) if obj_tok is not None else ""
             prt = next((c.text.lower() for c in tok.children if c.dep_ == "prt"), "")
             prep = next((c for c in tok.children if c.dep_ == "prep"), None)
             pobj = next((c for c in prep.children if c.dep_ == "pobj"), None) if prep is not None else None
             phrase = self._imperative(tok, obj_tok, prt, prep)
-            if lem in L.SOUND_WORDS:
-                events.append(Event(actor=actor, kind="sound", sfx=L.SOUND_WORDS[lem], verb=lem))
+            if lem in self.sounds:
+                events.append(Event(actor=actor, kind="sound", sfx=self.sounds[lem], verb=lem))
             if actor is None:
                 continue
             kind = self.chars[actor].kind
             obj_head = obj_tok.lemma_.lower() if obj_tok is not None else ""
-            clip = L.ANIM_WITH_OBJECT.get((lem, obj_head)) or L.ANIM_VERBS.get(lem)
+            clip = self.anim_with.get((lem, obj_head)) or self.anim.get(lem)
             if kind != "human" and lem in ("crash", "sway") and pobj is not None and pobj.lemma_.lower() in ("floor", "ground"):
                 clip = "fall"
             if clip and kind != "human" and clip not in self.creature_clips.get(kind, set()):
@@ -427,6 +517,9 @@ class _Reader:
             low = w.lower()
             if low in ("his", "her", "its") and actor and self._pronoun(low) == actor:
                 out.append("your")
+            elif low == "his" and self._pronoun(low) and self._pronoun(low) != actor:
+                name = self.chars[self._pronoun(low)].name
+                out.append((name.lower() if name.startswith("The ") else name) + "'s")
             elif low in ("him", "her", "them"):
                 ref = self._pronoun(low)
                 out.append(self.chars[ref].name if ref and ref != actor else "them")
@@ -436,6 +529,10 @@ class _Reader:
                 out.append(w)
         text = " ".join(out[:8])
         return text[:1].upper() + text[1:]
+
+
+def hero_score(c: Character) -> float:
+    return c.mentions + 2 * c.actions
 
 
 def analyze(paragraphs: list[str], catalog) -> Analysis:
@@ -449,10 +546,23 @@ def analyze(paragraphs: list[str], catalog) -> Analysis:
     lines: list[Line] = []
     for i, (doc, spans) in enumerate(parsed):
         lines.extend(reader.read_paragraph(i, doc, spans))
-    # Speakers count as mentions; anyone who speaks is a character.
+    # Recount mentions directly: every time a name appears in narration, plus
+    # half a point per spoken line. More reliable than entity labels, and it
+    # favours whoever the narration follows over whoever talks most.
+    for c in chars.values():
+        c.mentions = 0
+    for doc, spans in parsed:
+        for tok in doc:
+            if not _in_quotes(tok, spans):
+                cid = det.resolve_name(tok)
+                if cid in chars:
+                    chars[cid].mentions += 1
     for ln in lines:
         if ln.kind == "say" and ln.speaker in chars:
-            chars[ln.speaker].mentions += 1
+            chars[ln.speaker].mentions += 0.5
+        for e in ln.events:
+            if e.actor in chars and e.kind in ("move", "anim", "act"):
+                chars[e.actor].actions += 1
     humans = [c for c in chars.values() if c.kind == "human"]
-    protagonist = max(humans, key=lambda c: c.mentions).id if humans else None
+    protagonist = max(humans, key=hero_score).id if humans else None
     return Analysis(characters=chars, lines=lines, protagonist=protagonist)

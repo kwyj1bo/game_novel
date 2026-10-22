@@ -125,7 +125,6 @@ export const devilsSnare: LocationDef = {
   title: "Devil's Snare",
   info: {
     marks: Object.keys(MARKS),
-    keywords: ["plant","snare","vines","tendrils","creepers","pit"],
     props: {
       vines: ["rest", "grip", "retreat"],
       light: ["dark", "bright"],

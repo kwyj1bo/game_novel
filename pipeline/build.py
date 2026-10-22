@@ -12,7 +12,6 @@ from dataclasses import dataclass, field
 from . import lexicon as L
 from .analyze import Analysis, Character, Event, Line, QUOTE_RE
 
-FALLBACK_LOCATION = "castle_corridor"
 MAX_NARRATION_PER_SCENE = 14
 MAX_CHOICES = 3
 
@@ -49,14 +48,15 @@ def _location_hits(text: str, catalog) -> dict[str, int]:
     narration = QUOTE_RE.sub(" ", text).lower()
     hits = {}
     for lid, loc in catalog["locations"].items():
-        n = sum(len(re.findall(rf"\b{re.escape(k)}s?\b", narration)) for k in loc["keywords"])
+        # Multi-word keywords ("great hall") are stronger evidence than one word.
+        n = sum(len(re.findall(rf"\b{re.escape(k.lower())}s?\b", narration)) * len(k.split()) for k in loc["keywords"])
         if n:
             hits[lid] = n
     return hits
 
 
 def segment(paragraphs: list[str], lines: list[Line], catalog) -> list[Scene]:
-    fallback = FALLBACK_LOCATION if FALLBACK_LOCATION in catalog["locations"] else next(iter(catalog["locations"]))
+    fallback = catalog.get("defaultScenery") or next(iter(catalog["locations"]))
     hits = [_location_hits(p, catalog) for p in paragraphs]
     opening: dict[str, int] = {}
     for h in hits[:4]:
@@ -114,9 +114,14 @@ def opposite(event: Event, chars: dict[str, Character]) -> str:
     if event.kind == "move" and event.target in chars:
         t = chars[event.target]
         who = f"the {t.name.lower()}" if t.kind != "human" else t.name
+        if who.startswith("The "):
+            who = who.lower()  # unnamed people: "the sailor"
         return f"Keep away from {who}"
     if event.kind == "move" and event.target == "away":
         return "Stand your ground"
+    obj_head = event.obj.split()[-1].lower() if event.obj else ""
+    if (event.verb, obj_head) in L.OPPOSITES_WITH:
+        return L.OPPOSITES_WITH[(event.verb, obj_head)]
     template = L.OPPOSITES.get(event.verb)
     if template:
         if "{obj}" not in template:
@@ -172,7 +177,8 @@ def find_moments(a: Analysis, scenes: list[Scene]) -> list[Moment]:
 
     cands: list[Moment] = []
     for i, ln in enumerate(a.lines):
-        if i < 3 or i > n - 3:
+        # Leave room for setup before the first choice and an aftermath after the last.
+        if i < 3 or i > n - 2:
             continue
         for ev in ln.events:
             if ev.actor != hero or not ev.phrase:
@@ -207,13 +213,13 @@ SUBS = ["#f3d27a", "#ff9a6a", "#c9a8ff", "#8fd6a8", "#8ac8ff", "#ffb0c8", "#e0e0
 
 
 def actor_spec(c: Character, catalog) -> dict:
-    known = catalog["characters"].get(c.id)
-    if known:
-        return dict(known)
+    """The manifest's look for this character, or a generated one."""
     if c.kind != "human":
-        base = next((dict(v) for v in catalog["characters"].values() if v.get("kind") == c.kind), {"kind": c.kind, "height": 3})
+        base = dict(catalog["creatures"][c.asset]["spec"]) if c.asset in catalog["creatures"] else {"kind": c.kind, "height": 3}
         base["name"] = c.name
         return base
+    if c.asset in catalog["characters"]:
+        return dict(catalog["characters"][c.asset]["spec"])
     h = _h(c.id)
     female = c.gender == "f"
     styles = ["bushy", "long", "bun"] if female else ["short", "messy", "ginger_mop"]
@@ -238,6 +244,7 @@ class _Assembler:
         self.source = source
         self.chars = a.characters
         self.hero = a.protagonist
+        self._last_speaker: str | None = None
 
     def name(self, cid: str | None) -> str:
         return self.chars[cid].name if cid in self.chars else "someone"
@@ -288,6 +295,7 @@ class _Assembler:
     def beats(self, lines: list[Line], slots: dict, on_stage: set[str], first_beats: list) -> list:
         out = list(first_beats)
         last_cam = None
+        last_speaker = self._last_speaker
         narrations = 0
         for ln in lines:
             actions: list = []
@@ -295,8 +303,13 @@ class _Assembler:
                 actions.extend(self.event_beats(e, slots, on_stage))
             if ln.kind == "say" and ln.speaker in on_stage:
                 if ln.speaker != last_cam:
+                    # Turn to whoever they're talking to first, so the close-up sees their face.
+                    listener = last_speaker if last_speaker in on_stage and last_speaker != ln.speaker else next((c for c in on_stage if c != ln.speaker and self.chars[c].kind == "human"), None)
+                    if listener:
+                        out.append({"look": ln.speaker, "at": listener})
                     out.append({"camera": "close" if len(ln.text) < 70 else "medium", "on": ln.speaker, "ms": 500})
                     last_cam = ln.speaker
+                last_speaker = ln.speaker
                 out.extend(actions)
                 beat = {"say": ln.speaker, "text": ln.text}
                 if ln.mood:
@@ -311,13 +324,15 @@ class _Assembler:
             if focus and focus != last_cam:
                 out.append({"camera": "medium", "on": focus, "ms": 700})
                 last_cam = focus
-            elif not focus and last_cam is not None and narrations % 3 == 0:
+            elif not focus and last_cam is not None:
+                # Narration about the room: leave the close-up.
                 out.append({"camera": "wide", "ms": 900})
                 last_cam = None
             out.extend(actions)
             if narrations < MAX_NARRATION_PER_SCENE or ln.events:
                 out.append({"narrate": _trim(ln.text)})
                 narrations += 1
+        self._last_speaker = last_speaker
         return out
 
     def event_beats(self, e: Event, slots: dict, on_stage: set[str]) -> list:

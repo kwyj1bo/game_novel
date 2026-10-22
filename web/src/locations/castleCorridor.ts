@@ -23,7 +23,6 @@ export const castleCorridor: LocationDef = {
   title: "A Castle Corridor",
   info: {
     marks: Object.keys(MARKS),
-    keywords: ["corridor","hall","hallway","passage","staircase","stairs","castle","statue","window","door"],
     props: { bathroom_door: ["open", "closed", "locked"] },
   },
   build(ctx) {

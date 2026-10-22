@@ -33,7 +33,6 @@ export const potionsRoom: LocationDef = {
   title: "The Riddle of the Potions",
   info: {
     marks: Object.keys(MARKS),
-    keywords: ["bottles","potion","potions","riddle","flask","poison"],
     props: {
       back_fire: ["off", "on"],
       front_fire: ["off", "on"],

@@ -1,0 +1,351 @@
+{
+  "$schema": "../../../story.schema.json",
+  "id": "hp-book-the-forest",
+  "title": "The Forest",
+  "subtitle": "Hp Book",
+  "start": "scene_1",
+  "actors": {
+    "hagrid": {
+      "name": "Hagrid",
+      "kind": "human",
+      "height": 2.6,
+      "robe": "#4a3626",
+      "trim": "#3a2a1a",
+      "skin": "#d8a888",
+      "hair": "#24160c",
+      "hairStyle": "messy",
+      "eyes": "#1a1a1a",
+      "glasses": "none",
+      "beard": "short",
+      "outfit": "adult",
+      "hat": "none",
+      "scar": false,
+      "voice": 0.7,
+      "subtitleColor": "#e8b878"
+    },
+    "hound": {
+      "name": "Hound",
+      "kind": "dog3",
+      "height": 3.4,
+      "robe": "#3e2c1f",
+      "skin": "#e8c4a0",
+      "hair": "#3a2a1a",
+      "hairStyle": "short",
+      "eyes": "#3a5a2a",
+      "glasses": "none",
+      "beard": "none",
+      "outfit": "student",
+      "hat": "none",
+      "scar": false,
+      "voice": 1,
+      "subtitleColor": "#ffffff"
+    },
+    "harry": {
+      "name": "Harry",
+      "kind": "human",
+      "height": 1.45,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#e3b08c",
+      "hair": "#120d08",
+      "hairStyle": "messy",
+      "eyes": "#2e7d32",
+      "glasses": "round",
+      "beard": "none",
+      "outfit": "student",
+      "hat": "none",
+      "scar": true,
+      "voice": 1.15,
+      "subtitleColor": "#f3d27a"
+    },
+    "malfoy": {
+      "name": "Malfoy",
+      "kind": "human",
+      "height": 1.45,
+      "robe": "#18181f",
+      "trim": "#1a472a",
+      "skin": "#f0d8c8",
+      "hair": "#e8dca0",
+      "hairStyle": "short",
+      "eyes": "#8a9aa8",
+      "glasses": "none",
+      "beard": "none",
+      "outfit": "student",
+      "hat": "none",
+      "scar": false,
+      "voice": 1.05,
+      "subtitleColor": "#b8d8b8"
+    }
+  },
+  "scenes": {
+    "scene_1_wrong": {
+      "location": "forbidden_forest",
+      "cast": {
+        "hound": "auto_threat",
+        "hagrid": "auto_2",
+        "harry": "auto_1",
+        "malfoy": "auto_3"
+      },
+      "beats": [
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 500
+        },
+        {
+          "narrate": "Harry hesitates — and chooses to hold back."
+        },
+        {
+          "move": "harry",
+          "to": "auto_entry",
+          "async": true
+        },
+        {
+          "camera": "low",
+          "on": "hound",
+          "ms": 600
+        },
+        {
+          "sfx": "roar"
+        },
+        {
+          "anim": "hound",
+          "clip": "roar"
+        },
+        {
+          "together": [
+            {
+              "anim": "hound",
+              "clip": "lunge"
+            },
+            {
+              "fx": "shake",
+              "ms": 700
+            }
+          ]
+        },
+        {
+          "together": [
+            {
+              "anim": "harry",
+              "clip": "fall",
+              "hold": true
+            },
+            {
+              "sfx": "thud"
+            }
+          ]
+        },
+        {
+          "fx": "red_out",
+          "ms": 1500
+        }
+      ],
+      "ending": {
+        "kind": "death",
+        "title": "Wrong Turn",
+        "text": "In the book, Harry chose to step towards the clearing. Choosing to hold back ended the story here."
+      }
+    },
+    "scene_1": {
+      "location": "forbidden_forest",
+      "cast": {
+        "harry": "auto_1",
+        "hagrid": "auto_2",
+        "malfoy": "auto_3"
+      },
+      "beats": [
+        {
+          "camera": "wide",
+          "ms": 0
+        },
+        {
+          "music": "mystery"
+        },
+        {
+          "narrate": "The Forbidden Forest was black and silent."
+        },
+        {
+          "narrate": "Tall trees closed over the path, and the moon barely reached the ground."
+        },
+        {
+          "look": "hagrid",
+          "at": "harry"
+        },
+        {
+          "camera": "close",
+          "on": "hagrid",
+          "ms": 500
+        },
+        {
+          "say": "hagrid",
+          "text": "Stay close,",
+          "mood": "whisper"
+        },
+        {
+          "look": "hagrid",
+          "at": "harry"
+        },
+        {
+          "camera": "close",
+          "on": "hagrid",
+          "ms": 500
+        },
+        {
+          "say": "hagrid",
+          "text": "There's something out here that's been hurting the unicorns."
+        },
+        {
+          "narrate": "Malfoy stopped walking."
+        },
+        {
+          "look": "malfoy",
+          "at": "hagrid"
+        },
+        {
+          "camera": "close",
+          "on": "malfoy",
+          "ms": 500
+        },
+        {
+          "say": "malfoy",
+          "text": "I'm not going in there,"
+        },
+        {
+          "look": "malfoy",
+          "at": "hagrid"
+        },
+        {
+          "camera": "close",
+          "on": "malfoy",
+          "ms": 500
+        },
+        {
+          "say": "malfoy",
+          "text": "My father will hear about this."
+        },
+        {
+          "spawn": "hound",
+          "at": "auto_threat"
+        },
+        {
+          "sfx": "growl"
+        },
+        {
+          "narrate": "Hagrid's huge hound growled and pressed against his legs."
+        },
+        {
+          "narrate": "They reached a clearing."
+        },
+        {
+          "narrate": "Something silver lay on the ground, very still."
+        },
+        {
+          "narrate": "A hooded figure crawled out of the trees and bent over the silver shape."
+        },
+        {
+          "camera": "medium",
+          "on": "malfoy",
+          "ms": 700
+        },
+        {
+          "narrate": "Malfoy screamed and ran back down the path."
+        },
+        {
+          "camera": "medium",
+          "on": "hound",
+          "ms": 700
+        },
+        {
+          "move": "hound",
+          "to": "auto_entry",
+          "run": true,
+          "async": true
+        },
+        {
+          "narrate": "The hound bolted after him."
+        },
+        {
+          "narrate": "Harry did not run."
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 600
+        }
+      ],
+      "title": "The Forbidden Forest",
+      "choice": {
+        "prompt": "What should Harry do?",
+        "seconds": 10,
+        "options": [
+          {
+            "label": "Hold back",
+            "correct": false,
+            "goto": "scene_1_wrong"
+          },
+          {
+            "label": "Step towards the clearing",
+            "correct": true,
+            "goto": "scene_2"
+          }
+        ]
+      }
+    },
+    "scene_2": {
+      "location": "forbidden_forest",
+      "cast": {
+        "harry": "auto_1",
+        "hagrid": "auto_2",
+        "malfoy": "auto_3",
+        "hound": "auto_threat"
+      },
+      "beats": [
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 700
+        },
+        {
+          "anim": "harry",
+          "clip": "cast",
+          "async": true
+        },
+        {
+          "narrate": "He raised his wand and stepped towards the clearing."
+        },
+        {
+          "narrate": "The hooded figure lifted its head and glided towards Harry."
+        },
+        {
+          "narrate": "A searing pain burst through his scar."
+        },
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 700
+        },
+        {
+          "anim": "harry",
+          "clip": "fall",
+          "async": true,
+          "hold": true
+        },
+        {
+          "narrate": "Harry fell to his knees, clutching his forehead."
+        },
+        {
+          "sfx": "thud"
+        },
+        {
+          "narrate": "Hoofbeats thundered through the trees, and the hooded figure fled into the dark."
+        }
+      ],
+      "ending": {
+        "kind": "victory",
+        "title": "The Forest",
+        "text": "You followed Harry through “The Forest” the way the book tells it."
+      }
+    }
+  }
+}

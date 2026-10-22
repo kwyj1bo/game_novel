@@ -23,7 +23,6 @@ export const mirrorChamber: LocationDef = {
   title: "The Last Chamber",
   info: {
     marks: Object.keys(MARKS),
-    keywords: ["mirror","reflection","chamber"],
     props: {
       mirror: ["still", "glow"],
       flames: ["off", "on"],

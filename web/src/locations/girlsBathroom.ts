@@ -24,7 +24,6 @@ export const girlsBathroom: LocationDef = {
   title: "The Girls' Bathroom",
   info: {
     marks: Object.keys(MARKS),
-    keywords: ["bathroom","toilet","toilets","sink","sinks","lavatory","cubicle","basin"],
     props: {
       club: ["held", "floating", "dropped"],
       sinks: ["whole", "smashed"],

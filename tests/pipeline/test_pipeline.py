@@ -115,3 +115,68 @@ def test_engine_validator_accepts_generated_story(catalog, tmp_path, name):
     path.write_text(json.dumps(story))
     r = subprocess.run(["npx", "vite-node", "scripts/validate-story.ts", str(path)], cwd=ROOT / "web", capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
+
+
+# ---- whole books: chapters, hero, sceneries and cast all come from the manifest
+
+
+@pytest.fixture(scope="module")
+def hp_book(catalog):
+    from pipeline.__main__ import build_book
+
+    return build_book(load_chapters(FIX / "hp_book.txt"), catalog, "Fixture")
+
+
+@pytest.fixture(scope="module")
+def voyage(catalog):
+    from pipeline.__main__ import build_book
+
+    return build_book(load_chapters(FIX / "voyage.txt"), catalog, "Fixture")
+
+
+def _locations(story):
+    return list(dict.fromkeys(s["location"] for k, s in story["scenes"].items() if not k.endswith("_wrong")))
+
+
+def test_book_splits_into_chapters():
+    assert [c.title for c in load_chapters(FIX / "hp_book.txt")] == ["The Letters", "The Alley", "The Forest"]
+
+
+def test_each_chapter_picks_its_scenery_from_the_manifest(hp_book, voyage):
+    assert [_locations(r[0]) for r in hp_book] == [["privet_drive"], ["diagon_alley", "gringotts"], ["forbidden_forest"]]
+    assert [_locations(r[0]) for r in voyage] == [["generic_tavern"], ["generic_deck"]]
+
+
+def test_hero_is_decided_by_the_whole_book(hp_book, voyage):
+    assert {r[1].protagonist for r in hp_book} == {"harry"}
+    assert {r[1].protagonist for r in voyage} == {"elena"}
+
+
+def test_characters_use_manifest_assets_and_merge_aliases(hp_book):
+    letters = hp_book[0][0]
+    assert sorted(letters["actors"]) == ["dudley", "harry", "petunia", "vernon"]
+    # "Uncle Vernon" and "Mr. Dursley" are one person with the manifest's look.
+    assert letters["actors"]["vernon"]["name"] == "Uncle Vernon"
+    assert "gringotts" not in hp_book[1][0]["actors"]
+
+
+def test_unknown_characters_get_generated_looks(voyage):
+    elena = voyage[0][0]["actors"]["elena"]
+    assert elena["name"] == "Elena" and elena["hairStyle"] in ("bushy", "long", "bun")
+
+
+def test_book_choices(hp_book, voyage):
+    pairs = [(m.correct, m.opposite) for r in hp_book + voyage for m in r[3]]
+    assert pairs == [
+        ("Grab the letter", "Leave the letter"),
+        ("Take the key from Hagrid", "Refuse the key"),
+        ("Step towards the clearing", "Hold back"),
+        ("Take the innkeeper's hand", "Refuse the handshake"),
+        ("Run to the sailor", "Keep away from the sailor"),
+    ]
+
+
+def test_actions_that_did_not_happen_are_ignored(hp_book):
+    # "Harry did not run" must not become "Run" / "Stand still".
+    forest = hp_book[2][1]
+    assert not any(e.actor == "harry" and e.verb == "run" for ln in forest.lines for e in ln.events)

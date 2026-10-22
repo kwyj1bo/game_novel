@@ -9,7 +9,7 @@ const texCache = new Map<string, { map: THREE.Texture; normal: THREE.Texture; ro
 
 type Painter = (ctx: CanvasRenderingContext2D, h: Float32Array, size: number, rand: () => number) => void;
 
-function makeTextures(key: string, size: number, paint: Painter) {
+export function makeTextures(key: string, size: number, paint: Painter) {
   const hit = texCache.get(key);
   if (hit) return hit;
   const canvas = document.createElement("canvas");
@@ -50,7 +50,7 @@ function normalFromHeight(h: Float32Array, size: number, strength: number): HTML
   return c;
 }
 
-function speckle(ctx: CanvasRenderingContext2D, h: Float32Array, size: number, rand: () => number, n: number, alpha: number) {
+export function speckle(ctx: CanvasRenderingContext2D, h: Float32Array, size: number, rand: () => number, n: number, alpha: number) {
   for (let i = 0; i < n; i++) {
     const x = rand() * size;
     const y = rand() * size;
@@ -138,6 +138,60 @@ export function flagstoneMaterial(tint = "#5d5850", repeat: [number, number] = [
   return texturedMaterial(t, repeat, 0.85);
 }
 
+// Noisy ground: grass, sand, dirt. Blotches of the base colour plus fine grain.
+export function groundMaterial(tint: string, key: string, repeat: [number, number] = [1, 1], grain = 0.25): THREE.MeshStandardMaterial {
+  const t = makeTextures(`ground:${key}:${tint}`, 256, (ctx, h, size, rand) => {
+    const base = new THREE.Color(tint);
+    ctx.fillStyle = `#${base.getHexString()}`;
+    ctx.fillRect(0, 0, size, size);
+    for (let i = 0; i < 260; i++) {
+      const c = base.clone().multiplyScalar(0.8 + rand() * 0.4);
+      ctx.fillStyle = `#${c.getHexString()}`;
+      ctx.globalAlpha = 0.35;
+      ctx.beginPath();
+      ctx.arc(rand() * size, rand() * size, 4 + rand() * 18, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) h[y * size + x] = 0.5 + noise1(x * 0.21 + y * 0.13, 3) * grain;
+    speckle(ctx, h, size, rand, 9000, grain);
+  });
+  return texturedMaterial(t, repeat, 0.95);
+}
+
+// Smooth painted plaster with faint mottling, for houses and inns.
+export function plasterMaterial(tint = "#c8b89a", repeat: [number, number] = [1, 1]): THREE.MeshStandardMaterial {
+  return groundMaterial(tint, "plaster", repeat, 0.08);
+}
+
+// Small rounded cobbles for streets and courtyards.
+export function cobbleMaterial(tint = "#6a645a", repeat: [number, number] = [1, 1]): THREE.MeshStandardMaterial {
+  const t = makeTextures(`cobble:${tint}`, 256, (ctx, h, size, rand) => {
+    const base = new THREE.Color(tint);
+    ctx.fillStyle = "#24221e";
+    ctx.fillRect(0, 0, size, size);
+    h.fill(0.1);
+    const n = 8;
+    const cell = size / n;
+    for (let y = 0; y < n; y++)
+      for (let x = 0; x < n; x++) {
+        const cx = (x + 0.5 + (y % 2) * 0.5) * cell;
+        const cy = (y + 0.5) * cell;
+        const r = cell * (0.38 + rand() * 0.08);
+        ctx.fillStyle = `#${base.clone().multiplyScalar(0.75 + rand() * 0.5).getHexString()}`;
+        ctx.beginPath();
+        ctx.ellipse(cx % size, cy, r, r * 0.85, rand(), 0, Math.PI * 2);
+        ctx.fill();
+        for (let yy = Math.floor(cy - r); yy < cy + r; yy++)
+          for (let xx = Math.floor(cx - r); xx < cx + r; xx++) {
+            const d = Math.hypot(xx - cx, yy - cy) / r;
+            if (d < 1 && yy >= 0 && yy < size) h[yy * size + (((xx % size) + size) % size)] = 0.3 + (1 - d * d) * 0.6;
+          }
+      }
+  });
+  return texturedMaterial(t, repeat, 0.8);
+}
+
 // Square glazed tiles with grout, for bathrooms and kitchens.
 export function tileMaterial(tint = "#d8d2c4", repeat: [number, number] = [1, 1]): THREE.MeshStandardMaterial {
   const t = makeTextures(`tile:${tint}`, 256, (ctx, h, size, rand) => {
@@ -183,7 +237,7 @@ export function woodMaterial(tint = "#5a3a22", repeat: [number, number] = [1, 1]
   return texturedMaterial(t, repeat, 0.75);
 }
 
-function texturedMaterial(t: { map: THREE.Texture; normal: THREE.Texture }, repeat: [number, number], roughness: number) {
+export function texturedMaterial(t: { map: THREE.Texture; normal: THREE.Texture }, repeat: [number, number], roughness: number) {
   const map = t.map.clone();
   const normal = t.normal.clone();
   map.repeat.set(...repeat);
