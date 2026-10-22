@@ -23,3 +23,5 @@ jobs:
       - run: npm test
       - run: npm run validate
       - run: npx vite build
+      - name: story.schema.json is up to date
+        run: npm run schema && git diff --exit-code story.schema.json

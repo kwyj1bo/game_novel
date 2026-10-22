@@ -1,4 +1,5 @@
 {
+  "$schema": "../../../story.schema.json",
   "id": "hp1-troll",
   "title": "The Troll on Halloween",
   "subtitle": "Harry Potter and the Philosopher's Stone",
