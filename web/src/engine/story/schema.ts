@@ -173,7 +173,7 @@ export const SceneSchema = z
 export const ActorSpecSchema = z
   .object({
     name: z.string(),
-    kind: z.enum(["human", "dog3", "troll", "owl", "cat"]).default("human"),
+    kind: z.enum(["human", "dog3", "troll"]).default("human"),
     height: z.number().positive().default(1.6),
     robe: z.string().default("#222222"),
     trim: z.string().optional(),
@@ -185,6 +185,7 @@ export const ActorSpecSchema = z
     beard: z.enum(["none", "short", "long"]).default("none"),
     // Students wear the school jumper and shirt under the robe.
     outfit: z.enum(["student", "adult"]).default("student"),
+    hat: z.enum(["none", "witch"]).default("none"),
     scar: z.boolean().default(false),
     voice: z.number().default(1),
     subtitleColor: z.string().default("#ffffff"),

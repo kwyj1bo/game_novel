@@ -1,0 +1,670 @@
+{
+  "id": "hp1-troll",
+  "title": "The Troll on Halloween",
+  "subtitle": "Harry Potter and the Philosopher's Stone",
+  "start": "troll_corridor",
+  "actors": {
+    "harry": {
+      "name": "Harry",
+      "height": 1.45,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#e3b08c",
+      "hair": "#120d08",
+      "hairStyle": "messy",
+      "eyes": "#2e7d32",
+      "glasses": "round",
+      "scar": true,
+      "voice": 1.15,
+      "subtitleColor": "#f3d27a"
+    },
+    "ron": {
+      "name": "Ron",
+      "height": 1.53,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#ecbb9a",
+      "hair": "#c2501e",
+      "hairStyle": "ginger_mop",
+      "eyes": "#4a7ab0",
+      "voice": 0.95,
+      "subtitleColor": "#ff9a6a"
+    },
+    "hermione": {
+      "name": "Hermione",
+      "height": 1.42,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#dca47e",
+      "hair": "#5a3418",
+      "hairStyle": "bushy",
+      "eyes": "#6a4a2a",
+      "voice": 1.4,
+      "subtitleColor": "#c9a8ff"
+    },
+    "troll": {
+      "name": "Troll",
+      "kind": "troll",
+      "height": 3.6,
+      "skin": "#7d8572",
+      "robe": "#4a3a28"
+    },
+    "mcgonagall": {
+      "name": "McGonagall",
+      "height": 1.74,
+      "robe": "#1f4a33",
+      "trim": "#1a3a28",
+      "skin": "#e2bea0",
+      "hair": "#5a5a5a",
+      "hairStyle": "bun",
+      "eyes": "#4a5a4a",
+      "glasses": "square",
+      "outfit": "adult",
+      "hat": "witch",
+      "voice": 0.9,
+      "subtitleColor": "#8fd6a8"
+    }
+  },
+  "scenes": {
+    "troll_corridor": {
+      "title": "Halloween Night",
+      "location": "castle_corridor",
+      "cast": {
+        "harry": "start_harry",
+        "ron": "start_ron"
+      },
+      "beats": [
+        {
+          "camera": "wide",
+          "ms": 0
+        },
+        {
+          "narrate": "Halloween. A troll is loose in the castle, and every student has been sent to bed. Every student except Hermione, who doesn't know."
+        },
+        {
+          "together": [
+            {
+              "move": "harry",
+              "to": [
+                0.5,
+                6.4
+              ]
+            },
+            {
+              "move": "ron",
+              "to": [
+                -0.4,
+                7.0
+              ]
+            }
+          ]
+        },
+        {
+          "camera": "two",
+          "on": "ron",
+          "with": "harry"
+        },
+        {
+          "say": "ron",
+          "text": "She's been crying in the girls' bathroom all afternoon. All because of what I said after Charms.",
+          "mood": "whisper"
+        },
+        {
+          "say": "ron",
+          "text": "Swish and flick, swish and flick. She never stops going on about it.",
+          "mood": "whisper"
+        },
+        {
+          "say": "harry",
+          "text": "Then we'll find her and tell her ourselves. Come on.",
+          "mood": "whisper"
+        },
+        {
+          "sfx": "growl"
+        },
+        {
+          "spawn": "troll",
+          "at": "troll_enter"
+        },
+        {
+          "say": "ron",
+          "text": "Can you smell that? Like old socks and a blocked drain...",
+          "mood": "whisper"
+        },
+        {
+          "together": [
+            {
+              "move": "harry",
+              "to": "hide_harry",
+              "run": true
+            },
+            {
+              "move": "ron",
+              "to": "hide_ron",
+              "run": true
+            }
+          ]
+        },
+        {
+          "camera": "low",
+          "on": "troll",
+          "ms": 1200
+        },
+        {
+          "narrate": "Twelve feet of grey, lumpy troll shuffles out of the shadows, its club scraping along the flagstones."
+        },
+        {
+          "move": "troll",
+          "to": "troll_door"
+        },
+        {
+          "look": "troll",
+          "at": "bathroom_door"
+        },
+        {
+          "narrate": "It stops at a doorway, peers inside, and squeezes through."
+        },
+        {
+          "despawn": "troll"
+        },
+        {
+          "camera": "two",
+          "on": "harry",
+          "with": "ron"
+        },
+        {
+          "say": "harry",
+          "text": "The key's still in the lock. We can shut it in!",
+          "mood": "urgent"
+        },
+        {
+          "together": [
+            {
+              "move": "harry",
+              "to": "lock_harry",
+              "run": true
+            },
+            {
+              "move": "ron",
+              "to": "lock_ron",
+              "run": true
+            }
+          ]
+        },
+        {
+          "prop": "bathroom_door",
+          "state": "locked"
+        },
+        {
+          "say": "ron",
+          "text": "Yes! We did it!",
+          "anim": "celebrate"
+        },
+        {
+          "wait": 500
+        },
+        {
+          "together": [
+            {
+              "sfx": "scream"
+            },
+            {
+              "fx": "shake",
+              "ms": 400
+            }
+          ]
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 500
+        },
+        {
+          "say": "harry",
+          "text": "Oh no. Ron — which room was that?",
+          "mood": "scared"
+        },
+        {
+          "say": "ron",
+          "text": "The girls' bathroom. Hermione!",
+          "mood": "scared"
+        }
+      ],
+      "choice": {
+        "prompt": "Hermione is locked in with the troll.",
+        "seconds": 8,
+        "options": [
+          {
+            "label": "Unlock the door and go in after her",
+            "correct": true,
+            "goto": "bathroom_fight"
+          },
+          {
+            "label": "Run and fetch a teacher",
+            "correct": false,
+            "goto": "corridor_too_late"
+          }
+        ]
+      }
+    },
+    "corridor_too_late": {
+      "location": "castle_corridor",
+      "cast": {
+        "harry": "lock_harry",
+        "ron": "lock_ron"
+      },
+      "beats": [
+        {
+          "say": "harry",
+          "text": "We need a teacher — quick!",
+          "mood": "urgent"
+        },
+        {
+          "camera": "wide",
+          "ms": 600
+        },
+        {
+          "together": [
+            {
+              "move": "harry",
+              "to": "teachers",
+              "run": true
+            },
+            {
+              "move": "ron",
+              "to": [
+                0.7,
+                11.2
+              ],
+              "run": true
+            },
+            {
+              "sfx": "crash"
+            }
+          ]
+        },
+        {
+          "sfx": "scream"
+        },
+        {
+          "fx": "fade_out",
+          "ms": 1500
+        }
+      ],
+      "ending": {
+        "kind": "failure",
+        "title": "Too Late",
+        "text": "Hermione needed help that very moment, not in ten minutes. By the time a teacher arrived, the bathroom was wrecked. Real friends go back in."
+      }
+    },
+    "bathroom_fight": {
+      "title": "The Girls' Bathroom",
+      "location": "girls_bathroom",
+      "cast": {
+        "harry": "entry",
+        "ron": [
+          -0.2,
+          5.6
+        ],
+        "hermione": "hermione_corner",
+        "troll": "troll_start"
+      },
+      "beats": [
+        {
+          "look": "troll",
+          "at": "hermione"
+        },
+        {
+          "anim": "hermione",
+          "clip": "cower",
+          "hold": true
+        },
+        {
+          "camera": "wide",
+          "ms": 0
+        },
+        {
+          "together": [
+            {
+              "move": "harry",
+              "to": "harry_in",
+              "run": true
+            },
+            {
+              "move": "ron",
+              "to": "ron_in",
+              "run": true
+            }
+          ]
+        },
+        {
+          "camera": "medium",
+          "on": "troll",
+          "ms": 700
+        },
+        {
+          "anim": "troll",
+          "clip": "lunge"
+        },
+        {
+          "together": [
+            {
+              "prop": "sinks",
+              "state": "smashed"
+            },
+            {
+              "fx": "shake",
+              "ms": 600
+            }
+          ]
+        },
+        {
+          "say": "hermione",
+          "text": "Help! Somebody help me!",
+          "mood": "scared"
+        },
+        {
+          "move": "troll",
+          "to": "troll_hermione"
+        },
+        {
+          "camera": "two",
+          "on": "harry",
+          "with": "ron"
+        },
+        {
+          "say": "harry",
+          "text": "Distract it! Make it look at us!",
+          "mood": "urgent"
+        },
+        {
+          "narrate": "Harry snatches up a broken tap and hurls it. It bounces off the troll's shoulder."
+        },
+        {
+          "sfx": "thud"
+        },
+        {
+          "look": "troll",
+          "at": "ron"
+        },
+        {
+          "move": "troll",
+          "to": "troll_turn"
+        },
+        {
+          "together": [
+            {
+              "anim": "troll",
+              "clip": "roar"
+            },
+            {
+              "sfx": "roar"
+            },
+            {
+              "camera": "low",
+              "on": "troll",
+              "ms": 600
+            }
+          ]
+        },
+        {
+          "move": "ron",
+          "to": "ron_side",
+          "run": true
+        },
+        {
+          "say": "ron",
+          "text": "Over here, you great lump!",
+          "mood": "angry"
+        },
+        {
+          "move": "harry",
+          "to": "harry_hermione",
+          "run": true
+        },
+        {
+          "say": "harry",
+          "text": "Hermione, run! Move!",
+          "mood": "urgent"
+        },
+        {
+          "anim": "hermione",
+          "clip": "shake"
+        },
+        {
+          "narrate": "She is frozen with fear. The troll turns on Ron and lifts its club."
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 600
+        }
+      ],
+      "choice": {
+        "prompt": "The troll raises its club over Ron.",
+        "seconds": 8,
+        "options": [
+          {
+            "label": "Tell Ron: the levitation charm, on the club!",
+            "correct": true,
+            "goto": "bathroom_leviosa"
+          },
+          {
+            "label": "Tell Ron to run for it",
+            "correct": false,
+            "goto": "bathroom_club"
+          }
+        ]
+      }
+    },
+    "bathroom_club": {
+      "location": "girls_bathroom",
+      "cast": {
+        "harry": "harry_hermione",
+        "ron": "ron_side",
+        "hermione": "hermione_corner",
+        "troll": "troll_turn"
+      },
+      "beats": [
+        {
+          "say": "harry",
+          "text": "Ron, run!",
+          "mood": "urgent"
+        },
+        {
+          "look": "troll",
+          "at": "ron"
+        },
+        {
+          "camera": "wide",
+          "ms": 500
+        },
+        {
+          "move": "ron",
+          "to": [
+            2.8,
+            3.4
+          ],
+          "run": true,
+          "async": true
+        },
+        {
+          "anim": "troll",
+          "clip": "lunge"
+        },
+        {
+          "together": [
+            {
+              "sfx": "crash"
+            },
+            {
+              "fx": "shake",
+              "ms": 700
+            },
+            {
+              "anim": "ron",
+              "clip": "fall",
+              "hold": true
+            }
+          ]
+        },
+        {
+          "fx": "red_out",
+          "ms": 1500
+        }
+      ],
+      "ending": {
+        "kind": "death",
+        "title": "Nowhere to Run",
+        "text": "Nobody outruns a troll in a bathroom. Ron had practiced the one spell that could stop it that very morning: swish and flick."
+      }
+    },
+    "bathroom_leviosa": {
+      "location": "girls_bathroom",
+      "cast": {
+        "harry": "harry_hermione",
+        "ron": "ron_side",
+        "hermione": "hermione_corner",
+        "troll": "troll_turn"
+      },
+      "beats": [
+        {
+          "say": "harry",
+          "text": "Ron — the club! Use the charm!",
+          "mood": "urgent"
+        },
+        {
+          "camera": "medium",
+          "on": "ron",
+          "ms": 600
+        },
+        {
+          "look": "ron",
+          "at": "troll"
+        },
+        {
+          "anim": "ron",
+          "clip": "cast"
+        },
+        {
+          "say": "ron",
+          "text": "Wingardium Leviosa!",
+          "mood": "urgent"
+        },
+        {
+          "fx": "spell",
+          "from": "ron",
+          "to": "troll",
+          "color": "#ffe08a"
+        },
+        {
+          "prop": "club",
+          "state": "floating"
+        },
+        {
+          "camera": "low",
+          "on": "troll",
+          "ms": 1200
+        },
+        {
+          "narrate": "The club tears free of the troll's grip and rises, higher and higher, turning slowly in the air."
+        },
+        {
+          "prop": "club",
+          "state": "dropped"
+        },
+        {
+          "wait": 500
+        },
+        {
+          "together": [
+            {
+              "anim": "troll",
+              "clip": "fall",
+              "hold": true
+            },
+            {
+              "fx": "shake",
+              "ms": 900
+            }
+          ]
+        },
+        {
+          "sfx": "thud"
+        },
+        {
+          "camera": "wide",
+          "ms": 900
+        },
+        {
+          "anim": "hermione",
+          "clip": "idle"
+        },
+        {
+          "say": "hermione",
+          "text": "Is it... dead?",
+          "mood": "whisper"
+        },
+        {
+          "say": "harry",
+          "text": "Just knocked out, I think."
+        },
+        {
+          "sfx": "door"
+        },
+        {
+          "spawn": "mcgonagall",
+          "at": "entry"
+        },
+        {
+          "move": "mcgonagall",
+          "to": [
+            0.6,
+            3.8
+          ]
+        },
+        {
+          "camera": "medium",
+          "on": "mcgonagall",
+          "ms": 700
+        },
+        {
+          "say": "mcgonagall",
+          "text": "What on earth were you thinking? You should be in your dormitory!",
+          "mood": "angry"
+        },
+        {
+          "camera": "medium",
+          "on": "hermione",
+          "ms": 600
+        },
+        {
+          "say": "hermione",
+          "text": "It's my fault, Professor. I went looking for the troll myself. They came to find me."
+        },
+        {
+          "camera": "medium",
+          "on": "mcgonagall",
+          "ms": 600
+        },
+        {
+          "say": "mcgonagall",
+          "text": "Five points from Gryffindor, Miss Granger. And five points each to you two — for pure, astonishing luck."
+        },
+        {
+          "camera": "two",
+          "on": "harry",
+          "with": "hermione"
+        },
+        {
+          "narrate": "Facing a troll together changes things. From that night on, Hermione Granger was their friend."
+        }
+      ],
+      "ending": {
+        "kind": "victory",
+        "title": "Three Friends",
+        "text": "Hermione took the blame to protect them. Harry and Ron never forgot it."
+      }
+    }
+  }
+}

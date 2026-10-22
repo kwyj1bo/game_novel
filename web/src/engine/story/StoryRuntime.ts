@@ -4,7 +4,8 @@ import type { ChoiceOption, Ending, Story } from "./schema";
 
 export type RuntimeEvent =
   | { type: "scene"; id: string }
-  | { type: "choice"; scene: string }
+  // checkpoint: the scene that entered the current location, a safe place to resume.
+  | { type: "choice"; scene: string; checkpoint: string }
   | { type: "chosen"; scene: string; option: ChoiceOption; timedOut: boolean }
   | { type: "ending"; scene: string; ending: Ending };
 
@@ -63,7 +64,7 @@ export class StoryRuntime {
 
       if (scene.choice) {
         this.lastChoiceScene = id;
-        this.emit({ type: "choice", scene: id });
+        this.emit({ type: "choice", scene: id, checkpoint: this.trail[0] ?? id });
         const idx = await this.hud.showChoice(scene.choice);
         const timedOut = idx < 0;
         // Hesitating is a choice too: running out of time takes the wrong path.
@@ -80,6 +81,7 @@ export class StoryRuntime {
       this.emit({ type: "ending", scene: id, ending });
       const canRetry = ending.kind !== "victory" && this.lastChoiceScene !== null;
       const action = await this.hud.showEnding(ending, canRetry);
+      if (action === "menu") return;
       if (action === "retry" && canRetry) {
         id = this.lastChoiceScene!;
         const prefix = this.trail.slice(0, this.trail.indexOf(id));
