@@ -138,6 +138,30 @@ export function flagstoneMaterial(tint = "#5d5850", repeat: [number, number] = [
   return texturedMaterial(t, repeat, 0.85);
 }
 
+// Square glazed tiles with grout, for bathrooms and kitchens.
+export function tileMaterial(tint = "#d8d2c4", repeat: [number, number] = [1, 1]): THREE.MeshStandardMaterial {
+  const t = makeTextures(`tile:${tint}`, 256, (ctx, h, size, rand) => {
+    const base = new THREE.Color(tint);
+    ctx.fillStyle = "#5a564e";
+    ctx.fillRect(0, 0, size, size);
+    h.fill(0.2);
+    const n = 4;
+    const cell = size / n;
+    for (let y = 0; y < n; y++) {
+      for (let x = 0; x < n; x++) {
+        const c = base.clone().multiplyScalar(0.9 + rand() * 0.15);
+        ctx.fillStyle = `#${c.getHexString()}`;
+        ctx.fillRect(x * cell + 2, y * cell + 2, cell - 4, cell - 4);
+        for (let yy = y * cell + 2; yy < (y + 1) * cell - 2; yy++) for (let xx = x * cell + 2; xx < (x + 1) * cell - 2; xx++) h[yy * size + xx] = 0.8;
+      }
+    }
+    speckle(ctx, h, size, rand, 2500, 0.1);
+  });
+  const m = texturedMaterial(t, repeat, 0.25);
+  m.normalScale.set(0.5, 0.5);
+  return m;
+}
+
 export function woodMaterial(tint = "#5a3a22", repeat: [number, number] = [1, 1]): THREE.MeshStandardMaterial {
   const t = makeTextures(`wood:${tint}`, 256, (ctx, h, size, rand) => {
     const base = new THREE.Color(tint);

@@ -146,6 +146,7 @@ function actor(name: string) {
     glasses: "none" as const,
     beard: "none" as const,
     outfit: "student" as const,
+    hat: "none" as const,
     scar: false,
     voice: 1,
     subtitleColor: "#fff",

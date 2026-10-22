@@ -258,6 +258,15 @@ export class Human extends Actor {
 
     this.buildHair(hair, spec);
     this.buildGlasses(spec);
+    if (spec.hat === "witch") {
+      const felt = mat(spec.trim ?? spec.robe, 0.9, { side: THREE.DoubleSide });
+      const hat = joint(h, [0, r * 0.75, -r * 0.05]);
+      hat.rotation.x = -0.12;
+      add(hat, new THREE.CylinderGeometry(r * 2.1, r * 2.1, r * 0.06, 28), felt, [0, 0, 0]);
+      // Tall cone with a crooked tip.
+      add(hat, new THREE.ConeGeometry(r * 0.95, r * 2.2, 24, 1, true), felt, [0, r * 1.1, 0]);
+      add(hat, new THREE.ConeGeometry(r * 0.32, r * 0.9, 12), felt, [r * 0.18, r * 2.3, -r * 0.1], undefined, [0, 0, -0.5]);
+    }
     if (spec.beard !== "none") this.buildBeard(hair, spec);
     if (spec.scar) {
       const scar = mat("#9a3a32", 0.6);

@@ -7,36 +7,68 @@ import { DomHud } from "./ui/Hud";
 import type { LocationDef } from "./world/Location";
 import { ThreeStage } from "./world/ThreeStage";
 
+export interface Chapter {
+  number: string;
+  story: Story;
+}
+
 export interface EngineOptions {
   host: HTMLElement;
-  story: Story;
+  // Heading for the chapter menu, e.g. the book title.
+  title: string;
+  chapters: Chapter[];
   locations: Record<string, LocationDef>;
   fast?: boolean;
   muted?: boolean;
 }
 
-// Wires the renderer, stage, HUD and story runtime together and runs the frame loop.
+const PROGRESS_KEY = "novel-engine:progress";
+
+interface Progress {
+  [storyId: string]: { scene: string; title: string };
+}
+
+function loadProgress(): Progress {
+  try {
+    return JSON.parse(localStorage.getItem(PROGRESS_KEY) ?? "{}");
+  } catch {
+    return {};
+  }
+}
+
+function saveProgress(p: Progress): void {
+  try {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(p));
+  } catch {
+    // Storage can be unavailable (private mode); progress is a convenience.
+  }
+}
+
+// Wires the renderer, stage, HUD and story runtime together, runs the frame
+// loop, and moves between the chapter menu and chapters.
 export class Engine {
   readonly stage: ThreeStage;
   readonly hud: DomHud;
-  readonly runtime: StoryRuntime;
   readonly renderer: Renderer;
   readonly audio = new AudioEngine();
-  readonly events: RuntimeEvent[] = [];
-  readonly story: Story;
+  // Events of the chapter being played (reset when a chapter starts).
+  events: RuntimeEvent[] = [];
+  story: Story;
+  runtime: StoryRuntime;
   private last = performance.now();
   private fpsFrames = 0;
   private fpsTime = 0;
   fps = 0;
 
-  constructor(opts: EngineOptions) {
+  constructor(private readonly opts: EngineOptions) {
     const info = Object.fromEntries(Object.entries(opts.locations).map(([id, d]) => [id, d.info]));
-    const issues = validateStory(opts.story, info);
-    if (issues.length) {
-      throw new Error(`story "${opts.story.id}" is invalid:\n` + issues.map((i) => `  ${i.scene ?? "-"}: ${i.message}`).join("\n"));
+    for (const { story } of opts.chapters) {
+      const issues = validateStory(story, info);
+      if (issues.length) {
+        throw new Error(`story "${story.id}" is invalid:\n` + issues.map((i) => `  ${i.scene ?? "-"}: ${i.message}`).join("\n"));
+      }
     }
     if (opts.muted) this.audio.enabled = false;
-    this.story = opts.story;
 
     const host = opts.host;
     const canvas = document.createElement("canvas");
@@ -56,8 +88,8 @@ export class Engine {
         this.stage.rig.handheld = on ? 2.5 : 1;
       },
     });
-    this.runtime = new StoryRuntime(opts.story, this.stage, this.hud);
-    this.runtime.on((e) => this.events.push(e));
+    this.story = opts.chapters[0].story;
+    this.runtime = this.makeRuntime(this.story);
 
     const resize = () => {
       const w = host.clientWidth;
@@ -71,16 +103,50 @@ export class Engine {
     resize();
   }
 
-  start(opts: { skipTitle?: boolean; from?: string } = {}): Promise<void> {
+  private makeRuntime(story: Story): StoryRuntime {
+    this.story = story;
+    this.events = [];
+    const rt = new StoryRuntime(story, this.stage, this.hud);
+    rt.on((e) => {
+      this.events.push(e);
+      const progress = loadProgress();
+      if (e.type === "choice") {
+        progress[story.id] = { scene: e.checkpoint, title: story.scenes[e.checkpoint].title ?? story.title };
+        saveProgress(progress);
+      }
+      if (e.type === "ending" && e.ending.kind === "victory") {
+        delete progress[story.id];
+        saveProgress(progress);
+      }
+    });
+    this.runtime = rt;
+    return rt;
+  }
+
+  // With `from`, jumps straight into the chapter containing that scene;
+  // otherwise shows the chapter menu, and returns to it after a chapter.
+  async start(opts: { from?: string } = {}): Promise<void> {
     requestAnimationFrame(this.frame);
-    if (opts.skipTitle) {
+    if (opts.from) {
+      const chapter = this.opts.chapters.find((c) => opts.from! in c.story.scenes);
+      if (!chapter) throw new Error(`no chapter has a scene "${opts.from}"`);
       this.hud.setLetterbox(true);
       this.audio.unlock();
-      return this.runtime.start(opts);
+      await this.makeRuntime(chapter.story).start({ skipTitle: true, from: opts.from });
     }
-    // The opening room plays behind the title screen.
-    const first = this.story.scenes[this.story.start].location;
-    return this.stage.showcase(first).then(() => this.runtime.start(opts));
+    for (;;) {
+      // The opening room of the first chapter plays behind the menu.
+      const first = this.opts.chapters[0].story;
+      await this.stage.showcase(first.scenes[first.start].location);
+      const progress = loadProgress();
+      const pick = await this.hud.showMenu(
+        this.opts.title,
+        this.opts.chapters.map((c) => ({ id: c.story.id, number: c.number, title: c.story.title, resumeLabel: progress[c.story.id]?.title })),
+      );
+      const story = this.opts.chapters.find((c) => c.story.id === pick.id)!.story;
+      const from = pick.resume ? progress[story.id]?.scene : undefined;
+      await this.makeRuntime(story).start({ skipTitle: true, from });
+    }
   }
 
   private frame = (now: number) => {

@@ -2,6 +2,14 @@ import type { AudioEngine } from "../audio/AudioEngine";
 import type { EndingAction, Hud, Speaker } from "../story/ports";
 import type { Choice, Ending, Story } from "../story/schema";
 
+export interface MenuChapter {
+  id: string;
+  number: string;
+  title: string;
+  // Set when there is saved progress to resume.
+  resumeLabel?: string;
+}
+
 export interface HudOptions {
   // Testing mode: instant text, short holds.
   fast: boolean;
@@ -108,6 +116,36 @@ export class DomHud implements Hud {
         this.setLetterbox(true);
         resolve();
       };
+    });
+  }
+
+  // Chapter select. Resolves with the chosen chapter and whether to resume it.
+  showMenu(heading: string, chapters: MenuChapter[]): Promise<{ id: string; resume: boolean }> {
+    this.state = "title";
+    this.setLetterbox(false);
+    const screen = el("div", "screen title-screen", this.root);
+    el("div", "eyebrow", screen, "An interactive novel");
+    el("h1", "title", screen, heading);
+    const list = el("div", "chapters", screen);
+    el("div", "hint", screen, "Click or Space to advance · 1 / 2 to choose");
+    return new Promise((resolve) => {
+      const go = (id: string, resume: boolean) => {
+        this.audio.unlock();
+        screen.classList.add("leaving");
+        setTimeout(() => screen.remove(), 900);
+        this.state = "idle";
+        this.setLetterbox(true);
+        resolve({ id, resume });
+      };
+      for (const c of chapters) {
+        const card = el("div", "chapter", list);
+        card.dataset.id = c.id;
+        el("div", "chapter-number", card, c.number);
+        el("div", "chapter-title", card, c.title);
+        const row = el("div", "actions", card);
+        el("button", "primary", row, "Begin").onclick = () => go(c.id, false);
+        if (c.resumeLabel) el("button", "secondary", row, `Continue · ${c.resumeLabel}`).onclick = () => go(c.id, true);
+      }
     });
   }
 
@@ -245,6 +283,7 @@ export class DomHud implements Hud {
       };
       if (canRetry) el("button", "primary", row, "Try again").onclick = () => go("retry");
       el("button", canRetry ? "secondary" : "primary", row, ending.kind === "victory" ? "Play again" : "Restart chapter").onclick = () => go("restart");
+      el("button", "secondary", row, "Chapters").onclick = () => go("menu");
     });
   }
 

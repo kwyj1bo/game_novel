@@ -418,6 +418,11 @@ const SFX = {
     SFX.creak(a, t, out);
     SFX.thud(a, t + 1.0, out);
   },
+  scream: (a: AudioEngine, t: number, out: AudioNode) => {
+    const o = r(a).osc("sawtooth", 880, t, 1.1, out, 0.07, 0.04, 620);
+    o.detune.setValueCurveAtTime(new Float32Array([0, 60, -40, 80, -60, 40, 0]), t, 1.0);
+    r(a).noise(t, 1.0, out, { f0: 2400, q: 3, peak: 0.05, a: 0.05 });
+  },
   laugh: (a: AudioEngine, t: number, out: AudioNode) => {
     for (let i = 0; i < 6; i++) r(a).osc("sawtooth", 150 - i * 6, t + i * 0.2, 0.14, out, 0.06, 0.02, 120 - i * 6);
   },

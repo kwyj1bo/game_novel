@@ -339,6 +339,43 @@ canvas.view {
   color: rgba(239, 231, 214, 0.85);
   margin: 0 0 36px;
 }
+.chapters {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 26px;
+}
+.chapter {
+  width: min(360px, 88vw);
+  padding: 22px 22px 20px;
+  border: 1px solid rgba(217, 180, 90, 0.35);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(20, 16, 10, 0.75), rgba(4, 4, 4, 0.85));
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+.chapter-number {
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.chapter-title {
+  font-family: var(--display);
+  font-size: 22px;
+  margin: 8px 0 18px;
+  color: var(--gold-soft);
+}
+.chapter .actions {
+  justify-content: flex-start;
+  gap: 10px;
+}
+.chapter .primary,
+.chapter .secondary {
+  padding: 10px 18px;
+  font-size: 11px;
+}
 .screen .hint {
   margin-top: 26px;
   font-size: 14px;

@@ -37,7 +37,7 @@ export interface Speaker {
   voice: number;
 }
 
-export type EndingAction = "retry" | "restart";
+export type EndingAction = "retry" | "restart" | "menu";
 
 export interface Hud {
   showTitle(story: Story): Promise<void>;
