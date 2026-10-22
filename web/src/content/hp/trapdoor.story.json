@@ -1,4 +1,5 @@
 {
+  "$schema": "../../../story.schema.json",
   "id": "hp1-trapdoor",
   "title": "Through the Trapdoor",
   "subtitle": "Harry Potter and the Philosopher's Stone",

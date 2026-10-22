@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "validate": "vite-node scripts/validate-story.ts"
+    "validate": "vite-node scripts/validate-story.ts",
+    "schema": "vite-node scripts/export-schema.ts"
   },
   "dependencies": {
     "postprocessing": "^6.39.5",

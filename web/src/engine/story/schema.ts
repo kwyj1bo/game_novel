@@ -194,6 +194,8 @@ export const ActorSpecSchema = z
 
 export const StorySchema = z
   .object({
+    // Lets editors find story.schema.json; ignored by the engine.
+    $schema: z.string().optional(),
     id: z.string(),
     title: z.string(),
     subtitle: z.string().optional(),

@@ -47,6 +47,8 @@ A story is a JSON file in `web/src/content/hp/`. Each story is one chapter. It l
 
 Each scene ends in one of three ways: a `goto` to the next scene, a `choice`, or an `ending`.
 
+`web/story.schema.json` describes the story format for editors: a story file that sets `"$schema"` gets autocomplete and inline errors. Run `npm run schema` after you change the zod schema in `schema.ts`. CI fails when the file is out of date.
+
 The validator (`web/src/engine/story/validate.ts`) enforces the game design:
 
 - A choice has exactly one correct option.
