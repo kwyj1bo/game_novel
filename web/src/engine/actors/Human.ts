@@ -110,6 +110,9 @@ export class Human extends Actor {
   private readonly allMaterials: THREE.MeshStandardMaterial[] = [];
   private readonly baseColors = new Map<THREE.MeshStandardMaterial, THREE.Color>();
   private crumbleU = 0;
+  // Once revealed or turned to ash, later clips must not undo it.
+  private unwrapped = false;
+  private crumbled = false;
   private nextBlink = 2;
   private blink = 0;
   private readonly seed: number;
@@ -629,24 +632,26 @@ export class Human extends Actor {
         break;
     }
     this.flute.visible = name === "play_flute" && u < 0.97;
+    if (name === "unwrap" && u >= 1) this.unwrapped = true;
+    if (name === "crumble" && u >= 1) this.crumbled = true;
     if (this.turban && this.backFace) {
       const off = name === "unwrap" ? easeOutCubic(clamp((u - 0.2) / 0.6, 0, 1)) : 0;
-      const turbanOff = name === "unwrap" && (hold || u < 1) ? off : 0;
+      const turbanOff = this.unwrapped ? 1 : off;
       this.turban.scale.setScalar(1 - turbanOff * 0.999);
       this.turban.visible = turbanOff < 0.99;
       this.backFace.visible = turbanOff > 0.5;
     }
-    this.applyCrumble(name === "crumble" ? u : 0);
+    this.applyCrumble(this.crumbled ? 1 : name === "crumble" ? u : 0);
   }
 
   private resetClipVisuals(): void {
     this.flute.visible = false;
     if (this.turban && this.backFace) {
-      this.turban.scale.setScalar(1);
-      this.turban.visible = true;
-      this.backFace.visible = false;
+      this.turban.scale.setScalar(this.unwrapped ? 0.001 : 1);
+      this.turban.visible = !this.unwrapped;
+      this.backFace.visible = this.unwrapped;
     }
-    this.applyCrumble(0);
+    this.applyCrumble(this.crumbled ? 1 : 0);
   }
 
   private applyCrumble(u: number): void {

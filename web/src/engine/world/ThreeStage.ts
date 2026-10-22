@@ -36,7 +36,7 @@ export class ThreeStage implements Stage {
   ) {
     this.rig = new CameraRig(aspect);
     // Soft fill that travels with the camera keeps faces readable in dark rooms.
-    const fill = new THREE.PointLight("#ffe2c4", 1.2, 7, 1.5);
+    const fill = new THREE.PointLight("#ffe2c4", 0.45, 6, 1.5);
     fill.position.set(0.4, 0.3, 0);
     this.rig.camera.add(fill);
     this.scene.add(this.rig.camera);
@@ -81,6 +81,12 @@ export class ThreeStage implements Stage {
     this.scene.fog = loc.fog;
     this.scene.environmentIntensity = loc.environmentIntensity ?? 0.25;
     this.rig.bounds = loc.bounds;
+    // Props and architecture that cast shadows are solid enough to block a shot.
+    const occluders: THREE.Object3D[] = [];
+    loc.root.traverse((o) => {
+      if (o instanceof THREE.Mesh && !(o instanceof THREE.InstancedMesh) && o.castShadow && o.frustumCulled) occluders.push(o);
+    });
+    this.rig.occluders = occluders;
     this.rig.cut(loc.wide.pos, loc.wide.look);
     if (loc.music) this.audio.music(loc.music);
     if (covered) void this.fxs.fade(null, 0, 700);
@@ -260,7 +266,8 @@ export class ThreeStage implements Stage {
   private subject(t: Target): ShotSubject {
     const a = typeof t === "string" ? this.actors.get(t) : undefined;
     if (a) return { point: a.headPosition(new THREE.Vector3()), yaw: a.yaw, height: a.height };
-    return { point: this.focusPoint(t) };
+    // Places get wider framing than faces.
+    return { point: this.focusPoint(t), height: 2.6 };
   }
 
   actor(id: string): Actor | undefined {

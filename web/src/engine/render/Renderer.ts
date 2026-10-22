@@ -51,7 +51,7 @@ export class Renderer {
     this.bloom = new BloomEffect({ mipmapBlur: true, luminanceThreshold: 0.85, luminanceSmoothing: 0.2, intensity: 1.15, radius: 0.7 });
     this.hueSat = new HueSaturationEffect({ saturation: 0 });
     const vignette = new VignetteEffect({ offset: 0.28, darkness: 0.62 });
-    const tone = new ToneMappingEffect({ mode: ToneMappingMode.AGX });
+    const tone = new ToneMappingEffect({ mode: ToneMappingMode.ACES_FILMIC });
     const noise = new NoiseEffect({ premultiply: true, blendFunction: BlendFunction.SCREEN });
     noise.blendMode.opacity.value = 0.05;
     this.composer.addPass(new EffectPass(camera, this.bloom, tone, this.hueSat, vignette, noise));

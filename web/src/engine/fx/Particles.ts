@@ -88,7 +88,7 @@ export class ParticleSystem {
     this.material = new THREE.ShaderMaterial({
       vertexShader: VERT,
       fragmentShader: FRAG,
-      uniforms: { uScale: { value: 400 }, uSoft: { value: additive ? 0.0 : 0.15 } },
+      uniforms: { uScale: { value: 400 }, uSoft: { value: 0.0 } },
       transparent: true,
       depthWrite: false,
       blending: additive ? THREE.AdditiveBlending : THREE.NormalBlending,

@@ -32,6 +32,16 @@ for (const s of schedule) {
       return e ? { fps: Math.round(e.fps), scene: e.runtime.currentScene, hud: e.hud.state, line: e.hud.lastLine } : null;
     });
     console.log(`shot ${s.arg}ms`, JSON.stringify(info));
+  } else if (s.arg === "correct" || s.arg === "wrong") {
+    // Wait for the next choice, then answer it.
+    const want = s.arg === "correct";
+    await page.waitForFunction(() => (window as any).__engine?.hud.state === "choice", null, { timeout: 120_000 });
+    await page.evaluate((w) => {
+      const e = (window as any).__engine;
+      const opts = e.story.scenes[e.runtime.currentScene].choice.options;
+      e.hud.pick(opts.findIndex((o: any) => o.correct === w));
+    }, want);
+    console.log(`picked ${s.arg} at ${Date.now() - t0}ms`);
   } else if (s.arg.startsWith("pick")) {
     await page.evaluate((i) => (window as any).__engine.hud.pick(i), Number(s.arg.slice(4)));
   } else if (s.arg === "begin") {

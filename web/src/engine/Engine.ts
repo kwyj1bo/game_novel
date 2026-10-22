@@ -23,6 +23,7 @@ export class Engine {
   readonly renderer: Renderer;
   readonly audio = new AudioEngine();
   readonly events: RuntimeEvent[] = [];
+  readonly story: Story;
   private last = performance.now();
   private fpsFrames = 0;
   private fpsTime = 0;
@@ -35,6 +36,7 @@ export class Engine {
       throw new Error(`story "${opts.story.id}" is invalid:\n` + issues.map((i) => `  ${i.scene ?? "-"}: ${i.message}`).join("\n"));
     }
     if (opts.muted) this.audio.enabled = false;
+    this.story = opts.story;
 
     const host = opts.host;
     const canvas = document.createElement("canvas");

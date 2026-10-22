@@ -38,7 +38,10 @@ export class CameraRig {
   private shakeLeft = 0;
   private time = 0;
   bounds: THREE.Box3 | null = null;
+  // Solid scenery the camera must not hide behind (set per location).
+  occluders: THREE.Object3D[] = [];
   handheld = 1;
+  private readonly ray = new THREE.Raycaster();
 
   constructor(aspect: number) {
     this.camera = new THREE.PerspectiveCamera(38, aspect, 0.05, 200);
@@ -58,6 +61,7 @@ export class CameraRig {
   // Frames a shot. ms = 0 cuts; otherwise eases from the current framing.
   frame(req: ShotRequest, ms: number): Promise<void> {
     const { pos, look } = this.compute(req);
+    if (req.shot !== "wide" && req.shot !== "pov") this.unblock(pos, look);
     this.orbit = null;
     this.track = null;
     if (req.shot === "orbit" && req.subject) {
@@ -99,6 +103,35 @@ export class CameraRig {
   shake(amount: number, seconds: number): void {
     this.shakeAmt = Math.max(this.shakeAmt, amount);
     this.shakeLeft = Math.max(this.shakeLeft, seconds);
+  }
+
+  // Swings the camera around the subject (then up) until nothing solid sits
+  // between it and the subject.
+  private unblock(pos: THREE.Vector3, look: THREE.Vector3): void {
+    if (!this.occluders.length || !this.blocked(pos, look)) return;
+    const offset = pos.clone().sub(look);
+    const tries: [number, number][] = [];
+    for (const lift of [0, 0.8, 1.8]) for (const a of [25, -25, 50, -50, 80, -80, 120, -120]) tries.push([a, lift]);
+    for (const [deg, lift] of tries) {
+      const cand = offset.clone().applyAxisAngle(UP, THREE.MathUtils.degToRad(deg)).add(look);
+      cand.y += lift;
+      if (!this.blocked(cand, look)) {
+        pos.copy(cand);
+        return;
+      }
+    }
+  }
+
+  private blocked(pos: THREE.Vector3, look: THREE.Vector3): boolean {
+    const p = pos.clone();
+    if (this.bounds) p.clamp(this.bounds.min, this.bounds.max);
+    const dir = p.clone().sub(look);
+    const dist = dir.length();
+    if (dist < 0.05) return false;
+    this.ray.set(look, dir.normalize());
+    this.ray.far = dist;
+    // Ignore hits right at the subject (its own body or the object it stands on).
+    return this.ray.intersectObjects(this.occluders, false).some((h) => h.distance > 0.45);
   }
 
   private compute(req: ShotRequest): { pos: THREE.Vector3; look: THREE.Vector3 } {

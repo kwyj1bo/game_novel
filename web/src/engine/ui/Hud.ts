@@ -198,6 +198,7 @@ export class DomHud implements Hud {
       const finish = (i: number) => {
         if (!this.pickFn) return;
         this.pickFn = null;
+        this.state = "idle";
         clearTimeout(timeout);
         this.audio.heartbeat(false);
         if (i >= 0) {
@@ -214,7 +215,6 @@ export class DomHud implements Hud {
           () => {
             box.classList.remove("show", "timeout");
             this.opts.onChoiceMode(false);
-            this.state = "idle";
             resolve(i);
           },
           this.opts.fast ? 0 : 750,
