@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { damp, easeOutCubic, lerp } from "../engine/core/math";
 import type { LocationDef } from "../engine/world/Location";
-import { mesh, room, stoneMaterial, torch, v3 } from "./kit";
+import { mesh, room, stoneMaterial, torch, autoMarks, v3 } from "./kit";
 
 const SQ = 1.6;
 // Square name (e.g. "d4") -> world position. Rank 1 is nearest the camera (the black side).
@@ -20,6 +20,7 @@ const MARKS = {
   white_king: sq("g7"),
   exit: v3(0, 0, -8.6),
   exit_harry: v3(0.3, 0, -7.6),
+  ...autoMarks(v3(0, 0, 2.4), v3(-2.6, 7.4, 9.6), v3(0, 0, 8.4), 2.0),
 };
 
 type Kind = "pawn" | "rook" | "knight" | "bishop" | "queen" | "king";
@@ -98,6 +99,7 @@ export const chessboard: LocationDef = {
   title: "The Giant Chessboard",
   info: {
     marks: Object.keys(MARKS),
+    keywords: ["chess","chessboard","knight","queen","bishop","pawn","checkmate"],
     props: {
       black_knight: ["d4", "c5", "toppled"],
       white_queen: ["e7", "c5", "f3"],

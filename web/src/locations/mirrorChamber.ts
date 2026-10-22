@@ -3,7 +3,7 @@ import { Reflector } from "three/examples/jsm/objects/Reflector.js";
 import { damp, noise1 } from "../engine/core/math";
 import { hdr } from "../engine/fx/Particles";
 import type { LocationDef } from "../engine/world/Location";
-import { flagstoneMaterial, mesh, pillar, stoneMaterial, torch, v3 } from "./kit";
+import { flagstoneMaterial, mesh, pillar, stoneMaterial, torch, autoMarks, v3 } from "./kit";
 
 const MARKS = {
   entry: v3(0, 0, 7.2),
@@ -15,6 +15,7 @@ const MARKS = {
   harry_grab: v3(0.3, 0, -1.7),
   mirror: v3(0, 1.7, -5.3),
   mirror_front: v3(0, 0, -4.2),
+  ...autoMarks(v3(0, 0, 0.8), v3(3.2, 3.4, 6.2), v3(0, 0, 7.2), 2.0),
 };
 
 export const mirrorChamber: LocationDef = {
@@ -22,6 +23,7 @@ export const mirrorChamber: LocationDef = {
   title: "The Last Chamber",
   info: {
     marks: Object.keys(MARKS),
+    keywords: ["mirror","reflection","chamber"],
     props: {
       mirror: ["still", "glow"],
       flames: ["off", "on"],

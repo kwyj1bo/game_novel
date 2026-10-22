@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { damp } from "../engine/core/math";
 import { hdr } from "../engine/fx/Particles";
 import type { LocationDef } from "../engine/world/Location";
-import { dust, flagstoneMaterial, mesh, pillar, room, stoneMaterial, torch, v3, woodMaterial } from "./kit";
+import { dust, flagstoneMaterial, mesh, pillar, room, stoneMaterial, torch, autoMarks, v3, woodMaterial } from "./kit";
 
 const MARKS = {
   start_harry: v3(0.5, 0, 9.5),
@@ -15,6 +15,7 @@ const MARKS = {
   lock_harry: v3(-1.5, 0, -4.9),
   lock_ron: v3(-1.0, 0, -4.0),
   teachers: v3(0, 0, 11.5),
+  ...autoMarks(v3(0, 0, 3.5), v3(1.6, 2.2, 11.6), v3(0, 0, 11), 1.2),
 };
 
 export const castleCorridor: LocationDef = {
@@ -22,6 +23,7 @@ export const castleCorridor: LocationDef = {
   title: "A Castle Corridor",
   info: {
     marks: Object.keys(MARKS),
+    keywords: ["corridor","hall","hallway","passage","staircase","stairs","castle","statue","window","door"],
     props: { bathroom_door: ["open", "closed", "locked"] },
   },
   build(ctx) {

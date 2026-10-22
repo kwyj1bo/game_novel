@@ -76,6 +76,37 @@ The `Director` talks to the 3D world and the UI only through two interfaces (`St
 
 A retry rebuilds the room without delay: the runtime replays the scenes since the last location change in instant mode, then asks the choice again.
 
+## From novel to game
+
+The pipeline in `pipeline/` turns a novel (PDF or plain text) into one story file per chapter. It uses no AI model. spaCy supplies sentences, part-of-speech tags and the dependency parse. WordNet supplies antonyms. Every other decision is a rule in `pipeline/analyze.py` and `pipeline/build.py`, or a word list in `pipeline/lexicon.py`. The same input always gives the same story.
+
+The steps are:
+
+1. **Text:** split the file into chapters and paragraphs (`text.py`).
+2. **Characters:** find names, merge variants ("Professor McGonagall", "McGonagall"), detect creatures that match an asset (troll, dog), and work out genders from honorifics and subject pronouns.
+3. **Dialogue:** pull out quotes, attribute each one to a speaker from tags such as "said Ron" or "she whispered", and set the mood from the speech verb.
+4. **Actions:** map verbs to engine actions through the dependency parse: moves, animations, sounds and spells. Pronouns are resolved to the most recent character of the right gender.
+5. **Scenes:** start a new scene at a scene break, a time jump, or a change of location. Locations come from keyword matches in narration, using the keywords each location declares.
+6. **Choices:** score the protagonist's decisive actions by tension, verb and position. Pick up to three. The correct option is what the hero did. The wrong option is its direct opposite ("Unlock the door" against "Leave the door locked"). A wrong choice plays its consequence and ends the run, and the ending says what the hero did in the book.
+7. **Story:** stage the cast on each location's generic `auto_*` marks, add camera shots, and write story JSON that the engine validator accepts.
+
+The pipeline reads the assets it can use from `web/catalog.json`. The engine writes this file (`npm run catalog`). It lists locations with their keywords and marks, known characters, creatures, animations and sounds.
+
+### Run it
+
+You need Python 3.12.
+
+1. Install the dependencies: `pip install -r requirements.txt`
+2. Get the spaCy model: `python -m spacy download en_core_web_sm`
+3. Get WordNet: `python -c "import nltk; nltk.download('wordnet')"`
+4. Build a novel: `python -m pipeline build book.pdf --validate`
+
+Each chapter is written to `web/public/generated/`. Open one with `http://localhost:5173/?story=/generated/<file>.story.json`. Add `--debug out/` to write the output of each step for inspection.
+
+To upload from the browser, start the backend with `uvicorn app.main:app --port 8000` next to `npm run dev`. The chapter menu then has an "Upload a novel" card.
+
+`python -m pytest` runs the pipeline tests on two original fixture chapters in `tests/pipeline/fixtures/`.
+
 ## Earlier prototype
 
-The Python code in `app/` extracts chapters and text from a PDF. It is not used by the engine yet. A later phase will turn extracted text into story files.
+The rest of the Python code in `app/` is the first prototype: PDF text and chapter extraction. The pipeline replaces its scene and entity detection.

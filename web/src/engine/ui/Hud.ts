@@ -120,7 +120,7 @@ export class DomHud implements Hud {
   }
 
   // Chapter select. Resolves with the chosen chapter and whether to resume it.
-  showMenu(heading: string, chapters: MenuChapter[]): Promise<{ id: string; resume: boolean }> {
+  showMenu(heading: string, chapters: MenuChapter[], upload?: (file: File) => Promise<MenuChapter[]>): Promise<{ id: string; resume: boolean }> {
     this.state = "title";
     this.setLetterbox(false);
     const screen = el("div", "screen title-screen", this.root);
@@ -137,15 +137,45 @@ export class DomHud implements Hud {
         this.setLetterbox(true);
         resolve({ id, resume });
       };
-      for (const c of chapters) {
-        const card = el("div", "chapter", list);
+      const addCard = (c: MenuChapter, before?: HTMLElement) => {
+        const card = el("div", "chapter");
+        list.insertBefore(card, before ?? null);
         card.dataset.id = c.id;
         el("div", "chapter-number", card, c.number);
         el("div", "chapter-title", card, c.title);
         const row = el("div", "actions", card);
         el("button", "primary", row, "Begin").onclick = () => go(c.id, false);
         if (c.resumeLabel) el("button", "secondary", row, `Continue · ${c.resumeLabel}`).onclick = () => go(c.id, true);
-      }
+      };
+      chapters.forEach((c) => addCard(c));
+      if (!upload) return;
+      // Upload card: a novel goes to the pipeline and comes back as chapters.
+      const card = el("div", "chapter upload", list);
+      el("div", "chapter-number", card, "Your own book");
+      el("div", "chapter-title", card, "Upload a novel");
+      const input = el("input", "file-input", card) as HTMLInputElement;
+      input.type = "file";
+      input.accept = ".pdf,.txt";
+      const status = el("div", "upload-status", card, "PDF or plain text");
+      const row = el("div", "actions", card);
+      const pickBtn = el("button", "secondary", row, "Choose file");
+      pickBtn.onclick = () => input.click();
+      input.onchange = async () => {
+        const file = input.files?.[0];
+        if (!file) return;
+        pickBtn.disabled = true;
+        status.textContent = `Reading “${file.name}”…`;
+        try {
+          const added = await upload(file);
+          added.forEach((c) => addCard(c, card));
+          status.textContent = `Added ${added.length} chapter${added.length === 1 ? "" : "s"}.`;
+        } catch (e) {
+          status.textContent = e instanceof Error ? e.message : String(e);
+        } finally {
+          pickBtn.disabled = false;
+          input.value = "";
+        }
+      };
     });
   }
 

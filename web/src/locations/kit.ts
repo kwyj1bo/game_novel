@@ -303,3 +303,21 @@ export function dust(p: Particles, center: THREE.Vector3, size: THREE.Vector3, c
 }
 
 export const v3 = (x: number, y: number, z: number) => new THREE.Vector3(x, y, z);
+
+// Generic marks every location provides, so generated stories can stage any
+// cast without knowing the room: auto_1..auto_5 on an arc facing the wide
+// camera, auto_threat across from them, auto_entry where people come in.
+export const AUTO_MARKS = ["auto_1", "auto_2", "auto_3", "auto_4", "auto_5", "auto_threat", "auto_entry"] as const;
+
+export function autoMarks(center: THREE.Vector3, camera: THREE.Vector3, entry: THREE.Vector3, radius = 1.8): Record<string, THREE.Vector3> {
+  const dir = camera.clone().sub(center).setY(0).normalize();
+  const arcCenter = center.clone().addScaledVector(dir, -radius * 0.4);
+  const out: Record<string, THREE.Vector3> = {};
+  [0, -28, 28, -56, 56].forEach((deg, i) => {
+    const d = dir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.degToRad(deg));
+    out[`auto_${i + 1}`] = arcCenter.clone().addScaledVector(d, radius).setY(0);
+  });
+  out.auto_threat = center.clone().addScaledVector(dir, -radius * 1.5).setY(0);
+  out.auto_entry = entry.clone().setY(0);
+  return out;
+}

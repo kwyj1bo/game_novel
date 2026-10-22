@@ -55,6 +55,12 @@ describe("validateStory", () => {
     expect(m.some((x) => x.includes('no state "melted"'))).toBe(true);
   });
 
+  it("rejects a camera aimed at an actor who is not on stage", () => {
+    const s = makeStory();
+    s.scenes.ok.beats.push({ camera: "close", on: "ron" });
+    expect(messages(s).some((m) => m.includes('"ron" is not a mark in pit or an actor on stage'))).toBe(true);
+  });
+
   it("detects cycles and unreachable scenes", () => {
     const s = makeStory();
     s.scenes.ok = { ...s.scenes.ok, ending: undefined, goto: "s1" };

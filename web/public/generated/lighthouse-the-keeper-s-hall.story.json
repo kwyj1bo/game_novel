@@ -1,0 +1,353 @@
+{
+  "$schema": "../../../story.schema.json",
+  "id": "lighthouse-the-keeper-s-hall",
+  "title": "The Keeper's Hall",
+  "subtitle": "Lighthouse",
+  "start": "scene_1",
+  "actors": {
+    "mara": {
+      "name": "Mara",
+      "height": 1.64,
+      "robe": "#2e3a24",
+      "skin": "#7a5038",
+      "hair": "#3a2414",
+      "hairStyle": "long",
+      "outfit": "adult",
+      "voice": 1.35,
+      "subtitleColor": "#f3d27a"
+    },
+    "tobin": {
+      "name": "Tobin",
+      "height": 1.5,
+      "robe": "#1f3a4a",
+      "skin": "#dca47e",
+      "hair": "#5a3418",
+      "hairStyle": "ginger_mop",
+      "outfit": "adult",
+      "voice": 0.95,
+      "subtitleColor": "#ff9a6a"
+    },
+    "dog": {
+      "name": "Dog",
+      "kind": "dog3",
+      "height": 3.4,
+      "robe": "#3e2c1f"
+    }
+  },
+  "scenes": {
+    "scene_1_wrong": {
+      "location": "castle_corridor",
+      "cast": {
+        "mara": "auto_1",
+        "tobin": "auto_2",
+        "dog": "auto_threat"
+      },
+      "beats": [
+        {
+          "camera": "medium",
+          "on": "mara",
+          "ms": 500
+        },
+        {
+          "narrate": "Mara hesitates — and chooses to leave the lantern where it is."
+        },
+        {
+          "camera": "low",
+          "on": "dog",
+          "ms": 600
+        },
+        {
+          "sfx": "roar"
+        },
+        {
+          "anim": "dog",
+          "clip": "roar"
+        },
+        {
+          "together": [
+            {
+              "anim": "dog",
+              "clip": "lunge"
+            },
+            {
+              "fx": "shake",
+              "ms": 700
+            }
+          ]
+        },
+        {
+          "together": [
+            {
+              "anim": "mara",
+              "clip": "fall",
+              "hold": true
+            },
+            {
+              "sfx": "thud"
+            }
+          ]
+        },
+        {
+          "fx": "red_out",
+          "ms": 1500
+        }
+      ],
+      "ending": {
+        "kind": "death",
+        "title": "Not How It Happened",
+        "text": "In the book, Mara chose to pick up the lantern. Choosing to leave the lantern where it is ended the story here."
+      }
+    },
+    "scene_1": {
+      "location": "castle_corridor",
+      "cast": {
+        "mara": "auto_1",
+        "tobin": "auto_2"
+      },
+      "beats": [
+        {
+          "camera": "wide",
+          "ms": 0
+        },
+        {
+          "music": "tension"
+        },
+        {
+          "camera": "medium",
+          "on": "mara",
+          "ms": 700
+        },
+        {
+          "narrate": "Mara pushed the heavy door and stepped into the long hall of the lighthouse."
+        },
+        {
+          "narrate": "Rain hammered against the window at the far end."
+        },
+        {
+          "camera": "close",
+          "on": "mara",
+          "ms": 500
+        },
+        {
+          "say": "mara",
+          "text": "Tobin?",
+          "mood": "urgent"
+        },
+        {
+          "camera": "close",
+          "on": "mara",
+          "ms": 500
+        },
+        {
+          "say": "mara",
+          "text": "Are you up there?"
+        },
+        {
+          "narrate": "Her brother came down the stairs two at a time."
+        },
+        {
+          "narrate": "He was pale and his hands were shaking."
+        },
+        {
+          "camera": "close",
+          "on": "tobin",
+          "ms": 500
+        },
+        {
+          "say": "tobin",
+          "text": "Something is in the cellar,",
+          "mood": "whisper"
+        },
+        {
+          "camera": "close",
+          "on": "tobin",
+          "ms": 500
+        },
+        {
+          "say": "tobin",
+          "text": "I heard it breathing."
+        },
+        {
+          "narrate": "Mara frowned."
+        },
+        {
+          "camera": "close",
+          "on": "mara",
+          "ms": 500
+        },
+        {
+          "say": "mara",
+          "text": "It's the storm. Old houses make noises."
+        },
+        {
+          "sfx": "growl"
+        },
+        {
+          "narrate": "A low growl rolled up through the floorboards."
+        },
+        {
+          "camera": "medium",
+          "on": "tobin",
+          "ms": 700
+        },
+        {
+          "anim": "tobin",
+          "clip": "reach",
+          "async": true
+        },
+        {
+          "narrate": "Tobin grabbed her arm."
+        },
+        {
+          "camera": "close",
+          "on": "tobin",
+          "ms": 500
+        },
+        {
+          "say": "tobin",
+          "text": "That is not the storm,"
+        },
+        {
+          "narrate": "The cellar door burst open."
+        },
+        {
+          "spawn": "dog",
+          "at": "auto_threat"
+        },
+        {
+          "sfx": "growl"
+        },
+        {
+          "camera": "medium",
+          "on": "dog",
+          "ms": 700
+        },
+        {
+          "narrate": "A great grey dog, taller than a man, padded into the hall."
+        },
+        {
+          "narrate": "Its eyes glowed yellow in the dark."
+        },
+        {
+          "camera": "medium",
+          "on": "tobin",
+          "ms": 700
+        },
+        {
+          "move": "tobin",
+          "to": "auto_entry",
+          "run": true,
+          "async": true
+        },
+        {
+          "narrate": "Tobin backed away towards the staircase."
+        },
+        {
+          "narrate": "The dog growled and lowered its head."
+        },
+        {
+          "camera": "close",
+          "on": "mara",
+          "ms": 600
+        }
+      ],
+      "title": "A Castle Corridor",
+      "choice": {
+        "prompt": "What should Mara do?",
+        "seconds": 10,
+        "options": [
+          {
+            "label": "Pick up the lantern",
+            "correct": true,
+            "goto": "scene_2"
+          },
+          {
+            "label": "Leave the lantern where it is",
+            "correct": false,
+            "goto": "scene_1_wrong"
+          }
+        ]
+      }
+    },
+    "scene_2": {
+      "location": "castle_corridor",
+      "cast": {
+        "mara": "auto_1",
+        "tobin": "auto_2",
+        "dog": "auto_threat"
+      },
+      "beats": [
+        {
+          "camera": "medium",
+          "on": "mara",
+          "ms": 700
+        },
+        {
+          "anim": "mara",
+          "clip": "reach",
+          "async": true
+        },
+        {
+          "narrate": "Mara picked up the lantern from the table."
+        },
+        {
+          "camera": "medium",
+          "on": "mara",
+          "ms": 700
+        },
+        {
+          "anim": "mara",
+          "clip": "reach",
+          "async": true
+        },
+        {
+          "narrate": "She stepped in front of her brother and held the light high."
+        },
+        {
+          "camera": "close",
+          "on": "mara",
+          "ms": 500
+        },
+        {
+          "say": "mara",
+          "text": "Stay behind me,"
+        },
+        {
+          "narrate": "The dog flinched from the bright flame."
+        },
+        {
+          "narrate": "It whined, turned, and slunk back towards the cellar."
+        },
+        {
+          "narrate": "Mara closed the cellar door and leaned against it, breathing hard."
+        },
+        {
+          "camera": "close",
+          "on": "tobin",
+          "ms": 500
+        },
+        {
+          "say": "tobin",
+          "text": "You were brilliant,"
+        },
+        {
+          "camera": "close",
+          "on": "mara",
+          "ms": 500
+        },
+        {
+          "say": "mara",
+          "text": "Don't tell anyone,"
+        },
+        {
+          "narrate": "said Mara, and she laughed."
+        }
+      ],
+      "ending": {
+        "kind": "victory",
+        "title": "The Keeper's Hall",
+        "text": "You followed Mara through “The Keeper's Hall” the way the book tells it."
+      }
+    }
+  }
+}

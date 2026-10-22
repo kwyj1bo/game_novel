@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { damp, noise1 } from "../engine/core/math";
 import { hdr } from "../engine/fx/Particles";
 import type { LocationDef } from "../engine/world/Location";
-import { flagstoneMaterial, mesh, room, stoneMaterial, v3, woodMaterial } from "./kit";
+import { flagstoneMaterial, mesh, room, stoneMaterial, autoMarks, v3, woodMaterial } from "./kit";
 
 const MARKS = {
   entry: v3(0, 0, 3.9),
@@ -14,6 +14,7 @@ const MARKS = {
   beyond: v3(0, 0, -6.6),
   back_fire: v3(0, 0, 4.6),
   back_beyond: v3(0, 0, 6.4),
+  ...autoMarks(v3(0, 0, 1.6), v3(2.2, 2.4, 3.6), v3(0, 0, 3.9), 1.0),
 };
 
 // Seven bottles in a row; three matter to the story.
@@ -32,6 +33,7 @@ export const potionsRoom: LocationDef = {
   title: "The Riddle of the Potions",
   info: {
     marks: Object.keys(MARKS),
+    keywords: ["bottles","potion","potions","riddle","flask","poison"],
     props: {
       back_fire: ["off", "on"],
       front_fire: ["off", "on"],

@@ -427,3 +427,7 @@ const SFX = {
     for (let i = 0; i < 6; i++) r(a).osc("sawtooth", 150 - i * 6, t + i * 0.2, 0.14, out, 0.06, 0.02, 120 - i * 6);
   },
 };
+
+// Names stories may use in "sfx" and "music" beats.
+export const SFX_NAMES = Object.keys(SFX);
+export const MUSIC_NAMES = Object.keys(MUSIC);

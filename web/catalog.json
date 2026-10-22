@@ -1,0 +1,550 @@
+{
+  "locations": {
+    "fluffy_room": {
+      "title": "The Forbidden Corridor",
+      "keywords": [
+        "three-headed",
+        "dog",
+        "harp",
+        "trapdoor",
+        "third floor",
+        "forbidden corridor"
+      ],
+      "marks": [
+        "door",
+        "harry_in",
+        "ron_in",
+        "hermione_in",
+        "harry_mid",
+        "ron_mid",
+        "hermione_mid",
+        "harry_trap",
+        "ron_trap",
+        "hermione_trap",
+        "trapdoor",
+        "fluffy",
+        "fluffy_strike",
+        "harp",
+        "center",
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {
+        "trapdoor": [
+          "closed",
+          "open"
+        ],
+        "harp": [
+          "playing",
+          "silent"
+        ],
+        "door": [
+          "closed",
+          "open"
+        ]
+      }
+    },
+    "devils_snare": {
+      "title": "Devil's Snare",
+      "keywords": [
+        "plant",
+        "snare",
+        "vines",
+        "tendrils",
+        "creepers",
+        "pit"
+      ],
+      "marks": [
+        "hole",
+        "center",
+        "land_harry",
+        "land_ron",
+        "land_hermione",
+        "passage",
+        "passage_harry",
+        "passage_ron",
+        "passage_hermione",
+        "drag",
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {
+        "vines": [
+          "rest",
+          "grip",
+          "retreat"
+        ],
+        "light": [
+          "dark",
+          "bright"
+        ]
+      }
+    },
+    "flying_keys": {
+      "title": "The Chamber of Winged Keys",
+      "keywords": [
+        "keys",
+        "winged",
+        "broomstick",
+        "brooms",
+        "fluttering"
+      ],
+      "marks": [
+        "entry",
+        "harry_floor",
+        "ron_floor",
+        "hermione_floor",
+        "brooms",
+        "harry_broom",
+        "air_high",
+        "air_key",
+        "air_silver",
+        "air_dive",
+        "door",
+        "door_front",
+        "ron_door",
+        "hermione_door",
+        "keyhole",
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {
+        "keys": [
+          "swarm",
+          "attack"
+        ],
+        "special_key": [
+          "flying",
+          "caught",
+          "in_lock"
+        ],
+        "brooms": [
+          "leaning",
+          "harry_flying"
+        ],
+        "door": [
+          "locked",
+          "open"
+        ]
+      }
+    },
+    "chessboard": {
+      "title": "The Giant Chessboard",
+      "keywords": [
+        "chess",
+        "chessboard",
+        "knight",
+        "queen",
+        "bishop",
+        "pawn",
+        "checkmate"
+      ],
+      "marks": [
+        "entry",
+        "board_center",
+        "ron_d4",
+        "ron_c5",
+        "harry_f3",
+        "harry_f6",
+        "hermione_c2",
+        "hermione_ron",
+        "white_queen",
+        "white_king",
+        "exit",
+        "exit_harry",
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {
+        "black_knight": [
+          "d4",
+          "c5",
+          "toppled"
+        ],
+        "white_queen": [
+          "e7",
+          "c5",
+          "f3"
+        ],
+        "white_king": [
+          "standing",
+          "surrender"
+        ]
+      }
+    },
+    "potions_room": {
+      "title": "The Riddle of the Potions",
+      "keywords": [
+        "bottles",
+        "potion",
+        "potions",
+        "riddle",
+        "flask",
+        "poison"
+      ],
+      "marks": [
+        "entry",
+        "harry_table",
+        "hermione_table",
+        "table",
+        "bottles",
+        "front_fire",
+        "beyond",
+        "back_fire",
+        "back_beyond",
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {
+        "back_fire": [
+          "off",
+          "on"
+        ],
+        "front_fire": [
+          "off",
+          "on"
+        ],
+        "tiny": [
+          "table",
+          "harry",
+          "gone"
+        ],
+        "round": [
+          "table",
+          "hermione",
+          "gone"
+        ],
+        "poison": [
+          "table",
+          "harry",
+          "gone"
+        ]
+      }
+    },
+    "mirror_chamber": {
+      "title": "The Last Chamber",
+      "keywords": [
+        "mirror",
+        "reflection",
+        "chamber"
+      ],
+      "marks": [
+        "entry",
+        "stairs_bottom",
+        "harry_mid",
+        "quirrell",
+        "quirrell_mirror",
+        "harry_mirror",
+        "harry_grab",
+        "mirror",
+        "mirror_front",
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {
+        "mirror": [
+          "still",
+          "glow"
+        ],
+        "flames": [
+          "off",
+          "on"
+        ]
+      }
+    },
+    "castle_corridor": {
+      "title": "A Castle Corridor",
+      "keywords": [
+        "corridor",
+        "hall",
+        "hallway",
+        "passage",
+        "staircase",
+        "stairs",
+        "castle",
+        "statue",
+        "window",
+        "door"
+      ],
+      "marks": [
+        "start_harry",
+        "start_ron",
+        "hide_harry",
+        "hide_ron",
+        "troll_enter",
+        "troll_door",
+        "bathroom_door",
+        "lock_harry",
+        "lock_ron",
+        "teachers",
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {
+        "bathroom_door": [
+          "open",
+          "closed",
+          "locked"
+        ]
+      }
+    },
+    "girls_bathroom": {
+      "title": "The Girls' Bathroom",
+      "keywords": [
+        "bathroom",
+        "toilet",
+        "toilets",
+        "sink",
+        "sinks",
+        "lavatory",
+        "cubicle",
+        "basin"
+      ],
+      "marks": [
+        "entry",
+        "harry_in",
+        "ron_in",
+        "hermione_corner",
+        "troll_start",
+        "troll_hermione",
+        "troll_turn",
+        "ron_side",
+        "harry_side",
+        "harry_hermione",
+        "sinks",
+        "auto_1",
+        "auto_2",
+        "auto_3",
+        "auto_4",
+        "auto_5",
+        "auto_threat",
+        "auto_entry"
+      ],
+      "props": {
+        "club": [
+          "held",
+          "floating",
+          "dropped"
+        ],
+        "sinks": [
+          "whole",
+          "smashed"
+        ]
+      }
+    }
+  },
+  "autoMarks": [
+    "auto_1",
+    "auto_2",
+    "auto_3",
+    "auto_4",
+    "auto_5",
+    "auto_threat",
+    "auto_entry"
+  ],
+  "characters": {
+    "harry": {
+      "name": "Harry",
+      "height": 1.45,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#e3b08c",
+      "hair": "#120d08",
+      "hairStyle": "messy",
+      "eyes": "#2e7d32",
+      "glasses": "round",
+      "scar": true,
+      "voice": 1.15,
+      "subtitleColor": "#f3d27a"
+    },
+    "ron": {
+      "name": "Ron",
+      "height": 1.53,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#ecbb9a",
+      "hair": "#c2501e",
+      "hairStyle": "ginger_mop",
+      "eyes": "#4a7ab0",
+      "voice": 0.95,
+      "subtitleColor": "#ff9a6a"
+    },
+    "hermione": {
+      "name": "Hermione",
+      "height": 1.42,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#dca47e",
+      "hair": "#5a3418",
+      "hairStyle": "bushy",
+      "eyes": "#6a4a2a",
+      "voice": 1.4,
+      "subtitleColor": "#c9a8ff"
+    },
+    "troll": {
+      "name": "Troll",
+      "kind": "troll",
+      "height": 3.6,
+      "skin": "#7d8572",
+      "robe": "#4a3a28"
+    },
+    "mcgonagall": {
+      "name": "McGonagall",
+      "height": 1.74,
+      "robe": "#1f4a33",
+      "trim": "#1a3a28",
+      "skin": "#e2bea0",
+      "hair": "#5a5a5a",
+      "hairStyle": "bun",
+      "eyes": "#4a5a4a",
+      "glasses": "square",
+      "outfit": "adult",
+      "hat": "witch",
+      "voice": 0.9,
+      "subtitleColor": "#8fd6a8"
+    },
+    "fluffy": {
+      "name": "Fluffy",
+      "kind": "dog3",
+      "height": 3.4,
+      "robe": "#3e2c1f"
+    },
+    "quirrell": {
+      "name": "Quirrell",
+      "height": 1.74,
+      "robe": "#2a2238",
+      "trim": "#4a2a5a",
+      "skin": "#d6bc9c",
+      "hair": "#4a3a2a",
+      "hairStyle": "turban",
+      "eyes": "#5a4a3a",
+      "voice": 0.85,
+      "subtitleColor": "#c8b8e8",
+      "outfit": "adult"
+    }
+  },
+  "creatures": {
+    "dog3": [
+      "dog",
+      "hound",
+      "three-headed"
+    ],
+    "troll": [
+      "troll",
+      "ogre"
+    ]
+  },
+  "clips": [
+    "idle",
+    "wave",
+    "point",
+    "cast",
+    "nod",
+    "shake",
+    "cower",
+    "fall",
+    "kneel",
+    "jump",
+    "struggle",
+    "reach",
+    "drink",
+    "celebrate",
+    "play_flute",
+    "laugh",
+    "unwrap",
+    "crumble",
+    "sleep",
+    "wake",
+    "lunge",
+    "roar"
+  ],
+  "cameraShots": [
+    "wide",
+    "close",
+    "medium",
+    "two",
+    "over",
+    "low",
+    "high",
+    "orbit",
+    "pov"
+  ],
+  "fx": [
+    "spell",
+    "burst",
+    "fire",
+    "smoke",
+    "flash",
+    "sparkles",
+    "shake",
+    "fade_out",
+    "fade_in",
+    "red_out"
+  ],
+  "sfx": [
+    "spell",
+    "burst",
+    "whoosh",
+    "roar",
+    "growl",
+    "thud",
+    "crash",
+    "creak",
+    "flutter",
+    "gulp",
+    "fire",
+    "choice",
+    "select",
+    "heartbeat",
+    "sparkle",
+    "shatter",
+    "grind",
+    "door",
+    "scream",
+    "laugh"
+  ],
+  "music": [
+    "dread",
+    "mystery",
+    "tension",
+    "harp",
+    "flute",
+    "triumph",
+    "sorrow"
+  ]
+}

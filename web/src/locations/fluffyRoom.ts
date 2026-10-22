@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { damp } from "../engine/core/math";
 import { hdr } from "../engine/fx/Particles";
 import type { LocationDef } from "../engine/world/Location";
-import { dust, flagstoneMaterial, mesh, pillar, room, stoneMaterial, torch, v3, woodMaterial } from "./kit";
+import { dust, flagstoneMaterial, mesh, pillar, room, stoneMaterial, torch, autoMarks, v3, woodMaterial } from "./kit";
 
 const MARKS = {
   door: v3(5.3, 0, 5),
@@ -20,6 +20,7 @@ const MARKS = {
   fluffy_strike: v3(-0.6, 0, -1.6),
   harp: v3(3.7, 0, -3.2),
   center: v3(0, 0, 0.5),
+  ...autoMarks(v3(0, 0, 1.2), v3(1.2, 3.5, 8.4), v3(5.3, 0, 5), 2.0),
 };
 
 export const fluffyRoom: LocationDef = {
@@ -27,6 +28,7 @@ export const fluffyRoom: LocationDef = {
   title: "The Forbidden Corridor",
   info: {
     marks: Object.keys(MARKS),
+    keywords: ["three-headed","dog","harp","trapdoor","third floor","forbidden corridor"],
     props: {
       trapdoor: ["closed", "open"],
       harp: ["playing", "silent"],

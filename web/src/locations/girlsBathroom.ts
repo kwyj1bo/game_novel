@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { easeInCubic } from "../engine/core/math";
 import { hdr } from "../engine/fx/Particles";
 import type { LocationDef } from "../engine/world/Location";
-import { mesh, room, stoneMaterial, tileMaterial, torch, v3, woodMaterial } from "./kit";
+import { mesh, room, stoneMaterial, tileMaterial, torch, autoMarks, v3, woodMaterial } from "./kit";
 
 const MARKS = {
   entry: v3(0.6, 0, 5.4),
@@ -16,6 +16,7 @@ const MARKS = {
   harry_side: v3(-1.8, 0, 1.8),
   harry_hermione: v3(-2.3, 0, -1.6),
   sinks: v3(-3.3, 1.0, -1.5),
+  ...autoMarks(v3(0, 0, 1.0), v3(2.2, 2.9, 5.4), v3(0.6, 0, 5.4), 1.5),
 };
 
 export const girlsBathroom: LocationDef = {
@@ -23,6 +24,7 @@ export const girlsBathroom: LocationDef = {
   title: "The Girls' Bathroom",
   info: {
     marks: Object.keys(MARKS),
+    keywords: ["bathroom","toilet","toilets","sink","sinks","lavatory","cubicle","basin"],
     props: {
       club: ["held", "floating", "dropped"],
       sinks: ["whole", "smashed"],
