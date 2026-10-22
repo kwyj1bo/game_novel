@@ -1,0 +1,124 @@
+{
+  "id": "hp1-trapdoor",
+  "title": "Through the Trapdoor",
+  "subtitle": "Harry Potter and the Philosopher's Stone",
+  "start": "fluffy_intro",
+  "actors": {
+    "harry": { "name": "Harry", "height": 1.45, "robe": "#18181f", "trim": "#7f0909", "skin": "#eac6a6", "hair": "#120d08", "hairStyle": "messy", "eyes": "#2e7d32", "glasses": "round", "scar": true, "voice": 1.15, "subtitleColor": "#f3d27a" },
+    "ron": { "name": "Ron", "height": 1.53, "robe": "#18181f", "trim": "#7f0909", "skin": "#f0cdb2", "hair": "#c2501e", "hairStyle": "ginger_mop", "eyes": "#4a7ab0", "voice": 0.95, "subtitleColor": "#ff9a6a" },
+    "hermione": { "name": "Hermione", "height": 1.42, "robe": "#18181f", "trim": "#7f0909", "skin": "#e8c09c", "hair": "#5a3418", "hairStyle": "bushy", "eyes": "#6a4a2a", "voice": 1.4, "subtitleColor": "#c9a8ff" },
+    "fluffy": { "name": "Fluffy", "kind": "dog3", "height": 3.4, "robe": "#3e2c1f" }
+  },
+  "scenes": {
+    "fluffy_intro": {
+      "title": "The Forbidden Corridor",
+      "location": "fluffy_room",
+      "cast": { "harry": "door", "ron": [5.6, 6.0], "hermione": [5.6, 4.2], "fluffy": "fluffy" },
+      "beats": [
+        { "prop": "harp", "state": "playing" },
+        { "anim": "fluffy", "clip": "sleep", "hold": true, "async": true },
+        { "camera": "wide", "ms": 0 },
+        { "prop": "door", "state": "open" },
+        { "narrate": "Midnight on the third floor. The door they had sworn never to open stands ajar." },
+        { "together": [
+          { "move": "harry", "to": "harry_in" },
+          { "move": "ron", "to": "ron_in" },
+          { "move": "hermione", "to": "hermione_in" }
+        ] },
+        { "camera": "two", "on": "hermione", "with": "harry" },
+        { "say": "hermione", "text": "The door was already unlocked. Someone's gone through ahead of us.", "mood": "whisper" },
+        { "say": "ron", "text": "Can you hear that? Who plays music to a dog?", "mood": "whisper" },
+        { "camera": "medium", "on": "fluffy", "ms": 1600 },
+        { "narrate": "Fluffy sprawls across the floor, all three heads snoring. A golden harp plays beside him on its own." },
+        { "together": [
+          { "move": "harry", "to": "harry_mid" },
+          { "move": "ron", "to": "ron_mid" },
+          { "move": "hermione", "to": "hermione_mid" },
+          { "camera": "wide", "ms": 2400 }
+        ] },
+        { "look": "harry", "at": "trapdoor" },
+        { "camera": "close", "on": "harry" },
+        { "say": "harry", "text": "The trapdoor's right by his paw. While the harp's playing, we can just—" },
+        { "prop": "harp", "state": "silent" },
+        { "camera": "medium", "on": "harp", "ms": 400 },
+        { "wait": 900 },
+        { "sfx": "growl" },
+        { "camera": "low", "on": "fluffy", "ms": 700 },
+        { "fx": "shake", "ms": 500 },
+        { "say": "ron", "text": "It stopped. Harry — it stopped!", "mood": "scared" }
+      ],
+      "choice": {
+        "prompt": "The music has stopped. Fluffy is waking.",
+        "seconds": 8,
+        "options": [
+          { "label": "Play Hagrid's flute", "correct": true, "goto": "fluffy_flute" },
+          { "label": "Sprint for the trapdoor", "correct": false, "goto": "fluffy_mauled" }
+        ]
+      }
+    },
+    "fluffy_mauled": {
+      "location": "fluffy_room",
+      "cast": { "harry": "harry_mid", "ron": "ron_mid", "hermione": "hermione_mid", "fluffy": "fluffy" },
+      "beats": [
+        { "camera": "wide", "ms": 500 },
+        { "move": "harry", "to": "harry_trap", "run": true, "async": true },
+        { "anim": "fluffy", "clip": "wake" },
+        { "together": [
+          { "camera": "low", "on": "fluffy", "ms": 500 },
+          { "sfx": "roar" },
+          { "fx": "shake", "ms": 1600, "async": true },
+          { "anim": "fluffy", "clip": "roar" }
+        ] },
+        { "say": "hermione", "text": "HARRY!", "mood": "scared" },
+        { "camera": "wide", "ms": 300 },
+        { "together": [
+          { "move": "fluffy", "to": "fluffy_strike", "run": true },
+          { "anim": "fluffy", "clip": "lunge", "hold": true }
+        ] },
+        { "together": [
+          { "anim": "harry", "clip": "fall", "hold": true },
+          { "sfx": "thud" },
+          { "fx": "red_out", "ms": 1400 }
+        ] }
+      ],
+      "ending": {
+        "kind": "death",
+        "title": "Three Heads Are Worse Than One",
+        "text": "Fluffy is never caught off guard while the music is silent. A few notes of a song would have sent him straight back to sleep."
+      }
+    },
+    "fluffy_flute": {
+      "location": "fluffy_room",
+      "cast": { "harry": "harry_mid", "ron": "ron_mid", "hermione": "hermione_mid", "fluffy": "fluffy" },
+      "beats": [
+        { "camera": "medium", "on": "harry", "ms": 500 },
+        { "music": "flute" },
+        { "anim": "harry", "clip": "play_flute", "async": true },
+        { "camera": "medium", "on": "fluffy", "ms": 2400 },
+        { "narrate": "Harry lifts the rough wooden flute and blows. Not quite a tune, but the heads begin to droop." },
+        { "together": [
+          { "move": "ron", "to": "ron_trap" },
+          { "move": "hermione", "to": "hermione_trap" },
+          { "camera": "wide", "ms": 2000 }
+        ] },
+        { "anim": "harry", "clip": "play_flute", "async": true },
+        { "prop": "trapdoor", "state": "open" },
+        { "camera": "high", "on": "trapdoor", "ms": 1200 },
+        { "say": "ron", "text": "It's pitch black down there. No ladder, nothing.", "mood": "whisper" },
+        { "camera": "two", "on": "ron", "with": "hermione" },
+        { "say": "hermione", "text": "Then someone has to go first.", "mood": "whisper" },
+        { "move": "harry", "to": "harry_trap" },
+        { "camera": "close", "on": "harry" },
+        { "say": "harry", "text": "Me. Hermione, keep the flute going — whatever happens, don't let it stop.", "anim": "nod" },
+        { "anim": "hermione", "clip": "play_flute", "async": true },
+        { "look": "harry", "at": "trapdoor" },
+        { "move": "harry", "to": "trapdoor" },
+        { "camera": "high", "on": "trapdoor", "ms": 700 },
+        { "anim": "harry", "clip": "jump" },
+        { "together": [ { "despawn": "harry" }, { "sfx": "whoosh" } ] },
+        { "wait": 600 }
+      ],
+      "ending": { "kind": "victory", "title": "Into the Dark", "text": "Phase one slice: more chambers are on their way." }
+    }
+  }
+}
