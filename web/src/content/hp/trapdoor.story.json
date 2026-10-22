@@ -1,0 +1,1962 @@
+{
+  "id": "hp1-trapdoor",
+  "title": "Through the Trapdoor",
+  "subtitle": "Harry Potter and the Philosopher's Stone",
+  "start": "fluffy_intro",
+  "actors": {
+    "harry": {
+      "name": "Harry",
+      "height": 1.45,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#e3b08c",
+      "hair": "#120d08",
+      "hairStyle": "messy",
+      "eyes": "#2e7d32",
+      "glasses": "round",
+      "scar": true,
+      "voice": 1.15,
+      "subtitleColor": "#f3d27a"
+    },
+    "ron": {
+      "name": "Ron",
+      "height": 1.53,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#ecbb9a",
+      "hair": "#c2501e",
+      "hairStyle": "ginger_mop",
+      "eyes": "#4a7ab0",
+      "voice": 0.95,
+      "subtitleColor": "#ff9a6a"
+    },
+    "hermione": {
+      "name": "Hermione",
+      "height": 1.42,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#dca47e",
+      "hair": "#5a3418",
+      "hairStyle": "bushy",
+      "eyes": "#6a4a2a",
+      "voice": 1.4,
+      "subtitleColor": "#c9a8ff"
+    },
+    "fluffy": {
+      "name": "Fluffy",
+      "kind": "dog3",
+      "height": 3.4,
+      "robe": "#3e2c1f"
+    },
+    "quirrell": {
+      "name": "Quirrell",
+      "height": 1.74,
+      "robe": "#2a2238",
+      "trim": "#4a2a5a",
+      "skin": "#d6bc9c",
+      "hair": "#4a3a2a",
+      "hairStyle": "turban",
+      "eyes": "#5a4a3a",
+      "voice": 0.85,
+      "subtitleColor": "#c8b8e8"
+    }
+  },
+  "scenes": {
+    "fluffy_intro": {
+      "title": "The Forbidden Corridor",
+      "location": "fluffy_room",
+      "cast": {
+        "harry": "door",
+        "ron": [
+          5.6,
+          6.0
+        ],
+        "hermione": [
+          5.6,
+          4.2
+        ],
+        "fluffy": "fluffy"
+      },
+      "beats": [
+        {
+          "prop": "harp",
+          "state": "playing"
+        },
+        {
+          "anim": "fluffy",
+          "clip": "sleep",
+          "hold": true,
+          "async": true
+        },
+        {
+          "camera": "wide",
+          "ms": 0
+        },
+        {
+          "prop": "door",
+          "state": "open"
+        },
+        {
+          "narrate": "Midnight on the third floor. The door they had sworn never to open stands ajar."
+        },
+        {
+          "together": [
+            {
+              "move": "harry",
+              "to": "harry_in"
+            },
+            {
+              "move": "ron",
+              "to": "ron_in"
+            },
+            {
+              "move": "hermione",
+              "to": "hermione_in"
+            }
+          ]
+        },
+        {
+          "camera": "two",
+          "on": "hermione",
+          "with": "harry"
+        },
+        {
+          "say": "hermione",
+          "text": "The door was already unlocked. Someone's gone through ahead of us.",
+          "mood": "whisper"
+        },
+        {
+          "say": "ron",
+          "text": "Can you hear that? Who plays music to a dog?",
+          "mood": "whisper"
+        },
+        {
+          "camera": "medium",
+          "on": "fluffy",
+          "ms": 1600
+        },
+        {
+          "narrate": "Fluffy sprawls across the floor, all three heads snoring. A golden harp plays beside him on its own."
+        },
+        {
+          "together": [
+            {
+              "move": "harry",
+              "to": "harry_mid"
+            },
+            {
+              "move": "ron",
+              "to": "ron_mid"
+            },
+            {
+              "move": "hermione",
+              "to": "hermione_mid"
+            },
+            {
+              "camera": "wide",
+              "ms": 2400
+            }
+          ]
+        },
+        {
+          "look": "harry",
+          "at": "trapdoor"
+        },
+        {
+          "camera": "close",
+          "on": "harry"
+        },
+        {
+          "say": "harry",
+          "text": "The trapdoor's right by his paw. While the harp's playing, we can just—"
+        },
+        {
+          "prop": "harp",
+          "state": "silent"
+        },
+        {
+          "camera": "medium",
+          "on": "harp",
+          "ms": 400
+        },
+        {
+          "wait": 900
+        },
+        {
+          "sfx": "growl"
+        },
+        {
+          "camera": "low",
+          "on": "fluffy",
+          "ms": 700
+        },
+        {
+          "fx": "shake",
+          "ms": 500
+        },
+        {
+          "say": "ron",
+          "text": "It stopped. Harry — it stopped!",
+          "mood": "scared"
+        }
+      ],
+      "choice": {
+        "prompt": "The music has stopped. Fluffy is waking.",
+        "seconds": 8,
+        "options": [
+          {
+            "label": "Play Hagrid's flute",
+            "correct": true,
+            "goto": "fluffy_flute"
+          },
+          {
+            "label": "Sprint for the trapdoor",
+            "correct": false,
+            "goto": "fluffy_mauled"
+          }
+        ]
+      }
+    },
+    "fluffy_mauled": {
+      "location": "fluffy_room",
+      "cast": {
+        "harry": "harry_mid",
+        "ron": "ron_mid",
+        "hermione": "hermione_mid",
+        "fluffy": "fluffy"
+      },
+      "beats": [
+        {
+          "camera": "wide",
+          "ms": 500
+        },
+        {
+          "move": "harry",
+          "to": "harry_trap",
+          "run": true,
+          "async": true
+        },
+        {
+          "anim": "fluffy",
+          "clip": "wake"
+        },
+        {
+          "together": [
+            {
+              "camera": "low",
+              "on": "fluffy",
+              "ms": 500
+            },
+            {
+              "sfx": "roar"
+            },
+            {
+              "fx": "shake",
+              "ms": 1600,
+              "async": true
+            },
+            {
+              "anim": "fluffy",
+              "clip": "roar"
+            }
+          ]
+        },
+        {
+          "say": "hermione",
+          "text": "HARRY!",
+          "mood": "scared"
+        },
+        {
+          "camera": "wide",
+          "ms": 300
+        },
+        {
+          "together": [
+            {
+              "move": "fluffy",
+              "to": "fluffy_strike",
+              "run": true
+            },
+            {
+              "anim": "fluffy",
+              "clip": "lunge",
+              "hold": true
+            }
+          ]
+        },
+        {
+          "together": [
+            {
+              "anim": "harry",
+              "clip": "fall",
+              "hold": true
+            },
+            {
+              "sfx": "thud"
+            },
+            {
+              "fx": "red_out",
+              "ms": 1400
+            }
+          ]
+        }
+      ],
+      "ending": {
+        "kind": "death",
+        "title": "Three Heads Are Worse Than One",
+        "text": "Fluffy is never caught off guard while the music is silent. A few notes of a song would have sent him straight back to sleep."
+      }
+    },
+    "fluffy_flute": {
+      "location": "fluffy_room",
+      "cast": {
+        "harry": "harry_mid",
+        "ron": "ron_mid",
+        "hermione": "hermione_mid",
+        "fluffy": "fluffy"
+      },
+      "beats": [
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 500
+        },
+        {
+          "music": "flute"
+        },
+        {
+          "anim": "harry",
+          "clip": "play_flute",
+          "async": true
+        },
+        {
+          "camera": "medium",
+          "on": "fluffy",
+          "ms": 2400
+        },
+        {
+          "narrate": "Harry lifts the rough wooden flute and blows. Not quite a tune, but the heads begin to droop."
+        },
+        {
+          "together": [
+            {
+              "move": "ron",
+              "to": "ron_trap"
+            },
+            {
+              "move": "hermione",
+              "to": "hermione_trap"
+            },
+            {
+              "camera": "wide",
+              "ms": 2000
+            }
+          ]
+        },
+        {
+          "anim": "harry",
+          "clip": "play_flute",
+          "async": true
+        },
+        {
+          "prop": "trapdoor",
+          "state": "open"
+        },
+        {
+          "camera": "high",
+          "on": "trapdoor",
+          "ms": 1200
+        },
+        {
+          "say": "ron",
+          "text": "It's pitch black down there. No ladder, nothing.",
+          "mood": "whisper"
+        },
+        {
+          "camera": "two",
+          "on": "ron",
+          "with": "hermione"
+        },
+        {
+          "say": "hermione",
+          "text": "Then someone has to go first.",
+          "mood": "whisper"
+        },
+        {
+          "move": "harry",
+          "to": "harry_trap"
+        },
+        {
+          "camera": "close",
+          "on": "harry"
+        },
+        {
+          "say": "harry",
+          "text": "Me. Hermione, keep the flute going — whatever happens, don't let it stop.",
+          "anim": "nod"
+        },
+        {
+          "anim": "hermione",
+          "clip": "play_flute",
+          "async": true
+        },
+        {
+          "look": "harry",
+          "at": "trapdoor"
+        },
+        {
+          "move": "harry",
+          "to": "trapdoor"
+        },
+        {
+          "camera": "high",
+          "on": "trapdoor",
+          "ms": 700
+        },
+        {
+          "anim": "harry",
+          "clip": "jump"
+        },
+        {
+          "together": [
+            {
+              "despawn": "harry"
+            },
+            {
+              "sfx": "whoosh"
+            }
+          ]
+        },
+        {
+          "wait": 600
+        }
+      ],
+      "goto": "snare_fall"
+    },
+    "snare_fall": {
+      "title": "Devil's Snare",
+      "location": "devils_snare",
+      "cast": {},
+      "beats": [
+        {
+          "camera": "low",
+          "on": "hole",
+          "ms": 0
+        },
+        {
+          "wait": 500
+        },
+        {
+          "sfx": "whoosh"
+        },
+        {
+          "spawn": "harry",
+          "at": "land_harry"
+        },
+        {
+          "together": [
+            {
+              "anim": "harry",
+              "clip": "fall",
+              "hold": true
+            },
+            {
+              "sfx": "thud"
+            }
+          ]
+        },
+        {
+          "camera": "high",
+          "on": "harry",
+          "ms": 900
+        },
+        {
+          "narrate": "Something soft breaks his fall: a deep, rubbery tangle of plant."
+        },
+        {
+          "say": "harry",
+          "text": "It's all right! Some kind of plant — it's soft. Jump!",
+          "mood": "urgent"
+        },
+        {
+          "sfx": "whoosh"
+        },
+        {
+          "spawn": "ron",
+          "at": "land_ron"
+        },
+        {
+          "together": [
+            {
+              "anim": "ron",
+              "clip": "fall",
+              "hold": true
+            },
+            {
+              "sfx": "thud"
+            }
+          ]
+        },
+        {
+          "sfx": "whoosh"
+        },
+        {
+          "spawn": "hermione",
+          "at": "land_hermione"
+        },
+        {
+          "together": [
+            {
+              "anim": "hermione",
+              "clip": "fall",
+              "hold": true
+            },
+            {
+              "sfx": "thud"
+            }
+          ]
+        },
+        {
+          "camera": "wide",
+          "ms": 1200
+        },
+        {
+          "say": "ron",
+          "text": "Lucky this stuff was here, really."
+        },
+        {
+          "narrate": "Then, slowly, the tendrils begin to move."
+        },
+        {
+          "together": [
+            {
+              "anim": "harry",
+              "clip": "idle"
+            },
+            {
+              "anim": "ron",
+              "clip": "idle"
+            },
+            {
+              "anim": "hermione",
+              "clip": "idle"
+            }
+          ]
+        },
+        {
+          "wait": 700
+        },
+        {
+          "prop": "vines",
+          "state": "grip"
+        },
+        {
+          "sfx": "growl"
+        },
+        {
+          "together": [
+            {
+              "anim": "harry",
+              "clip": "struggle",
+              "async": true
+            },
+            {
+              "anim": "ron",
+              "clip": "struggle",
+              "async": true
+            },
+            {
+              "camera": "medium",
+              "on": "hermione",
+              "ms": 900
+            }
+          ]
+        },
+        {
+          "say": "hermione",
+          "text": "Stop moving, both of you! I know what this is — it's Devil's Snare!",
+          "mood": "urgent"
+        },
+        {
+          "camera": "two",
+          "on": "ron",
+          "with": "harry"
+        },
+        {
+          "anim": "ron",
+          "clip": "struggle",
+          "async": true
+        },
+        {
+          "say": "ron",
+          "text": "Oh, brilliant, it's got a name. That really helps!",
+          "mood": "angry"
+        },
+        {
+          "say": "hermione",
+          "text": "Professor Sprout told us how to beat it... there's something it can't stand... I can't remember!",
+          "mood": "scared"
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 700
+        },
+        {
+          "anim": "harry",
+          "clip": "struggle",
+          "async": true
+        }
+      ],
+      "choice": {
+        "prompt": "The vines are crushing Harry's chest. What does Devil's Snare hate?",
+        "seconds": 9,
+        "options": [
+          {
+            "label": "Light and heat — tell her to make fire",
+            "correct": true,
+            "goto": "snare_fire"
+          },
+          {
+            "label": "Nothing — tear free before it tightens",
+            "correct": false,
+            "goto": "snare_strangled"
+          }
+        ]
+      }
+    },
+    "snare_strangled": {
+      "location": "devils_snare",
+      "cast": {
+        "harry": "land_harry",
+        "ron": "land_ron",
+        "hermione": "land_hermione"
+      },
+      "beats": [
+        {
+          "anim": "harry",
+          "clip": "struggle",
+          "async": true
+        },
+        {
+          "say": "hermione",
+          "text": "Harry, stop fighting it — it only gets tighter!",
+          "mood": "scared"
+        },
+        {
+          "camera": "high",
+          "on": "harry",
+          "ms": 1200
+        },
+        {
+          "together": [
+            {
+              "anim": "harry",
+              "clip": "fall",
+              "hold": true
+            },
+            {
+              "move": "harry",
+              "to": "drag"
+            }
+          ]
+        },
+        {
+          "fx": "red_out",
+          "ms": 1600
+        }
+      ],
+      "ending": {
+        "kind": "death",
+        "title": "Strangled by the Snare",
+        "text": "Devil's Snare tightens around anyone who struggles, and it shrinks from light and warmth. One flame from Hermione's wand would have set you free."
+      }
+    },
+    "snare_fire": {
+      "location": "devils_snare",
+      "cast": {
+        "harry": "land_harry",
+        "ron": "land_ron",
+        "hermione": "land_hermione"
+      },
+      "beats": [
+        {
+          "say": "harry",
+          "text": "It hates light! Hermione — make a fire!",
+          "mood": "urgent",
+          "anim": "point"
+        },
+        {
+          "camera": "medium",
+          "on": "hermione",
+          "ms": 600
+        },
+        {
+          "say": "hermione",
+          "text": "Fire — yes, of course! But there's no wood, there's nothing to burn...",
+          "mood": "scared"
+        },
+        {
+          "say": "ron",
+          "text": "You're a witch! You've got a wand! Do something!",
+          "mood": "angry"
+        },
+        {
+          "look": "hermione",
+          "at": "center"
+        },
+        {
+          "anim": "hermione",
+          "clip": "cast"
+        },
+        {
+          "fx": "spell",
+          "from": "hermione",
+          "to": "center",
+          "color": "#5aa8ff"
+        },
+        {
+          "together": [
+            {
+              "fx": "fire",
+              "at": "center",
+              "color": "#3d8bff",
+              "ms": 2800,
+              "async": true
+            },
+            {
+              "prop": "light",
+              "state": "bright"
+            },
+            {
+              "prop": "vines",
+              "state": "retreat"
+            },
+            {
+              "camera": "wide",
+              "ms": 1500
+            }
+          ]
+        },
+        {
+          "narrate": "Bluebell flames spill from her wand. The vines flinch from the light and heat, loosen, and slither away into the dark."
+        },
+        {
+          "camera": "two",
+          "on": "ron",
+          "with": "hermione"
+        },
+        {
+          "say": "ron",
+          "text": "Good thing one of us actually listens in Herbology."
+        },
+        {
+          "say": "hermione",
+          "text": "Yes. Well. There's a passage — come on."
+        },
+        {
+          "together": [
+            {
+              "move": "harry",
+              "to": "passage_harry"
+            },
+            {
+              "move": "ron",
+              "to": "passage_ron"
+            },
+            {
+              "move": "hermione",
+              "to": "passage_hermione"
+            },
+            {
+              "camera": "wide",
+              "ms": 2000
+            }
+          ]
+        }
+      ],
+      "goto": "keys_enter"
+    },
+    "keys_enter": {
+      "title": "The Winged Keys",
+      "location": "flying_keys",
+      "cast": {
+        "harry": "entry",
+        "ron": [
+          1.0,
+          7.2
+        ],
+        "hermione": [
+          -1.0,
+          7.2
+        ]
+      },
+      "beats": [
+        {
+          "camera": "wide",
+          "ms": 0
+        },
+        {
+          "together": [
+            {
+              "move": "harry",
+              "to": "harry_floor"
+            },
+            {
+              "move": "ron",
+              "to": "ron_floor"
+            },
+            {
+              "move": "hermione",
+              "to": "hermione_floor"
+            }
+          ]
+        },
+        {
+          "sfx": "flutter"
+        },
+        {
+          "camera": "wide",
+          "on": "air_key",
+          "ms": 1800
+        },
+        {
+          "narrate": "The air glitters. Hundreds of tiny winged keys dart and wheel beneath the vaulted ceiling."
+        },
+        {
+          "camera": "two",
+          "on": "hermione",
+          "with": "harry"
+        },
+        {
+          "say": "hermione",
+          "text": "Those aren't birds. They're keys — keys with wings!"
+        },
+        {
+          "say": "ron",
+          "text": "And there are broomsticks by the wall. We've got to catch the right one."
+        },
+        {
+          "move": "hermione",
+          "to": "hermione_door"
+        },
+        {
+          "camera": "medium",
+          "on": "hermione",
+          "ms": 900
+        },
+        {
+          "anim": "hermione",
+          "clip": "cast"
+        },
+        {
+          "fx": "spell",
+          "from": "hermione",
+          "to": "keyhole",
+          "color": "#ffd27a"
+        },
+        {
+          "say": "hermione",
+          "text": "It's no good. The lock won't open with a spell — it needs its own key.",
+          "mood": "calm"
+        },
+        {
+          "move": "harry",
+          "to": "harry_broom"
+        },
+        {
+          "prop": "brooms",
+          "state": "harry_flying"
+        },
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 600
+        },
+        {
+          "move": "harry",
+          "to": "air_high",
+          "run": true
+        },
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 800
+        },
+        {
+          "say": "harry",
+          "text": "Whoever came through before us had to catch it too. It'll be the one that's been grabbed — battered, maybe hurt..."
+        },
+        {
+          "camera": "wide",
+          "on": "air_key",
+          "ms": 1000
+        },
+        {
+          "narrate": "One big, old key lurches through the air, one wing crumpled. Across the room, a gleaming silver key hovers invitingly near the door."
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 700
+        }
+      ],
+      "choice": {
+        "prompt": "Two keys catch Harry's eye. Which one opens the door?",
+        "seconds": 10,
+        "options": [
+          {
+            "label": "The battered key with the crumpled wing",
+            "correct": true,
+            "goto": "keys_catch"
+          },
+          {
+            "label": "The gleaming silver key by the door",
+            "correct": false,
+            "goto": "keys_swarm"
+          }
+        ]
+      }
+    },
+    "keys_swarm": {
+      "location": "flying_keys",
+      "cast": {
+        "harry": "air_high",
+        "ron": "ron_floor",
+        "hermione": "hermione_door"
+      },
+      "beats": [
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 500
+        },
+        {
+          "move": "harry",
+          "to": "air_silver",
+          "run": true
+        },
+        {
+          "anim": "harry",
+          "clip": "reach"
+        },
+        {
+          "together": [
+            {
+              "prop": "keys",
+              "state": "attack"
+            },
+            {
+              "fx": "shake",
+              "ms": 1500,
+              "async": true
+            }
+          ]
+        },
+        {
+          "say": "hermione",
+          "text": "Harry, look out — they're all coming at you!",
+          "mood": "scared"
+        },
+        {
+          "camera": "low",
+          "on": "harry",
+          "ms": 800
+        },
+        {
+          "wait": 1200
+        },
+        {
+          "together": [
+            {
+              "anim": "harry",
+              "clip": "fall",
+              "hold": true
+            },
+            {
+              "move": "harry",
+              "to": [
+                2.2,
+                -0.6
+              ],
+              "run": true
+            }
+          ]
+        },
+        {
+          "sfx": "thud"
+        },
+        {
+          "fx": "red_out",
+          "ms": 1400
+        }
+      ],
+      "ending": {
+        "kind": "failure",
+        "title": "Swarmed",
+        "text": "The shiny key was a decoy. The real one had already been caught once tonight — its wing was still crumpled. Grab the wrong key and the whole swarm turns on you."
+      }
+    },
+    "keys_catch": {
+      "location": "flying_keys",
+      "cast": {
+        "harry": "air_high",
+        "ron": "ron_floor",
+        "hermione": "hermione_door"
+      },
+      "beats": [
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 500
+        },
+        {
+          "move": "harry",
+          "to": "air_key",
+          "run": true
+        },
+        {
+          "anim": "harry",
+          "clip": "reach"
+        },
+        {
+          "prop": "special_key",
+          "state": "caught"
+        },
+        {
+          "say": "harry",
+          "text": "Got it!",
+          "anim": "celebrate"
+        },
+        {
+          "camera": "wide",
+          "ms": 1200
+        },
+        {
+          "move": "harry",
+          "to": "air_dive",
+          "run": true
+        },
+        {
+          "move": "harry",
+          "to": "door_front",
+          "run": true
+        },
+        {
+          "prop": "brooms",
+          "state": "leaning"
+        },
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 700
+        },
+        {
+          "prop": "special_key",
+          "state": "in_lock"
+        },
+        {
+          "sfx": "door"
+        },
+        {
+          "prop": "door",
+          "state": "open"
+        },
+        {
+          "together": [
+            {
+              "move": "ron",
+              "to": "ron_door"
+            },
+            {
+              "move": "hermione",
+              "to": "hermione_door"
+            }
+          ]
+        },
+        {
+          "camera": "wide",
+          "ms": 900
+        },
+        {
+          "camera": "two",
+          "on": "ron",
+          "with": "harry"
+        },
+        {
+          "say": "ron",
+          "text": "Brilliant flying, mate. Come on — whatever's next, let's get it over with."
+        }
+      ],
+      "goto": "chess_enter"
+    },
+    "chess_enter": {
+      "title": "The Chessboard",
+      "location": "chessboard",
+      "cast": {
+        "harry": "entry",
+        "ron": [
+          1.0,
+          8.6
+        ],
+        "hermione": [
+          -1.0,
+          8.6
+        ]
+      },
+      "beats": [
+        {
+          "camera": "wide",
+          "ms": 0
+        },
+        {
+          "together": [
+            {
+              "move": "harry",
+              "to": "harry_f3"
+            },
+            {
+              "move": "ron",
+              "to": "ron_d4"
+            },
+            {
+              "move": "hermione",
+              "to": "hermione_c2"
+            }
+          ]
+        },
+        {
+          "narrate": "A vast chessboard. The white pieces stand tall and faceless. The only way across is to play — and win."
+        },
+        {
+          "camera": "medium",
+          "on": "ron",
+          "ms": 900
+        },
+        {
+          "say": "ron",
+          "text": "We take the places of three black pieces. Harry, you're a bishop. Hermione, the castle. I'll be a knight."
+        },
+        {
+          "camera": "high",
+          "on": "board_center",
+          "ms": 1600
+        },
+        {
+          "sfx": "crash"
+        },
+        {
+          "narrate": "The game is savage. White shows no mercy, smashing every piece it takes and dragging it from the board."
+        },
+        {
+          "camera": "two",
+          "on": "ron",
+          "with": "harry"
+        },
+        {
+          "say": "ron",
+          "text": "This is it. I move forward, she takes me — and you're left free to checkmate the king.",
+          "mood": "calm"
+        },
+        {
+          "say": "hermione",
+          "text": "No! Ron, there must be another way!",
+          "mood": "scared"
+        },
+        {
+          "say": "ron",
+          "text": "It's chess! You have to make sacrifices. Go on, Harry — someone's getting closer to that Stone."
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 700
+        }
+      ],
+      "choice": {
+        "prompt": "Ron is ready to be taken so that you can win.",
+        "seconds": 10,
+        "options": [
+          {
+            "label": "Let Ron make his move",
+            "correct": true,
+            "goto": "chess_sacrifice"
+          },
+          {
+            "label": "Refuse — pull Ron back to safety",
+            "correct": false,
+            "goto": "chess_checkmate"
+          }
+        ]
+      }
+    },
+    "chess_checkmate": {
+      "location": "chessboard",
+      "cast": {
+        "harry": "harry_f3",
+        "ron": "ron_d4",
+        "hermione": "hermione_c2"
+      },
+      "beats": [
+        {
+          "say": "harry",
+          "text": "No. We're not losing anyone. Pull back, Ron!",
+          "anim": "shake"
+        },
+        {
+          "camera": "wide",
+          "ms": 800
+        },
+        {
+          "prop": "white_queen",
+          "state": "f3"
+        },
+        {
+          "wait": 1900
+        },
+        {
+          "together": [
+            {
+              "anim": "harry",
+              "clip": "fall",
+              "hold": true
+            },
+            {
+              "fx": "shake",
+              "ms": 700
+            }
+          ]
+        },
+        {
+          "fx": "red_out",
+          "ms": 1400
+        }
+      ],
+      "ending": {
+        "kind": "death",
+        "title": "Checkmate",
+        "text": "The board demanded a sacrifice and Ron saw it. Refusing only handed the white queen her move — and the game."
+      }
+    },
+    "chess_sacrifice": {
+      "location": "chessboard",
+      "cast": {
+        "harry": "harry_f3",
+        "ron": "ron_d4",
+        "hermione": "hermione_c2"
+      },
+      "beats": [
+        {
+          "say": "harry",
+          "text": "...All right. Go.",
+          "anim": "nod"
+        },
+        {
+          "camera": "wide",
+          "ms": 700
+        },
+        {
+          "together": [
+            {
+              "prop": "black_knight",
+              "state": "c5"
+            },
+            {
+              "move": "ron",
+              "to": "ron_c5"
+            }
+          ]
+        },
+        {
+          "prop": "white_queen",
+          "state": "c5"
+        },
+        {
+          "wait": 1600
+        },
+        {
+          "together": [
+            {
+              "anim": "ron",
+              "clip": "fall",
+              "hold": true
+            },
+            {
+              "sfx": "thud"
+            }
+          ]
+        },
+        {
+          "camera": "medium",
+          "on": "hermione",
+          "ms": 500
+        },
+        {
+          "say": "hermione",
+          "text": "RON!",
+          "mood": "scared"
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 600
+        },
+        {
+          "say": "harry",
+          "text": "Stay on your square. The game's not over."
+        },
+        {
+          "move": "harry",
+          "to": "harry_f6"
+        },
+        {
+          "look": "harry",
+          "at": "white_king"
+        },
+        {
+          "camera": "low",
+          "on": "harry",
+          "ms": 700
+        },
+        {
+          "say": "harry",
+          "text": "Checkmate."
+        },
+        {
+          "prop": "white_king",
+          "state": "surrender"
+        },
+        {
+          "camera": "wide",
+          "ms": 1200
+        },
+        {
+          "narrate": "The white king tips over at Harry's feet. The pieces part, and the far door swings open."
+        },
+        {
+          "move": "hermione",
+          "to": "hermione_ron",
+          "run": true
+        },
+        {
+          "anim": "hermione",
+          "clip": "kneel",
+          "hold": true
+        },
+        {
+          "camera": "two",
+          "on": "hermione",
+          "with": "harry"
+        },
+        {
+          "say": "hermione",
+          "text": "He's out cold, but he's breathing. We'll come back for him. Go — I'm right behind you."
+        },
+        {
+          "anim": "hermione",
+          "clip": "idle"
+        },
+        {
+          "together": [
+            {
+              "move": "harry",
+              "to": "exit_harry"
+            },
+            {
+              "move": "hermione",
+              "to": "exit"
+            }
+          ]
+        }
+      ],
+      "goto": "potions_enter"
+    },
+    "potions_enter": {
+      "title": "The Potions",
+      "location": "potions_room",
+      "cast": {
+        "harry": "entry",
+        "hermione": [
+          -0.5,
+          4.3
+        ]
+      },
+      "beats": [
+        {
+          "camera": "wide",
+          "ms": 0
+        },
+        {
+          "together": [
+            {
+              "move": "harry",
+              "to": "harry_table"
+            },
+            {
+              "move": "hermione",
+              "to": "hermione_table"
+            }
+          ]
+        },
+        {
+          "together": [
+            {
+              "prop": "back_fire",
+              "state": "on"
+            },
+            {
+              "camera": "medium",
+              "on": "back_fire",
+              "ms": 600
+            }
+          ]
+        },
+        {
+          "wait": 700
+        },
+        {
+          "prop": "front_fire",
+          "state": "on"
+        },
+        {
+          "camera": "medium",
+          "on": "front_fire",
+          "ms": 900
+        },
+        {
+          "narrate": "Purple fire springs up in the doorway behind them. Black flames seal the way ahead."
+        },
+        {
+          "camera": "two",
+          "on": "hermione",
+          "with": "harry"
+        },
+        {
+          "say": "hermione",
+          "text": "Look — a scroll, and seven bottles. It's a puzzle.",
+          "anim": "reach"
+        },
+        {
+          "narrate": "The verse is a riddle: three bottles hold poison, two hold nettle wine, one carries you back through the purple fire — and the smallest carries you forward through the black."
+        },
+        {
+          "say": "hermione",
+          "text": "This isn't magic, it's logic. Plenty of great wizards would be stuck in here forever.",
+          "mood": "calm"
+        },
+        {
+          "say": "hermione",
+          "text": "The round one at the end goes back. And there's only a mouthful left in the one that goes forward."
+        },
+        {
+          "camera": "medium",
+          "on": "bottles",
+          "ms": 800
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 700
+        }
+      ],
+      "choice": {
+        "prompt": "One swallow left for the way forward. Which bottle do you drink?",
+        "seconds": 12,
+        "options": [
+          {
+            "label": "The tiny flask, smallest of all",
+            "correct": true,
+            "goto": "potions_drink"
+          },
+          {
+            "label": "The tall green bottle beside it",
+            "correct": false,
+            "goto": "potions_poison"
+          }
+        ]
+      }
+    },
+    "potions_poison": {
+      "location": "potions_room",
+      "cast": {
+        "harry": "harry_table",
+        "hermione": "hermione_table"
+      },
+      "beats": [
+        {
+          "prop": "poison",
+          "state": "harry"
+        },
+        {
+          "anim": "harry",
+          "clip": "drink"
+        },
+        {
+          "sfx": "gulp"
+        },
+        {
+          "say": "hermione",
+          "text": "Harry, no — not that one!",
+          "mood": "scared"
+        },
+        {
+          "together": [
+            {
+              "fx": "smoke",
+              "at": "harry",
+              "ms": 2500,
+              "async": true
+            },
+            {
+              "anim": "harry",
+              "clip": "fall",
+              "hold": true
+            },
+            {
+              "prop": "poison",
+              "state": "gone"
+            }
+          ]
+        },
+        {
+          "sfx": "thud"
+        },
+        {
+          "fx": "red_out",
+          "ms": 1600
+        }
+      ],
+      "ending": {
+        "kind": "death",
+        "title": "Poisoned",
+        "text": "Three of the seven bottles held poison. The riddle said it plainly: only the smallest bottle leads through the black fire."
+      }
+    },
+    "potions_drink": {
+      "location": "potions_room",
+      "cast": {
+        "harry": "harry_table",
+        "hermione": "hermione_table"
+      },
+      "beats": [
+        {
+          "say": "harry",
+          "text": "The smallest one. You take the round one — go back, find Ron, and send an owl to Dumbledore."
+        },
+        {
+          "say": "hermione",
+          "text": "Be careful, Harry. You're braver than you think.",
+          "mood": "whisper"
+        },
+        {
+          "camera": "medium",
+          "on": "hermione",
+          "ms": 700
+        },
+        {
+          "prop": "round",
+          "state": "hermione"
+        },
+        {
+          "anim": "hermione",
+          "clip": "drink"
+        },
+        {
+          "sfx": "gulp"
+        },
+        {
+          "prop": "round",
+          "state": "gone"
+        },
+        {
+          "camera": "wide",
+          "ms": 900
+        },
+        {
+          "move": "hermione",
+          "to": "back_fire"
+        },
+        {
+          "fx": "sparkles",
+          "at": "back_fire",
+          "color": "#c26aff",
+          "ms": 1200,
+          "async": true
+        },
+        {
+          "move": "hermione",
+          "to": "back_beyond"
+        },
+        {
+          "despawn": "hermione"
+        },
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 700
+        },
+        {
+          "prop": "tiny",
+          "state": "harry"
+        },
+        {
+          "anim": "harry",
+          "clip": "drink"
+        },
+        {
+          "sfx": "gulp"
+        },
+        {
+          "prop": "tiny",
+          "state": "gone"
+        },
+        {
+          "narrate": "It is like swallowing ice."
+        },
+        {
+          "camera": "wide",
+          "ms": 900
+        },
+        {
+          "move": "harry",
+          "to": "front_fire"
+        },
+        {
+          "fx": "sparkles",
+          "at": "front_fire",
+          "color": "#9a7aff",
+          "ms": 1200,
+          "async": true
+        },
+        {
+          "move": "harry",
+          "to": "beyond"
+        }
+      ],
+      "goto": "mirror_enter"
+    },
+    "mirror_enter": {
+      "title": "The Last Chamber",
+      "location": "mirror_chamber",
+      "cast": {
+        "harry": "entry",
+        "quirrell": "quirrell_mirror"
+      },
+      "beats": [
+        {
+          "look": "quirrell",
+          "at": "mirror"
+        },
+        {
+          "prop": "flames",
+          "state": "on"
+        },
+        {
+          "camera": "wide",
+          "ms": 0
+        },
+        {
+          "move": "harry",
+          "to": "stairs_bottom"
+        },
+        {
+          "narrate": "Someone is already here, standing before a great golden mirror. And it isn't Snape."
+        },
+        {
+          "look": "quirrell",
+          "at": "harry"
+        },
+        {
+          "camera": "medium",
+          "on": "quirrell",
+          "ms": 1000
+        },
+        {
+          "say": "quirrell",
+          "text": "So. You made it all the way down here, Potter.",
+          "mood": "calm"
+        },
+        {
+          "move": "harry",
+          "to": "harry_mid"
+        },
+        {
+          "camera": "two",
+          "on": "harry",
+          "with": "quirrell"
+        },
+        {
+          "say": "harry",
+          "text": "You?! But I thought — Snape...",
+          "mood": "urgent"
+        },
+        {
+          "say": "quirrell",
+          "text": "Everyone watches Severus. Nobody ever looks twice at a nervous little teacher with a stammer.",
+          "anim": "laugh"
+        },
+        {
+          "say": "quirrell",
+          "text": "Now. The Stone is somewhere inside this mirror. Come here, boy. Tell me what you see."
+        },
+        {
+          "move": "harry",
+          "to": "harry_mirror"
+        },
+        {
+          "look": "harry",
+          "at": "mirror"
+        },
+        {
+          "camera": "over",
+          "on": "harry",
+          "with": "mirror",
+          "ms": 900
+        },
+        {
+          "prop": "mirror",
+          "state": "glow"
+        },
+        {
+          "narrate": "In the glass, Harry's reflection smiles, slips a blood-red stone into its pocket — and Harry feels something heavy drop into his own."
+        },
+        {
+          "say": "quirrell",
+          "text": "He is lying... Let me speak to him. Face to face.",
+          "as": "Voldemort",
+          "color": "#ff6a5a",
+          "mood": "whisper"
+        },
+        {
+          "camera": "medium",
+          "on": "quirrell",
+          "ms": 700
+        },
+        {
+          "anim": "quirrell",
+          "clip": "unwrap",
+          "hold": true
+        },
+        {
+          "look": "quirrell",
+          "at": "mirror"
+        },
+        {
+          "look": "harry",
+          "at": "quirrell"
+        },
+        {
+          "camera": "over",
+          "on": "harry",
+          "with": "quirrell",
+          "ms": 1200
+        },
+        {
+          "sfx": "laugh"
+        },
+        {
+          "say": "quirrell",
+          "text": "Harry Potter. See what I have become: a shadow, living on borrowed flesh.",
+          "as": "Voldemort",
+          "color": "#ff6a5a"
+        },
+        {
+          "say": "quirrell",
+          "text": "Give me the Stone in your pocket, and I will spare your worthless life.",
+          "as": "Voldemort",
+          "color": "#ff6a5a"
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 700
+        }
+      ],
+      "choice": {
+        "prompt": "Voldemort reaches for the Stone in your pocket.",
+        "seconds": 9,
+        "options": [
+          {
+            "label": "Seize Quirrell with your bare hands",
+            "correct": true,
+            "goto": "mirror_touch"
+          },
+          {
+            "label": "Hand over the Stone",
+            "correct": false,
+            "goto": "mirror_rise"
+          }
+        ]
+      }
+    },
+    "mirror_rise": {
+      "location": "mirror_chamber",
+      "cast": {
+        "harry": "harry_mirror",
+        "quirrell": "quirrell_mirror"
+      },
+      "beats": [
+        {
+          "anim": "harry",
+          "clip": "reach"
+        },
+        {
+          "sfx": "sparkle"
+        },
+        {
+          "say": "quirrell",
+          "text": "At last... Life, unending.",
+          "as": "Voldemort",
+          "color": "#ff6a5a"
+        },
+        {
+          "look": "quirrell",
+          "at": "harry"
+        },
+        {
+          "anim": "quirrell",
+          "clip": "laugh"
+        },
+        {
+          "anim": "quirrell",
+          "clip": "cast"
+        },
+        {
+          "fx": "spell",
+          "from": "quirrell",
+          "to": "harry",
+          "color": "#3aff5a"
+        },
+        {
+          "together": [
+            {
+              "fx": "flash",
+              "ms": 600,
+              "async": true
+            },
+            {
+              "anim": "harry",
+              "clip": "fall",
+              "hold": true
+            }
+          ]
+        },
+        {
+          "fx": "red_out",
+          "ms": 1600
+        }
+      ],
+      "ending": {
+        "kind": "death",
+        "title": "The Dark Lord Rises",
+        "text": "With the Stone, Voldemort would never die. Yet Quirrell could not bear Harry's touch — the protection his mother left him was the only weapon he needed."
+      }
+    },
+    "mirror_touch": {
+      "location": "mirror_chamber",
+      "cast": {
+        "harry": "harry_mirror",
+        "quirrell": "quirrell_mirror"
+      },
+      "beats": [
+        {
+          "move": "harry",
+          "to": "quirrell_mirror",
+          "run": true
+        },
+        {
+          "anim": "harry",
+          "clip": "reach",
+          "async": true
+        },
+        {
+          "fx": "burst",
+          "at": "quirrell",
+          "color": "#ffb060"
+        },
+        {
+          "look": "quirrell",
+          "at": "harry"
+        },
+        {
+          "anim": "quirrell",
+          "clip": "cower"
+        },
+        {
+          "say": "quirrell",
+          "text": "Master, I can't hold him — my hands! My hands!",
+          "mood": "scared"
+        },
+        {
+          "say": "quirrell",
+          "text": "Then finish him, fool!",
+          "as": "Voldemort",
+          "color": "#ff6a5a",
+          "mood": "angry"
+        },
+        {
+          "anim": "harry",
+          "clip": "reach",
+          "async": true
+        },
+        {
+          "camera": "two",
+          "on": "harry",
+          "with": "quirrell",
+          "ms": 500
+        },
+        {
+          "together": [
+            {
+              "fx": "fire",
+              "at": "quirrell",
+              "color": "#ffa040",
+              "ms": 2400,
+              "async": true
+            },
+            {
+              "anim": "quirrell",
+              "clip": "crumble",
+              "hold": true
+            },
+            {
+              "fx": "smoke",
+              "at": "quirrell",
+              "ms": 3000,
+              "async": true
+            },
+            {
+              "sfx": "crash"
+            }
+          ]
+        },
+        {
+          "fx": "flash",
+          "ms": 900
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 800
+        },
+        {
+          "anim": "harry",
+          "clip": "fall",
+          "hold": true
+        },
+        {
+          "narrate": "Harry holds on through the pain, until the whole world turns white."
+        },
+        {
+          "fx": "fade_out",
+          "ms": 2000
+        }
+      ],
+      "ending": {
+        "kind": "victory",
+        "title": "The Stone Is Safe",
+        "text": "Harry wakes in the hospital wing. Quirrell is gone, the Stone is destroyed, and Voldemort has fled — for now. His mother's love left a mark that the Dark Lord could not touch."
+      }
+    }
+  }
+}
