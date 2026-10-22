@@ -58,7 +58,8 @@
       "hairStyle": "turban",
       "eyes": "#5a4a3a",
       "voice": 0.85,
-      "subtitleColor": "#c8b8e8"
+      "subtitleColor": "#c8b8e8",
+      "outfit": "adult"
     }
   },
   "scenes": {

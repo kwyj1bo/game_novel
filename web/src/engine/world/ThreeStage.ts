@@ -93,6 +93,13 @@ export class ThreeStage implements Stage {
     else this.fxs.clearOverlay();
   }
 
+  // Builds a location with no cast and lets the camera drift through it.
+  async showcase(id: string): Promise<void> {
+    await this.loadLocation(id);
+    const loc = this.mustLocation();
+    this.rig.drift(loc.wide.look, loc.wide.pos);
+  }
+
   currentLocation(): string | null {
     return this.locationId;
   }

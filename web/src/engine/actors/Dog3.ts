@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import type { ActorSpec, AnimClip } from "../story/schema";
-import { clamp, damp, easeInCubic, envelope, lerp, noise1, smoothstep } from "../core/math";
+import { clamp, damp, easeInCubic, envelope, lerp, noise1, rng, smoothstep } from "../core/math";
 import { Actor } from "./Actor";
 
 interface Head {
@@ -57,6 +57,21 @@ export class Dog3 extends Actor {
     // Torso: a long capsule with a deep chest.
     add(this.body, new THREE.CapsuleGeometry(0.85 * k, 1.9 * k, 8, 20), fur, [0, 2.0 * k, -0.1 * k], [Math.PI / 2, 0, 0], [1, 1, 0.92]);
     add(this.body, new THREE.SphereGeometry(1.05 * k, 20, 14), fur, [0, 2.15 * k, 0.9 * k], undefined, [1, 1.05, 1]);
+    // Muscular haunches and shoulders so the body isn't a plain tube.
+    for (const s of [1, -1]) {
+      add(this.body, new THREE.SphereGeometry(0.62 * k, 16, 12), fur, [s * 0.42 * k, 2.0 * k, -1.15 * k], undefined, [0.8, 1.05, 1.1]);
+      add(this.body, new THREE.SphereGeometry(0.6 * k, 16, 12), fur, [s * 0.45 * k, 2.15 * k, 1.0 * k], undefined, [0.8, 1.1, 1]);
+    }
+    // Shaggy fur: clumps over the flanks, chest and belly.
+    const rand = rng(99);
+    for (let i = 0; i < 70; i++) {
+      const z = lerp(-1.9, 1.6, rand()) * k;
+      const a = lerp(-2.3, 2.3, rand());
+      const pos = new THREE.Vector3(Math.sin(a) * 0.86 * k, 2.0 * k + Math.cos(a) * 0.82 * k, z);
+      const m = add(this.body, new THREE.ConeGeometry(0.13 * k, 0.42 * k, 5), rand() < 0.5 ? fur : furDark, [pos.x, pos.y, pos.z]);
+      const out = new THREE.Vector3(Math.sin(a), Math.cos(a), 0).add(new THREE.Vector3(0, -0.6, -0.4)).normalize();
+      m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), out);
+    }
     // Scruffy fur clumps along the spine.
     for (let i = 0; i < 9; i++) {
       add(this.body, new THREE.ConeGeometry(0.22 * k, 0.5 * k, 5), furDark, [Math.sin(i * 2.1) * 0.2 * k, 2.85 * k - Math.abs(i - 3) * 0.04 * k, 1.1 * k - i * 0.3 * k], [-0.5, 0, Math.sin(i) * 0.4]);
@@ -87,6 +102,19 @@ export class Dog3 extends Actor {
       neck.rotation.y = -x * 0.35;
       this.body.add(neck);
       add(neck, new THREE.CapsuleGeometry(0.42 * k, 0.8 * k, 6, 14), fur, [0, 0.35 * k, 0.35 * k], [0.75, 0, 0]);
+      // Spiked leather collar.
+      const leather = new THREE.MeshStandardMaterial({ color: "#3a1c12", roughness: 0.6 });
+      const steel = new THREE.MeshStandardMaterial({ color: "#9a9a9a", metalness: 0.9, roughness: 0.3 });
+      const collar = new THREE.Group();
+      collar.position.set(0, 0.2 * k, 0.2 * k);
+      collar.rotation.x = 0.75 + Math.PI / 2;
+      neck.add(collar);
+      add(collar, new THREE.TorusGeometry(0.45 * k, 0.07 * k, 8, 24), leather, [0, 0, 0]);
+      for (let j = 0; j < 10; j++) {
+        const a = (j / 10) * Math.PI * 2;
+        const spike = add(collar, new THREE.ConeGeometry(0.05 * k, 0.16 * k, 6), steel, [Math.cos(a) * 0.52 * k, Math.sin(a) * 0.52 * k, 0]);
+        spike.rotation.z = a - Math.PI / 2;
+      }
       const head = new THREE.Group();
       head.position.set(0, 0.85 * k, 0.75 * k);
       neck.add(head);

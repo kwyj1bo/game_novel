@@ -76,8 +76,11 @@ export class Engine {
     if (opts.skipTitle) {
       this.hud.setLetterbox(true);
       this.audio.unlock();
+      return this.runtime.start(opts);
     }
-    return this.runtime.start(opts);
+    // The opening room plays behind the title screen.
+    const first = this.story.scenes[this.story.start].location;
+    return this.stage.showcase(first).then(() => this.runtime.start(opts));
   }
 
   private frame = (now: number) => {

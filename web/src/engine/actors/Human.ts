@@ -163,6 +163,16 @@ export class Human extends Actor {
     // Shoulder cap rounds off the top of the torso.
     add(this.spine, new THREE.SphereGeometry(0.185 * k, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), robe, [0, torsoL, 0], [1, 0.45, 0.72]);
     const chest = joint(this.spine, [0, torsoL, 0]);
+    // School uniform under the open robe: grey jumper, white collar.
+    if (spec.outfit === "student") {
+      const jumper = mat("#55565e", 0.95);
+      add(this.spine, new THREE.BoxGeometry(0.17 * k, 0.4 * k, 0.04 * k), jumper, [0, torsoL * 0.55, 0.115 * k], undefined, [-0.04, 0, 0]);
+      add(this.hips, new THREE.BoxGeometry(0.15 * k, 0.5 * k, 0.03 * k), mat("#2e2e34", 0.95), [0, -0.27 * k, 0.17 * k], undefined, [-0.12, 0, 0]);
+      const shirt = mat("#eeeae0", 0.7);
+      for (const s of [1, -1]) add(chest, new THREE.BoxGeometry(0.06 * k, 0.012 * k, 0.05 * k), shirt, [s * 0.035 * k, -0.035 * k, 0.12 * k], undefined, [0.3, 0, s * 0.5]);
+    }
+    // Hood folded down at the back of the robe.
+    add(chest, new THREE.SphereGeometry(0.13 * k, 14, 8, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), robe, [0, 0.0, -0.1 * k], [1.1, 0.8, 0.7]);
     // Scarf / collar in the trim colour.
     add(chest, new THREE.TorusGeometry(0.095 * k, 0.04 * k, 8, 18), trim, [0, 0.03 * k, 0], [1, 1, 0.9], [Math.PI / 2, 0, 0]);
     add(chest, new THREE.BoxGeometry(0.07 * k, 0.24 * k, 0.03 * k), trim, [0.05 * k, -0.1 * k, 0.12 * k], undefined, [0.15, 0, 0.12]);
@@ -176,7 +186,7 @@ export class Human extends Actor {
     const foreL = 0.25 * k;
     const makeArm = (side: 1 | -1) => {
       const shoulder = joint(chest, [side * 0.19 * k, -0.05 * k, 0]);
-      add(shoulder, new THREE.SphereGeometry(0.075 * k, 12, 8), robe, [0, 0, 0]);
+      add(shoulder, new THREE.SphereGeometry(0.064 * k, 12, 8), robe, [0, 0, 0]);
       add(shoulder, new THREE.CylinderGeometry(0.062 * k, 0.07 * k, upperL, 12), robe, [0, -upperL / 2, 0]);
       const elbow = joint(shoulder, [0, -upperL, 0]);
       // Wide sleeve cuff.
@@ -184,7 +194,10 @@ export class Human extends Actor {
       add(elbow, new THREE.CylinderGeometry(0.064 * k, 0.1 * k, foreL * 0.85, 14, 1, true), robe, [0, -foreL * 0.42, 0]);
       add(elbow, new THREE.CylinderGeometry(0.035 * k, 0.04 * k, foreL * 0.8, 8), skin, [0, -foreL * 0.55, 0]);
       const hand = joint(elbow, [0, -foreL, 0]);
-      add(hand, new THREE.SphereGeometry(0.045 * k, 10, 8), skin, [0, -0.01 * k, 0], [0.9, 1.15, 0.8]);
+      // Mitten hand: palm, curled fingers and a thumb on the inner side.
+      add(hand, new THREE.CapsuleGeometry(0.03 * k, 0.04 * k, 4, 8), skin, [0, -0.03 * k, 0], [1.1, 1, 0.75]);
+      add(hand, new THREE.CapsuleGeometry(0.022 * k, 0.03 * k, 4, 8), skin, [0, -0.075 * k, 0.012 * k], [1.3, 0.9, 0.9], [0.5, 0, 0]);
+      add(hand, new THREE.CapsuleGeometry(0.012 * k, 0.03 * k, 4, 6), skin, [-side * 0.03 * k, -0.035 * k, 0.018 * k], undefined, [0.4, 0, -side * 0.5]);
       return [shoulder, elbow, hand] as const;
     };
     let handR: THREE.Group;
@@ -233,10 +246,15 @@ export class Human extends Actor {
       add(eye, new THREE.SphereGeometry(r * 0.11, 12, 10), iris, [0, 0, r * 0.08], [1, 1, 0.5]);
       add(eye, new THREE.SphereGeometry(r * 0.055, 10, 8), pupil, [0, 0, r * 0.12], [1, 1, 0.5]);
       this.eyes.push(eye);
-      const brow = add(h, new THREE.BoxGeometry(r * 0.38, r * 0.07, r * 0.08), hair, [s * r * 0.36, r * 0.4, r * 0.88], undefined, [0, 0, -s * 0.08]);
+      // Upper lid shades the top of the eye and gives it shape.
+      add(h, new THREE.SphereGeometry(r * 0.215, 14, 8, 0, Math.PI * 2, 0, Math.PI * 0.42), skin, [s * r * 0.36, r * 0.11, r * 0.8], [1, 0.9, 0.62], [0.35, 0, 0]);
+      add(h, new THREE.SphereGeometry(r * 0.16, 10, 8), mat("#e89a8a", 0.7, { transparent: true, opacity: 0.35 }), [s * r * 0.48, -r * 0.22, r * 0.72], [1, 0.6, 0.3]);
+      const brow = add(h, new THREE.BoxGeometry(r * 0.4, r * 0.09, r * 0.09), hair, [s * r * 0.36, r * 0.4, r * 0.88], undefined, [0, 0, -s * 0.08]);
       this.brows.push(brow);
     }
-    const mouth = add(h, new THREE.SphereGeometry(r * 0.17, 14, 10), mat("#5a1f1f", 0.6), [0, -r * 0.5, r * 0.84], [1, 0.15, 0.45]);
+    const mouth = add(h, new THREE.SphereGeometry(r * 0.15, 14, 10), mat("#6a2a2a", 0.6), [0, -r * 0.5, r * 0.86], [1, 0.15, 0.45]);
+    // Lower lip catches a little light under the mouth.
+    add(h, new THREE.SphereGeometry(r * 0.1, 10, 8), mat(spec.skin, 0.5, { color: new THREE.Color(spec.skin).multiplyScalar(0.88) }), [0, -r * 0.6, r * 0.88], [1.2, 0.35, 0.5]);
 
     this.buildHair(hair, spec);
     this.buildGlasses(spec);
@@ -267,10 +285,24 @@ export class Human extends Actor {
         m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.add(new THREE.Vector3((rand() - 0.5) * 0.6, 0.2, (rand() - 0.5) * 0.6)).normalize());
       }
     };
+    // Soft elongated clumps pointing outward: tousled rather than spiky.
+    const clumps = (n: number, size: number, spread: number, minY: number) => {
+      for (let i = 0; i < n; i++) {
+        const th = rand() * Math.PI * 2;
+        const y = lerp(minY, 1, rand());
+        const rr = Math.sqrt(1 - y * y);
+        const dir = new THREE.Vector3(Math.cos(th) * rr, y, Math.sin(th) * rr);
+        if (dir.z > 0.5 && dir.y < 0.5) continue;
+        const m = add(h, new THREE.SphereGeometry(r * size, 8, 6), hair, [0, 0, 0], [0.55, 1.25, 0.55]);
+        m.position.copy(dir.clone().multiplyScalar(r * spread));
+        const tilt = dir.add(new THREE.Vector3((rand() - 0.5) * 0.8, 0.1, (rand() - 0.5) * 0.8)).normalize();
+        m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), tilt);
+      }
+    };
     switch (spec.hairStyle) {
       case "messy":
         cap(1.08);
-        tufts(26, 0.22, 1.02, 0.05);
+        clumps(30, 0.3, 1.0, 0.1);
         break;
       case "ginger_mop":
         cap(1.1, -0.3);
