@@ -225,3 +225,27 @@ def test_each_event_shows_at_most_two_lines_of_dialogue(halloween):
     for n in halloween[4]:
         if not n.choice:
             assert sum(1 for ln in n.lines if ln.kind == "say") <= 2
+
+
+def test_front_matter_is_not_a_chapter():
+    from pipeline.text import split_chapters
+
+    paras = ["Copyright page", "CHAPTER ONE", "Title"] + [f"Paragraph {i}." for i in range(6)]
+    chapters = split_chapters(paras)
+    assert [c.heading for c in chapters] == ["CHAPTER ONE"]
+
+
+def test_places_mentioned_in_passing_do_not_move_the_scene(catalog):
+    from pipeline.build import segment
+
+    paras = [
+        "Harry sat in the kitchen at number four, Privet Drive.",
+        "He remembered a lesson about a forest he had once read in a book.",
+        "Uncle Vernon read the paper in the kitchen.",
+        "Aunt Petunia washed the dishes.",
+    ]
+    assert [s.location for s in segment(paras, [], catalog)] == []  # no lines, no scenes
+    from pipeline.analyze import analyze
+
+    a = analyze(paras, catalog)
+    assert [s.location for s in segment(paras, a.lines, catalog)] == ["privet_drive"]

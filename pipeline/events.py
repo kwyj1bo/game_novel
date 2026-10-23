@@ -208,10 +208,16 @@ def build_chain(a: Analysis, scenes, moments) -> list[EventNode]:
             scored[i] = (p, s + 1.0, [*why, "leads to a turn"])
 
     k = max(MIN_EVENTS, min(MAX_EVENTS, math.ceil(len(paras) * SHARE)))
-    forced = scene_openers | moment_paras | setup_paras | {paras[-1]}
+    # Choices, their setup and the ending always stay; scene openings stay
+    # while there is room (best first), so the cap holds even in long chapters.
+    forced = moment_paras | setup_paras | {paras[-1]}
+    score_of = {p: s for p, s, _ in scored}
+    for p in sorted(scene_openers, key=lambda q: -score_of.get(q, 0)):
+        if len(forced) < MAX_EVENTS:
+            forced.add(p)
     chosen = set(forced)
     for p, s, _ in sorted(scored, key=lambda x: -x[1]):
-        if len(chosen) >= max(k, len(forced)):
+        if len(chosen) >= min(MAX_EVENTS, max(k, len(forced))):
             break
         chosen.add(p)
 

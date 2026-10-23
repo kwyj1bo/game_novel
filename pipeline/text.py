@@ -10,6 +10,9 @@ CHAPTER_RE = re.compile(
 )
 
 
+MIN_PARAGRAPHS = 5
+
+
 @dataclass
 class Chapter:
     heading: str
@@ -87,7 +90,10 @@ def split_chapters(paragraphs: list[str]) -> list[Chapter]:
             continue
         expect_title = False
         current.paragraphs.append(p)
-    return [c for c in chapters if c.paragraphs]
+    # Front matter (title page, copyright) before the first real heading is not
+    # a chapter, and neither is a stub of a few paragraphs.
+    has_headings = any(c.heading != "Untitled" for c in chapters)
+    return [c for c in chapters if len(c.paragraphs) >= MIN_PARAGRAPHS and not (has_headings and c.heading == "Untitled")]
 
 
 def load_chapters(path: str | Path) -> list[Chapter]:

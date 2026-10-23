@@ -5,40 +5,6 @@
   "subtitle": "Hp Book",
   "start": "scene_1",
   "actors": {
-    "dudley": {
-      "name": "Dudley",
-      "kind": "human",
-      "height": 1.5,
-      "robe": "#5a6a8a",
-      "skin": "#f2c8b0",
-      "hair": "#d0b070",
-      "hairStyle": "short",
-      "eyes": "#3a5a2a",
-      "glasses": "none",
-      "beard": "none",
-      "outfit": "adult",
-      "hat": "none",
-      "scar": false,
-      "voice": 1,
-      "subtitleColor": "#d8c8a8"
-    },
-    "petunia": {
-      "name": "Aunt Petunia",
-      "kind": "human",
-      "height": 1.7,
-      "robe": "#8a8a6a",
-      "skin": "#efd4c0",
-      "hair": "#c8b070",
-      "hairStyle": "bun",
-      "eyes": "#3a5a2a",
-      "glasses": "none",
-      "beard": "none",
-      "outfit": "adult",
-      "hat": "none",
-      "scar": false,
-      "voice": 1.3,
-      "subtitleColor": "#e8e0a8"
-    },
     "harry": {
       "name": "Harry",
       "kind": "human",
@@ -73,16 +39,50 @@
       "scar": false,
       "voice": 0.8,
       "subtitleColor": "#d8a888"
+    },
+    "dudley": {
+      "name": "Dudley",
+      "kind": "human",
+      "height": 1.5,
+      "robe": "#5a6a8a",
+      "skin": "#f2c8b0",
+      "hair": "#d0b070",
+      "hairStyle": "short",
+      "eyes": "#3a5a2a",
+      "glasses": "none",
+      "beard": "none",
+      "outfit": "adult",
+      "hat": "none",
+      "scar": false,
+      "voice": 1,
+      "subtitleColor": "#d8c8a8"
+    },
+    "petunia": {
+      "name": "Aunt Petunia",
+      "kind": "human",
+      "height": 1.7,
+      "robe": "#8a8a6a",
+      "skin": "#efd4c0",
+      "hair": "#c8b070",
+      "hairStyle": "bun",
+      "eyes": "#3a5a2a",
+      "glasses": "none",
+      "beard": "none",
+      "outfit": "adult",
+      "hat": "none",
+      "scar": false,
+      "voice": 1.3,
+      "subtitleColor": "#e8e0a8"
     }
   },
   "scenes": {
     "scene_1_wrong": {
       "location": "privet_drive",
       "cast": {
-        "petunia": "auto_4",
-        "dudley": "auto_3",
         "vernon": "auto_2",
-        "harry": "auto_1"
+        "harry": "auto_1",
+        "dudley": "auto_3",
+        "petunia": "auto_4"
       },
       "beats": [
         {
@@ -192,9 +192,9 @@
       "location": "privet_drive",
       "cast": {
         "harry": "auto_1",
-        "petunia": "auto_2",
+        "vernon": "auto_2",
         "dudley": "auto_3",
-        "vernon": "auto_4"
+        "petunia": "auto_4"
       },
       "beats": [
         {
