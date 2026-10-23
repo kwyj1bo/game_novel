@@ -53,6 +53,8 @@ const CLIP_SECONDS: Partial<Record<AnimClip, number>> = {
   push: 0.9,
   stagger: 1.1,
   give: 1.5,
+  sit: 1.0,
+  lean: 1.2,
 };
 
 const TMP = new THREE.Vector3();
@@ -220,6 +222,21 @@ export class Human extends Actor {
     this.flute = add(handR, new THREE.CylinderGeometry(0.012 * k, 0.012 * k, 0.32 * k, 8), mat("#a07a4a", 0.5), [0.08 * k, -0.03 * k, 0.06 * k], undefined, [0, 0, Math.PI / 2.4]);
     this.flute.visible = false;
 
+    if (spec.ghost) {
+      // Pearly, see-through and faintly glowing.
+      this.root.traverse((o) => {
+        if (o instanceof THREE.Mesh && o.material instanceof THREE.MeshStandardMaterial) {
+          const m = o.material;
+          m.color.lerp(new THREE.Color("#dfe8ff"), 0.6);
+          m.emissive = new THREE.Color("#7f9ad8");
+          m.emissiveIntensity = 0.5;
+          m.transparent = true;
+          m.opacity = 0.45;
+          m.depthWrite = false;
+          o.castShadow = false;
+        }
+      });
+    }
     this.root.traverse((o) => {
       if (o instanceof THREE.Mesh && o.material instanceof THREE.MeshStandardMaterial) {
         if (!this.allMaterials.includes(o.material)) {
@@ -691,6 +708,13 @@ export class Human extends Actor {
         set({ spineX: -0.45 * hit, neckX: -0.3 * hit, lShoulderZ: 1.1 * hit, rShoulderZ: -1.1 * hit, lHipX: 0.3 * hit, rHipX: -0.4 * hit, bodyY: -0.02 * k * hit });
         break;
       }
+      case "sit":
+        // Seated: hips down, thighs level, shins down.
+        set({ hipsY: -0.36 * k, lHipX: -1.45, rHipX: -1.45, lKneeX: 1.45, rKneeX: 1.45, spineX: 0.05, lShoulderX: -0.5, rShoulderX: -0.5, lElbowX: -0.9, rElbowX: -0.9 });
+        break;
+      case "lean":
+        set({ spineX: 0.45, neckX: -0.2, lShoulderX: -0.6, rShoulderX: -0.6, lElbowX: -0.8, rElbowX: -0.8 });
+        break;
       case "give":
         // Right hand held out, palm up, at chest height.
         set({ rShoulderX: -1.1, rShoulderZ: 0.1, rElbowX: -0.7, spineX: 0.08 });

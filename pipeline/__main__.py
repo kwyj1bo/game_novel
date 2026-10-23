@@ -80,7 +80,20 @@ def main(argv=None) -> int:
     b.add_argument("--out", type=Path, default=ROOT / "web" / "public" / "generated")
     b.add_argument("--debug", type=Path, help="also write each step's output here")
     b.add_argument("--validate", action="store_true")
+    inv = sub.add_parser("inventory", help="report which assets a novel needs that the manifest lacks")
+    inv.add_argument("source", type=Path)
+    inv.add_argument("--top", type=int, default=60)
+    inv.add_argument("--json", type=Path, help="also write the full report as JSON")
     args = p.parse_args(argv)
+
+    if args.cmd == "inventory":
+        from .inventory import inventory, report
+
+        data = inventory(load_chapters(args.source), load_catalog())
+        print(report(data, args.top))
+        if args.json:
+            args.json.write_text(json.dumps(data, indent=2))
+        return 0
 
     catalog = load_catalog()
     chapters = load_chapters(args.source)

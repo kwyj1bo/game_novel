@@ -89,7 +89,7 @@ A retry rebuilds the room without delay: the runtime replays the scenes since th
 | --- | --- |
 | `sceneries` | An id, a title, the keywords that place a scene there, and one way to build it: `preset` (a room, hall, tavern, forest, street, shore and 14 more types, with size, time of day, colours and props), `model` (a glTF file; empties named `mark_<name>` become marks), or `code` (one of the hand-built rooms). |
 | `characters` | Every name the text may use ("Harry", "Harry Potter", "Potter") and the look: height, robe, skin, hair style, glasses, beard, hat. |
-| `creatures` | The words for it ("troll") and its look. |
+| `creatures` | The words for an unnamed creature ("troll", "owl", "dragon") and its look. Named creatures (Hedwig, Fang, Norbert) are `characters` with a creature `kind`. Creature rigs: three-headed dog, troll, dog, cat, owl, dragon, centaur, unicorn. A human with `ghost: true` is translucent and glows. |
 | `actions` | A piece of choreography with parameters (`actor`, `target`, `object`). It has the verbs that trigger it, steps (story beats where `$actor`, `$target` and `$object` stand for the parameters), a narration template, a choice label, its `opposite` action, and whether it is a `decision` (opening a door is; falling is not). For example, `pat(actor, target)` walks the actor to the target, turns them to face each other, plays the pat and the target's nod. Its opposite is `shove`. |
 | `sounds` | A sound and the words that trigger it. |
 | `defaults.scenery` | Where a chapter goes when no keyword matches. |
@@ -123,6 +123,8 @@ You need Python 3.12.
 Each chapter is written to `web/public/generated/`. Open one with `http://localhost:5173/?story=/generated/<file>.story.json`. Add `--debug out/` to write the output of each step for inspection. `5-event-chain.json` is the chapter's outline: each event with its summary, characters, location, score, the reasons for the score, and the next event. The upload API returns the same chain with each chapter.
 
 To upload from the browser, start the backend with `uvicorn app.main:app --port 8000` next to `npm run dev`. The chapter menu then has an "Upload a novel" card.
+
+`python -m pipeline inventory book.pdf` reports what a book needs that the manifest lacks: every character (with mentions, and whether a manifest character covers them) and every on-screen verb (with counts, and whether an action asset covers it). Use it to decide which assets to add next.
 
 `python -m pytest` runs the pipeline tests on original fixture texts in `tests/pipeline/fixtures/`: two single chapters and two whole books, one in the Harry Potter world and one with no known assets.
 

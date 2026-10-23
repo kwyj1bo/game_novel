@@ -143,7 +143,8 @@ def display_name(cid: str | None, chars: dict[str, Character]) -> str:
     if cid not in chars:
         return "someone"
     c = chars[cid]
-    if c.kind != "human":
+    # Generic creatures are "the troll"; named ones ("Hedwig") keep their name.
+    if c.kind != "human" and c.id == c.name.lower():
         return f"the {c.name.lower()}"
     return c.name.lower() if c.name.startswith("The ") else c.name
 
@@ -164,7 +165,7 @@ def opposite(event: Event, chars: dict[str, Character]) -> str:
     """The direct opposite of what the hero did, as an instruction."""
     if event.kind == "move" and event.target in chars:
         t = chars[event.target]
-        who = f"the {t.name.lower()}" if t.kind != "human" else t.name
+        who = display_name(event.target, chars)
         if who.startswith("The "):
             who = who.lower()  # unnamed people: "the sailor"
         return f"Keep away from {who}"
@@ -271,8 +272,14 @@ HAIRS = ["#120d08", "#3a2414", "#5a3418", "#8a5a2a", "#c2501e", "#d8c080", "#6a6
 SUBS = ["#f3d27a", "#ff9a6a", "#c9a8ff", "#8fd6a8", "#8ac8ff", "#ffb0c8", "#e0e0e0"]
 
 
+# Creatures that stand at the threat mark and attack on a wrong choice.
+HOSTILE_KINDS = {"troll", "dog3", "dragon"}
+
+
 def actor_spec(c: Character, catalog) -> dict:
     """The manifest's look for this character, or a generated one."""
+    if c.asset in catalog["characters"]:
+        return dict(catalog["characters"][c.asset]["spec"])
     if c.kind != "human":
         base = dict(catalog["creatures"][c.asset]["spec"]) if c.asset in catalog["creatures"] else {"kind": c.kind, "height": 3}
         base["name"] = c.name
@@ -340,14 +347,14 @@ class _Assembler:
     def cast(self, ids: list[str], entering: set[str]) -> tuple[dict, dict]:
         """Initial cast (mark per actor) and the slot each actor will use."""
         slots: dict[str, str] = {}
-        humans = [c for c in ids if self.chars[c].kind == "human"]
+        humans = [c for c in ids if self.chars[c].kind not in HOSTILE_KINDS]
         if self.hero in humans:
             humans.remove(self.hero)
             humans.insert(0, self.hero)
         for i, c in enumerate(humans[:5]):
             slots[c] = f"auto_{i + 1}"
         for c in ids:
-            if self.chars[c].kind != "human":
+            if self.chars[c].kind in HOSTILE_KINDS:
                 slots[c] = "auto_threat"
         cast = {c: m for c, m in slots.items() if c not in entering}
         return cast, slots
@@ -404,7 +411,7 @@ class _Assembler:
             beat = self.act_beat(e, on_stage)
             return [beat] if beat else []
         if e.kind == "spell":
-            target = next((c for c in on_stage if self.chars[c].kind != "human"), None) or next((c for c in on_stage if c != e.actor), None)
+            target = next((c for c in on_stage if self.chars[c].kind in HOSTILE_KINDS), None) or next((c for c in on_stage if c != e.actor), None)
             beats = [{"anim": e.actor, "clip": "cast"}]
             if target:
                 beats.append({"fx": "spell", "from": e.actor, "to": target, "color": "#ffe08a"})
@@ -545,7 +552,7 @@ class _Assembler:
 
     def wrong_scene(self, location: str, m: Moment, stage: set[str], slots: dict) -> dict:
         hero = self.hero
-        threat = next((c for c in stage if self.chars[c].kind != "human"), None)
+        threat = next((c for c in stage if self.chars[c].kind in HOSTILE_KINDS), None)
         beats: list = [{"camera": "medium", "on": hero, "ms": 500}]
         opp_beat = self.act_beat(m.event, stage, m.opposite_action) if m.opposite_action else None
         if opp_beat:

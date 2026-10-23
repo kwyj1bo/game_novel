@@ -50,7 +50,8 @@ def asset_tables(catalog) -> tuple[dict, dict, dict]:
     by_verb, by_verb_obj, sounds = {}, {}, {}
     for a in catalog["actions"]:
         for v in a["verbs"]:
-            by_verb.setdefault(v, a["id"])
+            # A verb can mean several actions ("pull" a person or a thing).
+            by_verb.setdefault(v, []).append(a["id"])
         for v, obj in a.get("with", {}).items():
             by_verb_obj[(v, obj)] = a["id"]
     for s in catalog["sounds"]:
@@ -59,8 +60,12 @@ def asset_tables(catalog) -> tuple[dict, dict, dict]:
     return by_verb, by_verb_obj, sounds
 
 
-# Actions a creature can perform (its rig has no hands).
-CREATURE_ACTIONS = {"approach", "run_to", "back_away", "flee", "roar", "lunge", "fall", "cower", "nod", "shake_head"}
+# Actions an animal can perform (no hands). Centaurs have hands, so they can do anything.
+CREATURE_ACTIONS = {
+    "approach", "run_to", "back_away", "flee", "roar", "lunge", "fall", "cower", "nod", "shake_head",
+    "follow", "watch", "turn_to", "turn_away", "lie_down", "wake", "fly", "jump", "stop", "wait", "stand_firm",
+}
+HANDED_KINDS = {"human", "centaur", "troll"}
 
 
 @dataclass
@@ -132,10 +137,60 @@ class _Detector:
         self.creature_words = {w: cid for cid, c in catalog["creatures"].items() for w in c["words"] if " " not in w}
         self.creature_kind = {cid: c["spec"]["kind"] for cid, c in catalog["creatures"].items()}
         self.place_words = {k.lower() for loc in catalog["locations"].values() for k in loc["keywords"]}
+        # Single words from place titles and keywords ("hogwarts", "drive", "gryffindor").
+        self.place_tokens = {
+            w for loc in catalog["locations"].values() for phrase in [loc["title"], *loc["keywords"]]
+            for w in re.findall(r"[a-z']+", phrase.lower()) if len(w) >= 4 and w not in ("room", "hall", "hut's")
+        }
+
+    def _evidence(self) -> dict[str, dict[str, int]]:
+        """Per capitalised word: how it is used. People rarely take "the"
+        ("the Stone" is a thing), are not plural ("the Weasleys" is a family),
+        and get a PERSON label or act and speak somewhere in the book."""
+        ev: dict[str, dict[str, int]] = {}
+        for doc, spans in self.docs:
+            for tok in doc:
+                if tok.pos_ != "PROPN" or _in_quotes(tok, spans):
+                    continue
+                e = ev.setdefault(tok.text, {"n": 0, "the": 0, "plural": 0, "person": 0, "other": 0, "acts": 0})
+                e["n"] += 1
+                prev = doc[tok.i - 1] if tok.i > 0 else None
+                if prev is not None and prev.lower_ in ("the", "a", "an", "this", "that"):
+                    e["the"] += 1
+                if tok.tag_ == "NNPS":
+                    e["plural"] += 1
+                if tok.ent_type_ == "PERSON":
+                    e["person"] += 1
+                elif tok.ent_type_:
+                    e["other"] += 1
+                head = tok.head.lemma_.lower()
+                if tok.dep_ == "nsubj" and (head in L.SPEECH_VERBS or head in L.MOVE_VERBS or head in L.ACTION_VERBS):
+                    e["acts"] += 1
+        return ev
+
+    def _is_person_word(self, word: str, ev: dict[str, dict[str, int]], known: set[str]) -> bool:
+        if word.lower() in known:
+            return True  # the manifest knows this name
+        if not word[:1].isupper() or not word.replace("'", "").replace("-", "").isalpha():
+            return False  # "the", "jewel", "Mr."
+        if word.lower() in self.place_tokens:
+            return False  # part of a place name the manifest knows ("Hogwarts", "Drive")
+        e = ev.get(word)
+        if not e:
+            return True  # only seen inside an entity span; let the span decide
+        if e["the"] * 2 >= e["n"] or e["plural"] * 2 > e["n"]:
+            return False  # "the Stone", "the Weasleys"
+        if e["acts"]:
+            return True  # places and things don't act
+        if e["n"] < 2 or e["person"] == 0:
+            return False  # one passing mention, or never labelled a person
+        return e["other"] <= 2 * e["person"]
 
     def run(self) -> dict[str, Character]:
         names: Counter[tuple[str, ...]] = Counter()
         honors: dict[tuple[str, ...], str] = {}
+        evidence = self._evidence()
+        known = {w.lower() for a in self.catalog["characters"].values() for n in a["names"] for w in n.replace(".", "").split()}
         for doc, spans in self.docs:
             for ent in doc.ents:
                 if ent.label_ != "PERSON" or _in_quotes(ent[0], spans):
@@ -168,6 +223,8 @@ class _Detector:
                 continue
             if key in self.creature_words or key in L.HONORIFICS or " ".join(n).lower() in self.place_words:
                 continue  # "Gringotts" is somewhere you go, not someone
+            if not all(self._is_person_word(w, evidence, known) for w in n):
+                continue
             c = self.chars.get(key) or Character(id=key, name=" ".join(n) if len(n) == 1 else n[0])
             if n in honors:
                 c.name = f"{honors[n].capitalize()} {n[-1]}" if honors[n] in ("professor", "madam", "doctor") else n[-1]
@@ -197,6 +254,9 @@ class _Detector:
             if c.kind == "human":
                 keys = [c.name.lower(), c.id, *[a for a in self.alias if self.alias[a] == c.id]]
                 c.asset = next((by_name[k] for k in keys if k in by_name), None)
+                # A named creature ("Hedwig", "Norbert") takes its kind from the asset.
+                if c.asset:
+                    c.kind = self.catalog["characters"][c.asset]["spec"].get("kind", "human")
             key = c.asset if c.kind == "human" and c.asset else c.id
             if key in merged:
                 m = merged[key]
@@ -502,7 +562,7 @@ class _Reader:
             obj = self._phrase(pobj)
         else:
             obj = ""
-        action = self.by_verb_obj.get((lem, obj_head)) or self.by_verb.get(lem)
+        action = self._pick_action(lem, obj_head, target, obj_tok, pobj, actor)
         # "took his hand": the hand's owner is who the action is aimed at.
         if target is None and obj_tok is not None:
             owner = next((self.who(c) for c in obj_tok.children if c.dep_ == "poss"), None)
@@ -531,7 +591,7 @@ class _Reader:
             params = self.action_defs[action]["params"]
             if "target" in params and not target:
                 action = None
-            elif kind != "human" and action not in CREATURE_ACTIONS:
+            elif kind not in HANDED_KINDS and action not in CREATURE_ACTIONS:
                 action = None
         else:
             action = None
@@ -544,6 +604,31 @@ class _Reader:
             # No asset for it, but still a candidate decision.
             out.append(Event(actor=actor, kind="act", verb=lem, target=target, obj=obj, obj_label=obj_label, phrase=phrase))
         return out
+
+    def _pick_action(self, lem, obj_head, target, obj_tok, pobj, actor) -> str | None:
+        """The action asset a verb means here. With several candidates, the
+        first whose parameters the sentence can fill wins: aimed at a person
+        needs a target; acting on a thing needs an object."""
+        special = self.by_verb_obj.get((lem, obj_head))
+        if special:
+            return special
+        cands = self.by_verb.get(lem, [])
+        if not cands:
+            return None
+        if target is None and obj_tok is not None:
+            owner = next((self.who(c) for c in obj_tok.children if c.dep_ == "poss"), None)
+            if owner and owner != actor and any("target" in self.action_defs[c]["params"] for c in cands):
+                target = owner
+        has_thing = (obj_tok is not None and self.who(obj_tok) is None) or (obj_tok is None and pobj is not None and self.who(pobj) is None)
+        def fits(c: str) -> int:
+            params = self.action_defs[c]["params"]
+            if "target" in params and not target:
+                return -1
+            score = 2 if ("target" in params) == bool(target) else 0
+            score += 1 if ("object" in params) == has_thing else 0
+            return score
+        best = max(cands, key=lambda c: (fits(c), -cands.index(c)))
+        return best if fits(best) >= 0 else None
 
     def _second_person(self, phrase: str, actor: str | None) -> str:
         """'his wand' said of the actor -> 'your wand' (for choice labels)."""

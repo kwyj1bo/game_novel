@@ -29,6 +29,8 @@ export const ANIM_CLIPS = [
   "push",
   "stagger",
   "give",
+  "sit",
+  "lean",
   // creature clips
   "sleep",
   "wake",
@@ -183,7 +185,9 @@ export const SceneSchema = z
 export const ActorSpecSchema = z
   .object({
     name: z.string(),
-    kind: z.enum(["human", "dog3", "troll"]).default("human"),
+    kind: z.enum(["human", "dog3", "troll", "dog", "cat", "owl", "dragon", "centaur", "unicorn"]).default("human"),
+    // Translucent and glowing (ghosts).
+    ghost: z.boolean().default(false),
     height: z.number().positive().default(1.6),
     robe: z.string().default("#222222"),
     trim: z.string().optional(),

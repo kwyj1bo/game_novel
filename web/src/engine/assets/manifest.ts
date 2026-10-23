@@ -66,7 +66,7 @@ export const CreatureAssetSchema = z
   .object({
     id: z.string(),
     words: z.array(z.string()).min(1),
-    spec: ActorSpecSchema.partial().extend({ name: z.string(), kind: z.enum(["dog3", "troll"]) }),
+    spec: ActorSpecSchema.partial().extend({ name: z.string(), kind: z.enum(["dog3", "troll", "dog", "cat", "owl", "dragon", "centaur", "unicorn"]) }),
   })
   .strict();
 
