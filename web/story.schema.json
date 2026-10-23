@@ -308,6 +308,11 @@
                 "laugh",
                 "unwrap",
                 "crumble",
+                "pat",
+                "hug",
+                "push",
+                "stagger",
+                "give",
                 "sleep",
                 "wake",
                 "lunge",
@@ -445,6 +450,11 @@
                 "laugh",
                 "unwrap",
                 "crumble",
+                "pat",
+                "hug",
+                "push",
+                "stagger",
+                "give",
                 "sleep",
                 "wake",
                 "lunge",
@@ -726,6 +736,28 @@
           },
           "required": [
             "despawn"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "act": {
+              "type": "string"
+            },
+            "actor": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            },
+            "object": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "act",
+            "actor"
           ],
           "additionalProperties": false
         },
