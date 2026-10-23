@@ -16,6 +16,8 @@ from .analyze import Analysis, Line
 MIN_EVENTS = 4
 MAX_EVENTS = 14
 SHARE = 0.5  # at most this fraction of paragraphs survives (and never more than MAX_EVENTS)
+SHORT_CHAPTER = 12  # paragraphs; a chapter this short keeps more of itself
+SHORT_SHARE = 0.7
 MAX_SAY_PER_EVENT = 2
 
 WORD_RE = re.compile(r"[a-z']+")
@@ -90,7 +92,7 @@ def score_paragraph(lines: list[Line], a: Analysis, centrality: float, first_see
     why: list[str] = []
     hero = a.protagonist
     people = _who(lines, a)
-    actions = [e for ln in lines for e in ln.events if e.kind in ("move", "anim", "act", "spell")]
+    actions = [e for ln in lines for e in ln.events if e.kind in ("action", "act", "spell")]
     if hero in people:
         score += 1.5
         why.append("hero")
@@ -104,6 +106,11 @@ def score_paragraph(lines: list[Line], a: Analysis, centrality: float, first_see
     if any(a.characters[e.actor].kind != "human" for e in actions if e.actor in a.characters):
         score += 1.2
         why.append("creature acts")
+    # One character doing something to another is what scenes are made of.
+    between = [e for e in actions if e.kind == "action" and e.target]
+    if between:
+        score += min(2, len(between)) * 1.0
+        why.append("interaction")
     decisive = [e for e in actions if e.verb in L.DECISIVE_VERBS and e.actor == hero]
     if decisive:
         score += 1.5
@@ -164,7 +171,7 @@ def _shown_lines(lines: list[Line], hero: str | None, must_keep: set[int], names
     narr = [ln for ln in lines if ln.kind == "narrate"]
     summary = _summary(lines, names)
     for ln in narr:
-        if ln.text == summary or any(e.kind in ("move", "anim", "act", "spell") for e in ln.events) or id(ln) in must_keep:
+        if ln.text == summary or any(e.kind in ("action", "act", "spell", "move") for e in ln.events) or id(ln) in must_keep:
             keep.append(ln)
     says = [ln for ln in lines if ln.kind == "say"]
     ranked = sorted(says, key=lambda ln: (ln.speaker == hero, ln.text.endswith(("!", "?")), bool(ln.events), len(ln.text)), reverse=True)
@@ -207,7 +214,8 @@ def build_chain(a: Analysis, scenes, moments) -> list[EventNode]:
         if any(q in moment_paras for q, _, _ in ahead) or (ahead and "turning point" in ahead[0][2]):
             scored[i] = (p, s + 1.0, [*why, "leads to a turn"])
 
-    k = max(MIN_EVENTS, min(MAX_EVENTS, math.ceil(len(paras) * SHARE)))
+    share = SHORT_SHARE if len(paras) <= SHORT_CHAPTER else SHARE
+    k = max(MIN_EVENTS, min(MAX_EVENTS, math.ceil(len(paras) * share)))
     # Choices, their setup and the ending always stay; scene openings stay
     # while there is room (best first), so the cap holds even in long chapters.
     forced = moment_paras | setup_paras | {paras[-1]}

@@ -29,6 +29,8 @@ class Moment:
     correct: str
     opposite: str
     score: float
+    # Manifest action performed when the wrong option is picked, if any.
+    opposite_action: str | None = None
 
 
 def _h(text: str) -> int:
@@ -136,6 +138,23 @@ def segment(paragraphs: list[str], lines: list[Line], catalog) -> list[Scene]:
 # ---- moments and opposites -------------------------------------------------
 
 
+def display_name(cid: str | None, chars: dict[str, Character]) -> str:
+    """How narration and labels name a character: "Harry", "the troll", "the innkeeper"."""
+    if cid not in chars:
+        return "someone"
+    c = chars[cid]
+    if c.kind != "human":
+        return f"the {c.name.lower()}"
+    return c.name.lower() if c.name.startswith("The ") else c.name
+
+
+def fill_template(template: str, ev: Event, chars: dict[str, Character], for_player: bool = False) -> str:
+    """An action's text or label with its parameters filled in."""
+    text = template.replace("{actor}", display_name(ev.actor, chars)).replace("{target}", display_name(ev.target, chars))
+    text = text.replace("{object}", (ev.obj_label if for_player else ev.obj) or "it")
+    return text[:1].upper() + text[1:]
+
+
 def _strip_article(obj: str) -> tuple[str, bool]:
     m = re.match(r"^(the|a|an|this|that|your)\s+(.*)$", obj, re.IGNORECASE)
     return (m.group(2), True) if m else (obj, False)
@@ -193,7 +212,8 @@ def _as_infinitive(instruction: str) -> str:
 VERB_WEIGHT = {"unlock": 2.0, "open": 1.5, "enter": 1.5, "jump": 1.5, "attack": 2.0, "run": 1.5, "grab": 1.2, "cast": 2.0, "save": 2.0, "help": 1.5, "pick": 1.3, "close": 1.3, "throw": 1.3, "step": 1.0}
 
 
-def find_moments(a: Analysis, scenes: list[Scene]) -> list[Moment]:
+def find_moments(a: Analysis, scenes: list[Scene], catalog) -> list[Moment]:
+    actions = {x["id"]: x for x in catalog["actions"]}
     hero = a.protagonist
     if not hero:
         return []
@@ -215,17 +235,24 @@ def find_moments(a: Analysis, scenes: list[Scene]) -> list[Moment]:
         for ev in ln.events:
             if ev.actor != hero or not ev.phrase:
                 continue
-            toward_threat = ev.kind == "move" and ev.target in a.characters and a.characters[ev.target].kind != "human"
-            if ev.verb not in L.DECISIVE_VERBS and not toward_threat:
+            act = actions.get(ev.action) if ev.kind == "action" else None
+            if act and not act.get("decision"):
+                continue  # things that happen to you are not choices
+            opp = actions.get(act.get("opposite")) if act else None
+            toward_threat = ev.action in ("approach", "run_to") and ev.target in a.characters and a.characters[ev.target].kind != "human"
+            # A decision is an action with a defined opposite, or a decisive verb.
+            if not opp and ev.verb not in L.DECISIVE_VERBS and not toward_threat:
                 continue
             window = a.lines[max(0, i - 4) : i + 3]
             tension = sum(w.danger for w in window) / max(1, len(window))
             score = tension + VERB_WEIGHT.get(ev.verb, 0.8) + (1.5 if toward_threat else 0) + (1.0 if creatures_in[scene_of[id(ln)]] else 0) + 1.5 * i / n
-            correct = ev.phrase
-            if toward_threat:
-                t = a.characters[ev.target]
-                correct = f"{ev.verb.capitalize()} at the {t.name.lower()}" if ev.verb in ("run", "charge", "rush") else ev.phrase
-            cands.append(Moment(line=i, event=ev, correct=correct, opposite=opposite(ev, a.characters), score=score))
+            if act and opp:
+                # Both options are action assets: the hero's action and its opposite.
+                correct = fill_template(act["label"], ev, a.characters, for_player=True)
+                wrong = fill_template(opp["label"], ev, a.characters, for_player=True)
+                cands.append(Moment(line=i, event=ev, correct=correct, opposite=wrong, score=score + 0.5, opposite_action=opp["id"]))
+            else:
+                cands.append(Moment(line=i, event=ev, correct=ev.phrase, opposite=opposite(ev, a.characters), score=score))
     k = min(MAX_CHOICES, max(1, n // 20))
     chosen: list[Moment] = []
     for m in sorted(cands, key=lambda m: -m.score):
@@ -277,6 +304,7 @@ class _Assembler:
         self.chars = a.characters
         self.hero = a.protagonist
         self._last_speaker: str | None = None
+        self.actions = {x["id"]: x for x in catalog["actions"]}
 
     def name(self, cid: str | None) -> str:
         return self.chars[cid].name if cid in self.chars else "someone"
@@ -352,7 +380,7 @@ class _Assembler:
                 out.extend(actions)
                 out.append({"narrate": f"“{ln.text}”"})
                 continue
-            focus = next((e.actor for e in ln.events if e.actor in on_stage and e.kind in ("anim", "move")), None)
+            focus = next((e.actor for e in ln.events if e.actor in on_stage and e.kind == "action"), None)
             if focus and focus != last_cam:
                 out.append({"camera": "medium", "on": focus, "ms": 700})
                 last_cam = focus
@@ -362,7 +390,7 @@ class _Assembler:
                 last_cam = None
             out.extend(actions)
             if narrations < MAX_NARRATION_PER_SCENE or ln.events:
-                out.append({"narrate": _trim(ln.text)})
+                out.append({"narrate": self.narration(ln, on_stage)})
                 narrations += 1
         self._last_speaker = last_speaker
         return out
@@ -372,17 +400,9 @@ class _Assembler:
             return [{"sfx": e.sfx}]
         if e.actor not in on_stage:
             return []
-        if e.kind == "anim" and e.clip:
-            beat = {"anim": e.actor, "clip": e.clip, "async": True}
-            if e.clip in ("fall", "kneel", "sleep"):
-                beat["hold"] = True
-            return [beat]
-        if e.kind == "move":
-            if e.target == "away":
-                return [{"move": e.actor, "to": "auto_entry", "run": True, "async": True}]
-            if e.target in on_stage and e.target != e.actor:
-                return [{"move": e.actor, "to": e.target, "run": e.run, "async": not e.run}]
-            return []
+        if e.kind == "action":
+            beat = self.act_beat(e, on_stage)
+            return [beat] if beat else []
         if e.kind == "spell":
             target = next((c for c in on_stage if self.chars[c].kind != "human"), None) or next((c for c in on_stage if c != e.actor), None)
             beats = [{"anim": e.actor, "clip": "cast"}]
@@ -390,6 +410,30 @@ class _Assembler:
                 beats.append({"fx": "spell", "from": e.actor, "to": target, "color": "#ffe08a"})
             return beats
         return []
+
+    def act_beat(self, e: Event, on_stage: set[str], action: str | None = None) -> dict | None:
+        """An "act" beat for an action asset, if its parameters are on stage."""
+        aid = action or e.action
+        params = self.actions[aid]["params"]
+        beat: dict = {"act": aid, "actor": e.actor}
+        if "target" in params:
+            if e.target not in on_stage or e.target == e.actor:
+                return None
+            beat["target"] = e.target
+        if "object" in params:
+            beat["object"] = e.obj or "it"
+        return beat
+
+    def narration(self, ln: Line, on_stage: set[str]) -> str:
+        """What the narrator says for a line: written from the actions it holds
+        ("Ron walks over to Harry. Ron pats Harry on the shoulder."), or the
+        book's sentence, shortened, when no action asset matched."""
+        parts = [
+            fill_template(self.actions[e.action]["text"], e, self.chars)
+            for e in ln.events
+            if e.kind == "action" and e.actor in on_stage and ("target" not in self.actions[e.action]["params"] or e.target in on_stage)
+        ]
+        return " ".join(parts) if parts else _trim(ln.text)
 
     def build(self, scenes: list[Scene], moments: list[Moment]) -> dict:
         a = self.a
@@ -432,7 +476,7 @@ class _Assembler:
                         first_seen[c] = seen
             for ln in sc.lines:
                 for e in ln.events:
-                    if e.actor in present and e.actor not in on_stage and e.kind == "move" and e.verb in ("burst", "enter", "come", "hurry", "lumber", "pad", "walk", "rush"):
+                    if e.actor in present and e.actor not in on_stage and e.kind in ("move", "action") and e.verb in ("burst", "enter", "come", "hurry", "lumber", "pad", "walk", "rush"):
                         if not any(e.actor == x.speaker or e.actor in [y.actor for y in x.events] for x in sc.lines[: sc.lines.index(ln)]):
                             entering.add(e.actor)
             all_ids = list(dict.fromkeys([*on_stage, *present]))
@@ -502,9 +546,13 @@ class _Assembler:
     def wrong_scene(self, location: str, m: Moment, stage: set[str], slots: dict) -> dict:
         hero = self.hero
         threat = next((c for c in stage if self.chars[c].kind != "human"), None)
-        beats: list = [{"camera": "medium", "on": hero, "ms": 500}, {"narrate": f"{self.name(hero)} hesitates — and chooses {_as_infinitive(m.opposite)}."}]
-        if m.event.kind == "move" and m.event.target and m.event.target != "away":
-            beats.append({"move": hero, "to": "auto_entry", "async": True})
+        beats: list = [{"camera": "medium", "on": hero, "ms": 500}]
+        opp_beat = self.act_beat(m.event, stage, m.opposite_action) if m.opposite_action else None
+        if opp_beat:
+            # The player's choice is acted out: the opposite of what the book says.
+            beats += [opp_beat, {"narrate": fill_template(self.actions[m.opposite_action]["text"], m.event, self.chars)}]
+        else:
+            beats.append({"narrate": f"{self.name(hero)} hesitates — and chooses {_as_infinitive(m.opposite)}."})
         if threat:
             kind = self.chars[threat].kind
             beats += [{"camera": "low", "on": threat, "ms": 600}, {"sfx": "roar"}]
@@ -545,7 +593,7 @@ def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str,
     from .events import build_chain
 
     scenes = segment(paragraphs, a.lines, catalog)
-    moments = find_moments(a, scenes)
+    moments = find_moments(a, scenes, catalog)
     chain = build_chain(a, scenes, moments)
     shown = {id(ln) for node in chain for ln in node.lines}
     condensed = [Scene(location=sc.location, lines=[ln for ln in sc.lines if id(ln) in shown]) for sc in scenes]

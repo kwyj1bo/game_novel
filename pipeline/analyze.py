@@ -38,35 +38,44 @@ class Character:
     aliases: set[str] = field(default_factory=set)
     # Manifest asset this character uses (character or creature id), if any.
     asset: str | None = None
-    # Actions the narration gives this character (drives who the hero is).
+    # Actions the narration gives this character, and actions aimed at them
+    # (both drive who the hero is).
     actions: int = 0
+    targeted: int = 0
+    first_seen: int = 10**9  # index of the first line they appear in
 
 
 def asset_tables(catalog) -> tuple[dict, dict, dict]:
-    """verb -> clip, (verb, object) -> clip and word -> sound, from the manifest."""
-    anim, anim_with, sounds = {}, {}, {}
+    """verb -> action id, (verb, object) -> action id and word -> sound, from the manifest."""
+    by_verb, by_verb_obj, sounds = {}, {}, {}
     for a in catalog["actions"]:
         for v in a["verbs"]:
-            anim[v] = a["clip"]
+            by_verb.setdefault(v, a["id"])
         for v, obj in a.get("with", {}).items():
-            anim_with[(v, obj)] = a["clip"]
+            by_verb_obj[(v, obj)] = a["id"]
     for s in catalog["sounds"]:
         for w in s["words"]:
             sounds[w] = s["id"]
-    return anim, anim_with, sounds
+    return by_verb, by_verb_obj, sounds
+
+
+# Actions a creature can perform (its rig has no hands).
+CREATURE_ACTIONS = {"approach", "run_to", "back_away", "flee", "roar", "lunge", "fall", "cower", "nod", "shake_head"}
 
 
 @dataclass
 class Event:
     actor: str | None
-    kind: str  # move, anim, sound, spell
+    kind: str  # action (an asset from the manifest), move, act, sound, spell
     verb: str = ""
+    action: str | None = None  # manifest action id
     clip: str | None = None
     run: bool = False
     target: str | None = None  # character id, "away" or "forward"
     sfx: str | None = None
     phrase: str = ""  # imperative verb phrase, for choices
-    obj: str = ""  # object phrase
+    obj: str = ""  # object phrase, as written ("his wand")
+    obj_label: str = ""  # object phrase addressed to the player ("your wand")
 
 
 @dataclass
@@ -275,8 +284,8 @@ class _Reader:
         self.chars = detector.chars
         self.recent: list[str] = []
         self.last_speakers: list[str] = []
-        self.creature_clips = {"troll": {"roar", "lunge", "fall", "shake", "nod", "cower"}, "dog3": {"sleep", "wake", "lunge", "roar", "shake", "nod"}}
-        self.anim, self.anim_with, self.sounds = asset_tables(catalog)
+        self.by_verb, self.by_verb_obj, self.sounds = asset_tables(catalog)
+        self.action_defs = {a["id"]: a for a in catalog["actions"]}
 
     def _see(self, cid: str | None):
         if not cid:
@@ -285,27 +294,28 @@ class _Reader:
             self.recent.remove(cid)
         self.recent.append(cid)
 
-    def _pronoun(self, low: str) -> str | None:
+    def _pronoun(self, low: str, exclude: str | None = None) -> str | None:
         want = {"he": "m", "him": "m", "his": "m", "himself": "m", "she": "f", "her": "f", "herself": "f", "it": "n", "its": "n"}.get(low)
         if not want:
             return None
         # A known gender match beats someone whose gender is unknown.
         for cid in reversed(self.recent):
-            if self.chars[cid].gender == want:
+            if cid != exclude and self.chars[cid].gender == want:
                 return cid
         if want in "mf":
             for cid in reversed(self.recent):
-                if self.chars[cid].gender == "x":
+                if cid != exclude and self.chars[cid].gender == "x":
                     return cid
         return None
 
-    def who(self, tok) -> str | None:
-        """Character a token refers to (name, creature noun or pronoun)."""
+    def who(self, tok, exclude: str | None = None) -> str | None:
+        """Character a token refers to (name, creature noun or pronoun). An
+        object pronoun never means the actor themselves ("shoved him")."""
         cid = self.d.resolve_name(tok)
         if cid in self.chars:
             return cid
         if tok.pos_ == "PRON":
-            return self._pronoun(tok.text.lower())
+            return self._pronoun(tok.text.lower(), exclude)
         # Compound names ("Professor McGonagall") resolve through any part.
         for child in tok.children:
             if child.dep_ == "compound":
@@ -379,7 +389,7 @@ class _Reader:
                 elif rest:
                     # A tag's gesture ("grinning", "shaking his head") plays with the line.
                     first_quote = next(ln for ln in reversed(lines) if ln.kind == "say")
-                    first_quote.events.extend(e for e in self._events(sent, spans, participles=True) if e.kind == "anim")
+                    first_quote.events.extend(e for e in self._events(sent, spans, participles=True) if e.kind == "action")
             else:
                 text = sent.text.strip()
                 if text and text not in L.SCENE_SEPARATORS:
@@ -471,28 +481,80 @@ class _Reader:
                 events.append(Event(actor=actor, kind="sound", sfx=self.sounds[lem], verb=lem))
             if actor is None:
                 continue
-            kind = self.chars[actor].kind
-            obj_head = obj_tok.lemma_.lower() if obj_tok is not None else ""
-            clip = self.anim_with.get((lem, obj_head)) or self.anim.get(lem)
-            if kind != "human" and lem in ("crash", "sway") and pobj is not None and pobj.lemma_.lower() in ("floor", "ground"):
-                clip = "fall"
-            if clip and kind != "human" and clip not in self.creature_clips.get(kind, set()):
-                clip = None
-            if clip and kind == "human" and clip in ("roar", "lunge", "sleep", "wake"):
-                clip = None
-            if lem in L.MOVE_VERBS or (lem == "step" and prt in ("forward", "back")):
-                target = None
-                if lem in L.AWAY_VERBS or prt in ("away", "back") or (prep is not None and prep.text.lower() == "away"):
-                    target = "away"
-                elif pobj is not None:
-                    target = self.who(pobj) or "forward"
-                events.append(Event(actor=actor, kind="move", verb=lem, run=L.MOVE_VERBS.get(lem, False), target=target, phrase=phrase, obj=obj))
-            if clip:
-                events.append(Event(actor=actor, kind="anim", verb=lem, clip=clip, phrase=phrase, obj=obj))
-            elif lem in L.DECISIVE_VERBS and lem not in L.MOVE_VERBS:
-                # Not animated, but still a candidate decision.
-                events.append(Event(actor=actor, kind="act", verb=lem, phrase=phrase, obj=obj))
+            events.extend(self._action(tok, lem, actor, obj_tok, prt, prep, pobj, phrase))
         return events
+
+    def _action(self, tok, lem, actor, obj_tok, prt, prep, pobj, phrase) -> list[Event]:
+        """Matches a verb to an action asset and fills its parameters: the
+        target (a character the verb is aimed at) and the object (a thing)."""
+        kind = self.chars[actor].kind
+        obj_head = obj_tok.lemma_.lower() if obj_tok is not None else ""
+        target = self.who(obj_tok, exclude=actor) if obj_tok is not None else None
+        if target is None and pobj is not None:
+            target = self.who(pobj, exclude=actor)
+        if target == actor:
+            target = None
+        # The object is the thing acted on: the direct object unless it is a
+        # person, else a prepositional object that is not a person.
+        if obj_tok is not None and self.who(obj_tok) is None:
+            obj = self._phrase(obj_tok)
+        elif obj_tok is None and pobj is not None and self.who(pobj) is None:
+            obj = self._phrase(pobj)
+        else:
+            obj = ""
+        action = self.by_verb_obj.get((lem, obj_head)) or self.by_verb.get(lem)
+        # "took his hand": the hand's owner is who the action is aimed at.
+        if target is None and obj_tok is not None:
+            owner = next((self.who(c) for c in obj_tok.children if c.dep_ == "poss"), None)
+            if owner and owner != actor and action and "target" in self.action_defs.get(action, {}).get("params", []):
+                target = owner
+        # "crashed to the floor" for a creature is a fall.
+        if kind != "human" and lem in ("crash", "sway") and pobj is not None and pobj.lemma_.lower() in ("floor", "ground"):
+            action = "fall"
+        is_move = lem in L.MOVE_VERBS or (lem == "step" and prt in ("forward", "back"))
+        if is_move or action in ("approach", "run_to"):
+            away = lem in L.AWAY_VERBS or prt in ("away", "back") or (prep is not None and prep.text.lower() == "away")
+            if away and target is None:
+                # "backed away from the troll": the target hangs off "away".
+                frm = next((t for t in tok.subtree if t.dep_ == "prep" and t.lower_ == "from"), None)
+                pob = next((c for c in frm.children if c.dep_ == "pobj"), None) if frm is not None else None
+                target = self.who(pob) if pob is not None else None
+            if away:
+                action = "back_away" if target else "flee"
+            elif target:
+                action = "run_to" if L.MOVE_VERBS.get(lem) else "approach"
+            else:
+                # Moving with nobody to move to: only an entrance, no action.
+                return [Event(actor=actor, kind="move", verb=lem, run=L.MOVE_VERBS.get(lem, False), target="forward" if pobj is not None else None, phrase=phrase, obj=obj)]
+        out: list[Event] = []
+        if action and action in self.action_defs:
+            params = self.action_defs[action]["params"]
+            if "target" in params and not target:
+                action = None
+            elif kind != "human" and action not in CREATURE_ACTIONS:
+                action = None
+        else:
+            action = None
+        obj_label = self._second_person(obj, actor) if obj else ""
+        if action:
+            if "object" in self.action_defs[action]["params"] and not obj:
+                obj, obj_label = "it", "it"
+            out.append(Event(actor=actor, kind="action", verb=lem, action=action, target=target, obj=obj, obj_label=obj_label, phrase=phrase))
+        elif lem in L.DECISIVE_VERBS:
+            # No asset for it, but still a candidate decision.
+            out.append(Event(actor=actor, kind="act", verb=lem, target=target, obj=obj, obj_label=obj_label, phrase=phrase))
+        return out
+
+    def _second_person(self, phrase: str, actor: str | None) -> str:
+        """'his wand' said of the actor -> 'your wand' (for choice labels)."""
+        out = []
+        for w in phrase.split():
+            low = w.lower()
+            if low in ("his", "her", "its") and actor and self._pronoun(low) == actor:
+                out.append("your")
+            else:
+                out.append(w)
+        return " ".join(out)
 
     @staticmethod
     def _phrase(tok) -> str:
@@ -532,7 +594,9 @@ class _Reader:
 
 
 def hero_score(c: Character) -> float:
-    return c.mentions + 2 * c.actions
+    """The hero is who the story follows: named often, acting, and acted upon.
+    Whoever the story opens on gets a nudge."""
+    return c.mentions + 2 * c.actions + 1.5 * c.targeted + (3 if c.first_seen < 5 else 0)
 
 
 def analyze(paragraphs: list[str], catalog) -> Analysis:
@@ -557,12 +621,17 @@ def analyze(paragraphs: list[str], catalog) -> Analysis:
                 cid = det.resolve_name(tok)
                 if cid in chars:
                     chars[cid].mentions += 1
-    for ln in lines:
+    for i, ln in enumerate(lines):
         if ln.kind == "say" and ln.speaker in chars:
             chars[ln.speaker].mentions += 0.5
         for e in ln.events:
-            if e.actor in chars and e.kind in ("move", "anim", "act"):
+            if e.actor in chars and e.kind in ("action", "move", "act"):
                 chars[e.actor].actions += 1
+            if e.target in chars and e.kind == "action":
+                chars[e.target].targeted += 1
+        for cid, c in chars.items():
+            if c.first_seen > i and (ln.speaker == cid or any(e.actor == cid for e in ln.events) or (ln.kind == "narrate" and re.search(rf"\b{re.escape(c.name.split()[-1])}\b", ln.text))):
+                c.first_seen = i
     humans = [c for c in chars.values() if c.kind == "human"]
     protagonist = max(humans, key=hero_score).id if humans else None
     return Analysis(characters=chars, lines=lines, protagonist=protagonist)

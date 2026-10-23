@@ -1,0 +1,294 @@
+{
+  "$schema": "../../../story.schema.json",
+  "id": "common-room-the-common-room",
+  "title": "The Common Room",
+  "subtitle": "Common Room",
+  "start": "scene_1",
+  "actors": {
+    "malfoy": {
+      "name": "Malfoy",
+      "kind": "human",
+      "height": 1.45,
+      "robe": "#18181f",
+      "trim": "#1a472a",
+      "skin": "#f0d8c8",
+      "hair": "#e8dca0",
+      "hairStyle": "short",
+      "eyes": "#8a9aa8",
+      "glasses": "none",
+      "beard": "none",
+      "outfit": "student",
+      "hat": "none",
+      "scar": false,
+      "voice": 1.05,
+      "subtitleColor": "#b8d8b8"
+    },
+    "ron": {
+      "name": "Ron",
+      "kind": "human",
+      "height": 1.53,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#ecbb9a",
+      "hair": "#c2501e",
+      "hairStyle": "ginger_mop",
+      "eyes": "#4a7ab0",
+      "glasses": "none",
+      "beard": "none",
+      "outfit": "student",
+      "hat": "none",
+      "scar": false,
+      "voice": 0.95,
+      "subtitleColor": "#ff9a6a"
+    },
+    "hermione": {
+      "name": "Hermione",
+      "kind": "human",
+      "height": 1.42,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#dca47e",
+      "hair": "#5a3418",
+      "hairStyle": "bushy",
+      "eyes": "#6a4a2a",
+      "glasses": "none",
+      "beard": "none",
+      "outfit": "student",
+      "hat": "none",
+      "scar": false,
+      "voice": 1.4,
+      "subtitleColor": "#c9a8ff"
+    },
+    "harry": {
+      "name": "Harry",
+      "kind": "human",
+      "height": 1.45,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#e3b08c",
+      "hair": "#120d08",
+      "hairStyle": "messy",
+      "eyes": "#2e7d32",
+      "glasses": "round",
+      "beard": "none",
+      "outfit": "student",
+      "hat": "none",
+      "scar": true,
+      "voice": 1.15,
+      "subtitleColor": "#f3d27a"
+    }
+  },
+  "scenes": {
+    "scene_1_wrong": {
+      "location": "common_room",
+      "cast": {
+        "hermione": "auto_3",
+        "malfoy": "auto_4",
+        "ron": "auto_2",
+        "harry": "auto_1"
+      },
+      "beats": [
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 500
+        },
+        {
+          "act": "back_away",
+          "actor": "harry",
+          "target": "malfoy"
+        },
+        {
+          "narrate": "Harry backs away from Malfoy."
+        },
+        {
+          "anim": "harry",
+          "clip": "shake"
+        },
+        {
+          "narrate": "The moment slips away, and it cannot be taken back."
+        },
+        {
+          "fx": "fade_out",
+          "ms": 1500
+        }
+      ],
+      "ending": {
+        "kind": "failure",
+        "title": "The Other Path",
+        "text": "In the book, Harry chose to go to Malfoy. Choosing to back away from Malfoy ended the story here."
+      }
+    },
+    "scene_1": {
+      "location": "common_room",
+      "cast": {
+        "harry": "auto_1",
+        "malfoy": "auto_4"
+      },
+      "beats": [
+        {
+          "camera": "wide",
+          "ms": 0
+        },
+        {
+          "music": "mystery"
+        },
+        {
+          "narrate": "Harry sat in an armchair by the window."
+        },
+        {
+          "spawn": "ron",
+          "at": "auto_entry"
+        },
+        {
+          "move": "ron",
+          "to": "auto_2",
+          "async": true
+        },
+        {
+          "camera": "medium",
+          "on": "ron",
+          "ms": 700
+        },
+        {
+          "act": "approach",
+          "actor": "ron",
+          "target": "harry"
+        },
+        {
+          "act": "pat",
+          "actor": "ron",
+          "target": "harry"
+        },
+        {
+          "narrate": "Ron walks over to Harry. Ron gives Harry a pat."
+        },
+        {
+          "spawn": "hermione",
+          "at": "auto_entry"
+        },
+        {
+          "move": "hermione",
+          "to": "auto_3",
+          "async": true
+        },
+        {
+          "camera": "medium",
+          "on": "hermione",
+          "ms": 700
+        },
+        {
+          "act": "hug",
+          "actor": "hermione",
+          "target": "harry"
+        },
+        {
+          "narrate": "Hermione hugs Harry."
+        },
+        {
+          "narrate": "Malfoy pushed through the portrait hole, smirking."
+        },
+        {
+          "camera": "medium",
+          "on": "malfoy",
+          "ms": 700
+        },
+        {
+          "act": "approach",
+          "actor": "malfoy",
+          "target": "harry"
+        },
+        {
+          "act": "shove",
+          "actor": "malfoy",
+          "target": "harry"
+        },
+        {
+          "narrate": "Malfoy walks over to Harry. Malfoy shoves Harry away."
+        },
+        {
+          "look": "malfoy",
+          "at": "hermione"
+        },
+        {
+          "camera": "close",
+          "on": "malfoy",
+          "ms": 500
+        },
+        {
+          "say": "malfoy",
+          "text": "Nice flying, Potter,",
+          "mood": "angry"
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 600
+        }
+      ],
+      "title": "The Gryffindor Common Room",
+      "choice": {
+        "prompt": "What should Harry do?",
+        "seconds": 10,
+        "options": [
+          {
+            "label": "Go to Malfoy",
+            "correct": true,
+            "goto": "scene_2"
+          },
+          {
+            "label": "Back away from Malfoy",
+            "correct": false,
+            "goto": "scene_1_wrong"
+          }
+        ]
+      }
+    },
+    "scene_2": {
+      "location": "common_room",
+      "cast": {
+        "harry": "auto_1",
+        "hermione": "auto_2",
+        "malfoy": "auto_3",
+        "ron": "auto_4"
+      },
+      "beats": [
+        {
+          "camera": "medium",
+          "on": "harry",
+          "ms": 700
+        },
+        {
+          "act": "approach",
+          "actor": "harry",
+          "target": "malfoy"
+        },
+        {
+          "narrate": "Harry walks over to Malfoy."
+        },
+        {
+          "camera": "medium",
+          "on": "malfoy",
+          "ms": 700
+        },
+        {
+          "act": "back_away",
+          "actor": "malfoy",
+          "target": "harry"
+        },
+        {
+          "act": "flee",
+          "actor": "malfoy"
+        },
+        {
+          "narrate": "Malfoy backs away from Harry. Malfoy runs away."
+        }
+      ],
+      "ending": {
+        "kind": "victory",
+        "title": "The Common Room",
+        "text": "You followed Harry through “The Common Room” the way the book tells it."
+      }
+    }
+  }
+}

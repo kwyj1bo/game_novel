@@ -62,6 +62,8 @@ The validator (`web/src/engine/story/validate.ts`) enforces the game design:
 
 The engine checks the story when it starts and refuses to run an invalid story.
 
+An `act` beat (`{"act": "pat", "actor": "ron", "target": "harry"}`) performs an action asset. The engine expands it into the asset's steps, and the validator checks the expanded steps too.
+
 ### Main parts
 
 | Folder | Contents |
@@ -88,7 +90,7 @@ A retry rebuilds the room without delay: the runtime replays the scenes since th
 | `sceneries` | An id, a title, the keywords that place a scene there, and one way to build it: `preset` (a room, hall, tavern, forest, street, shore and 14 more types, with size, time of day, colours and props), `model` (a glTF file; empties named `mark_<name>` become marks), or `code` (one of the hand-built rooms). |
 | `characters` | Every name the text may use ("Harry", "Harry Potter", "Potter") and the look: height, robe, skin, hair style, glasses, beard, hat. |
 | `creatures` | The words for it ("troll") and its look. |
-| `actions` | An animation clip and the verbs that trigger it. Some need an object: "raise" + "wand" = cast. |
+| `actions` | A piece of choreography with parameters (`actor`, `target`, `object`). It has the verbs that trigger it, steps (story beats where `$actor`, `$target` and `$object` stand for the parameters), a narration template, a choice label, its `opposite` action, and whether it is a `decision` (opening a door is; falling is not). For example, `pat(actor, target)` walks the actor to the target, turns them to face each other, plays the pat and the target's nod. Its opposite is `shove`. |
 | `sounds` | A sound and the words that trigger it. |
 | `defaults.scenery` | Where a chapter goes when no keyword matches. |
 
@@ -103,10 +105,10 @@ The steps are:
 1. **Text:** split the file into chapters and paragraphs (`text.py`).
 2. **Characters:** find names, merge variants ("Professor McGonagall", "McGonagall"), match each person to a manifest character by any of its names ("Mr. Dursley" and "Uncle Vernon" are one asset), detect creatures and unnamed speakers ("the innkeeper"), and work out genders from honorifics and subject pronouns. Names of places ("Gringotts") are not people.
 3. **Dialogue:** pull out quotes, attribute each one to a speaker from tags such as "said Ron" or "she whispered", and set the mood from the speech verb.
-4. **Actions:** map verbs to engine actions through the dependency parse: moves, animations, sounds and spells. Actions that did not happen ("did not run", "before he went") are ignored. Pronouns are resolved to the most recent character of the right gender.
+4. **Actions:** match each verb to an action asset and fill its parameters from the dependency parse. "Ron walked up to Harry and patted him on the head" becomes `approach(ron, harry)` then `pat(ron, harry)`. Sounds and spells are found too. Actions that did not happen ("did not run", "before he went") are ignored. Pronouns are resolved to the most recent character of the right gender.
 5. **Scenes:** start a new scene at a scene break, a time jump, or a change of location. Locations come from keyword matches in narration, using the keywords each location declares.
-6. **Event chain:** reduce the chapter to its important events. Each paragraph is a candidate. It scores for involving the hero, real actions, decisions, tension, a sudden rise in tension, spells, creatures, sounds, a character's first appearance, a change of location, closeness to the climax, leading straight into a choice or a turn, and TextRank centrality (how many words it shares with the rest of the chapter). Scene openings, choices and the last paragraph are always kept. At most half the paragraphs survive, and never more than 14. The events form a chain: each one names the next. An event shows its key sentence, the lines with actions, and at most two lines of dialogue. Only the chain is played.
-7. **Choices:** the hero is the character the whole book follows (most named in narration, actions count double). Score the hero's decisive actions by tension, verb and position. Pick up to three. The correct option is what the hero did. The wrong option is its direct opposite ("Unlock the door" against "Leave the door locked"). A wrong choice plays its consequence and ends the run, and the ending says what the hero did in the book.
+6. **Event chain:** reduce the chapter to its important events. Each paragraph is a candidate. It scores for involving the hero, real actions, decisions, tension, a sudden rise in tension, spells, creatures, sounds, a character's first appearance, a change of location, closeness to the climax, leading straight into a choice or a turn, and TextRank centrality (how many words it shares with the rest of the chapter). Scene openings, choices and the last paragraph are always kept. At most half the paragraphs survive, and never more than 14. The events form a chain: each one names the next. An event shows its key lines and at most two lines of dialogue. Only the chain is played. Narration is written from the actions ("Ron walks over to Harry. Ron gives Harry a pat."), not copied from the book. The book's sentence is used, shortened, only when no action matched.
+7. **Choices:** the hero is the character the whole book follows (most named in narration, actions count double). Score the hero's decisions by tension, verb and position. When the action asset has an opposite, both options are actions: picking one plays that action. Pick up to three. The correct option is what the hero did. The wrong option is its direct opposite ("Open the door" against "Keep the door shut"). A wrong choice acts out the opposite action, plays its consequence and ends the run. The ending says what the hero did in the book.
 8. **Story:** stage the cast on each location's generic `auto_*` marks, add camera shots, and write story JSON that the engine validator accepts.
 
 ### Run it

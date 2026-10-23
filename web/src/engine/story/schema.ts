@@ -23,6 +23,12 @@ export const ANIM_CLIPS = [
   "laugh",
   "unwrap",
   "crumble",
+  // two-person interactions
+  "pat",
+  "hug",
+  "push",
+  "stagger",
+  "give",
   // creature clips
   "sleep",
   "wake",
@@ -93,6 +99,8 @@ const MusicBeat = z.object({ music: z.string() });
 const PropBeat = z.object({ prop: z.string(), state: z.string() });
 const SpawnBeat = z.object({ spawn: z.string(), at: Target });
 const DespawnBeat = z.object({ despawn: z.string() });
+// Performs an action asset from the manifest with its parameters.
+const ActBeat = z.object({ act: z.string(), actor: z.string(), target: z.string().optional(), object: z.string().optional() });
 
 export type Beat =
   | z.infer<typeof SayBeat>
@@ -108,6 +116,7 @@ export type Beat =
   | z.infer<typeof PropBeat>
   | z.infer<typeof SpawnBeat>
   | z.infer<typeof DespawnBeat>
+  | z.infer<typeof ActBeat>
   | { together: Beat[] };
 
 export const BeatSchema: z.ZodType<Beat> = z.lazy(() =>
@@ -125,6 +134,7 @@ export const BeatSchema: z.ZodType<Beat> = z.lazy(() =>
     PropBeat.strict(),
     SpawnBeat.strict(),
     DespawnBeat.strict(),
+    ActBeat.strict(),
     z.object({ together: z.array(BeatSchema).min(1) }).strict(),
   ]),
 );
@@ -235,5 +245,6 @@ const BEAT_KEYS = new Set([
   "prop",
   "spawn",
   "despawn",
+  "act",
   "together",
 ]);

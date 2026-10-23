@@ -1,3 +1,4 @@
+import type { ActionRegistry } from "./actions";
 import { Aborted, Director } from "./Director";
 import type { Hud, Stage } from "./ports";
 import type { ChoiceOption, Ending, Story } from "./schema";
@@ -23,8 +24,9 @@ export class StoryRuntime {
     private readonly story: Story,
     stage: Stage,
     private readonly hud: Hud,
+    actions: ActionRegistry = {},
   ) {
-    this.director = new Director(story, stage, hud);
+    this.director = new Director(story, stage, hud, actions);
   }
 
   on(fn: (e: RuntimeEvent) => void): () => void {

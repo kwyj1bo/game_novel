@@ -1,6 +1,7 @@
 import { AudioEngine } from "./audio/AudioEngine";
 import { Renderer } from "./render/Renderer";
 import { StoryRuntime, type RuntimeEvent } from "./story/StoryRuntime";
+import type { ActionRegistry } from "./story/actions";
 import { StorySchema, type Story } from "./story/schema";
 import { validateStory, type LocationRegistryInfo } from "./story/validate";
 import { DomHud } from "./ui/Hud";
@@ -31,6 +32,8 @@ export interface EngineOptions {
   uploadUrl?: string;
   // Endpoint listing books built so far; their chapters join the menu.
   libraryUrl?: string;
+  // Action assets ("act" beats expand from these).
+  actions?: ActionRegistry;
 }
 
 interface LibraryBook {
@@ -92,7 +95,7 @@ export class Engine {
     const info = (this.locationInfo = Object.fromEntries(Object.entries(opts.locations).map(([id, d]) => [id, d.info])));
     for (const { story } of opts.chapters) {
       if (!story) continue;
-      const issues = validateStory(story, info);
+      const issues = validateStory(story, info, opts.actions);
       if (issues.length) {
         throw new Error(`story "${story.id}" is invalid:\n` + issues.map((i) => `  ${i.scene ?? "-"}: ${i.message}`).join("\n"));
       }
@@ -160,7 +163,7 @@ export class Engine {
   private check(raw: unknown): Story | null {
     const parsed = StorySchema.safeParse(raw);
     if (!parsed.success) return null;
-    const issues = validateStory(parsed.data, this.locationInfo);
+    const issues = validateStory(parsed.data, this.locationInfo, this.opts.actions);
     if (issues.length) {
       console.warn(`story ${parsed.data.id} skipped:`, issues);
       return null;
@@ -199,7 +202,7 @@ export class Engine {
   private makeRuntime(story: Story, key = story.id): StoryRuntime {
     this.story = story;
     this.events = [];
-    const rt = new StoryRuntime(story, this.stage, this.hud);
+    const rt = new StoryRuntime(story, this.stage, this.hud, this.opts.actions);
     rt.on((e) => {
       this.events.push(e);
       const progress = loadProgress();

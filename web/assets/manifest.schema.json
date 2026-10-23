@@ -461,32 +461,8 @@
       "items": {
         "type": "object",
         "properties": {
-          "clip": {
-            "type": "string",
-            "enum": [
-              "idle",
-              "wave",
-              "point",
-              "cast",
-              "nod",
-              "shake",
-              "cower",
-              "fall",
-              "kneel",
-              "jump",
-              "struggle",
-              "reach",
-              "drink",
-              "celebrate",
-              "play_flute",
-              "laugh",
-              "unwrap",
-              "crumble",
-              "sleep",
-              "wake",
-              "lunge",
-              "roar"
-            ]
+          "id": {
+            "type": "string"
           },
           "verbs": {
             "default": [],
@@ -504,10 +480,45 @@
             "additionalProperties": {
               "type": "string"
             }
+          },
+          "params": {
+            "default": [
+              "actor"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "actor",
+                "target",
+                "object"
+              ]
+            }
+          },
+          "steps": {
+            "minItems": 1,
+            "type": "array",
+            "items": {}
+          },
+          "text": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "opposite": {
+            "type": "string"
+          },
+          "decision": {
+            "default": false,
+            "type": "boolean"
           }
         },
         "required": [
-          "clip"
+          "id",
+          "steps",
+          "text",
+          "label"
         ],
         "additionalProperties": false
       }

@@ -5,16 +5,23 @@
   "subtitle": "Hp Book",
   "start": "scene_1",
   "actors": {
-    "goblin": {
-      "name": "The Goblin",
-      "height": 1.59,
-      "robe": "#22262e",
-      "skin": "#e3b08c",
-      "hair": "#d8c080",
+    "hagrid": {
+      "name": "Hagrid",
+      "kind": "human",
+      "height": 2.6,
+      "robe": "#4a3626",
+      "trim": "#3a2a1a",
+      "skin": "#d8a888",
+      "hair": "#24160c",
       "hairStyle": "messy",
+      "eyes": "#1a1a1a",
+      "glasses": "none",
+      "beard": "short",
       "outfit": "adult",
-      "voice": 0.95,
-      "subtitleColor": "#e0e0e0"
+      "hat": "none",
+      "scar": false,
+      "voice": 0.7,
+      "subtitleColor": "#e8b878"
     },
     "harry": {
       "name": "Harry",
@@ -34,23 +41,16 @@
       "voice": 1.15,
       "subtitleColor": "#f3d27a"
     },
-    "hagrid": {
-      "name": "Hagrid",
-      "kind": "human",
-      "height": 2.6,
-      "robe": "#4a3626",
-      "trim": "#3a2a1a",
-      "skin": "#d8a888",
-      "hair": "#24160c",
+    "goblin": {
+      "name": "The Goblin",
+      "height": 1.59,
+      "robe": "#22262e",
+      "skin": "#e3b08c",
+      "hair": "#d8c080",
       "hairStyle": "messy",
-      "eyes": "#1a1a1a",
-      "glasses": "none",
-      "beard": "short",
       "outfit": "adult",
-      "hat": "none",
-      "scar": false,
-      "voice": 0.7,
-      "subtitleColor": "#e8b878"
+      "voice": 0.95,
+      "subtitleColor": "#e0e0e0"
     }
   },
   "scenes": {
@@ -70,6 +70,26 @@
         },
         {
           "narrate": "Hagrid led Harry through the crowded alley."
+        },
+        {
+          "look": "hagrid",
+          "at": "harry"
+        },
+        {
+          "camera": "close",
+          "on": "hagrid",
+          "ms": 500
+        },
+        {
+          "act": "laugh",
+          "actor": "hagrid"
+        },
+        {
+          "say": "hagrid",
+          "text": "Welcome to Diagon Alley,"
+        },
+        {
+          "narrate": "Harry stared at everything."
         }
       ],
       "title": "Diagon Alley",
@@ -78,8 +98,8 @@
     "scene_2_wrong": {
       "location": "gringotts",
       "cast": {
-        "harry": "auto_1",
         "hagrid": "auto_2",
+        "harry": "auto_1",
         "goblin": "auto_3"
       },
       "beats": [
@@ -89,7 +109,12 @@
           "ms": 500
         },
         {
-          "narrate": "Harry hesitates — and chooses to refuse the key."
+          "act": "leave_it",
+          "actor": "harry",
+          "object": "the key"
+        },
+        {
+          "narrate": "Harry leaves the key."
         },
         {
           "anim": "harry",
@@ -106,7 +131,7 @@
       "ending": {
         "kind": "failure",
         "title": "A Different Ending",
-        "text": "In the book, Harry chose to take the key from Hagrid. Choosing to refuse the key ended the story here."
+        "text": "In the book, Harry chose to grab the key. Choosing to leave the key ended the story here."
       }
     },
     "scene_2": {
@@ -130,14 +155,19 @@
           "ms": 700
         },
         {
-          "narrate": "Harry followed Hagrid up the steps and into Gringotts."
+          "act": "approach",
+          "actor": "harry",
+          "target": "hagrid"
+        },
+        {
+          "narrate": "Harry walks over to Hagrid."
         },
         {
           "narrate": "A goblin peered down at them."
         },
         {
           "look": "goblin",
-          "at": "harry"
+          "at": "hagrid"
         },
         {
           "camera": "close",
@@ -160,12 +190,12 @@
         "seconds": 10,
         "options": [
           {
-            "label": "Take the key from Hagrid",
+            "label": "Grab the key",
             "correct": true,
             "goto": "scene_3"
           },
           {
-            "label": "Refuse the key",
+            "label": "Leave the key",
             "correct": false,
             "goto": "scene_2_wrong"
           }
@@ -186,17 +216,17 @@
           "ms": 700
         },
         {
-          "anim": "harry",
-          "clip": "reach",
-          "async": true
+          "act": "take",
+          "actor": "harry",
+          "object": "the key"
         },
         {
-          "anim": "harry",
-          "clip": "reach",
-          "async": true
+          "act": "hold_on",
+          "actor": "harry",
+          "object": "it"
         },
         {
-          "narrate": "Harry took the key from Hagrid and held it up."
+          "narrate": "Harry grabs the key. Harry keeps hold of it."
         },
         {
           "camera": "medium",
@@ -204,16 +234,15 @@
           "ms": 700
         },
         {
-          "anim": "goblin",
-          "clip": "nod",
-          "async": true
+          "act": "nod",
+          "actor": "goblin"
         },
         {
-          "narrate": "The goblin nodded slowly."
+          "narrate": "The goblin nods."
         },
         {
           "look": "goblin",
-          "at": "harry"
+          "at": "hagrid"
         },
         {
           "camera": "close",

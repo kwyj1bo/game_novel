@@ -48,6 +48,11 @@ const CLIP_SECONDS: Partial<Record<AnimClip, number>> = {
   unwrap: 2.2,
   crumble: 3.0,
   sleep: 1.4,
+  pat: 1.6,
+  hug: 2.0,
+  push: 0.9,
+  stagger: 1.1,
+  give: 1.5,
 };
 
 const TMP = new THREE.Vector3();
@@ -664,6 +669,31 @@ export class Human extends Actor {
           lElbowX: -0.9,
           rElbowX: -0.9,
         });
+        break;
+      case "pat": {
+        // Right hand out and down onto a shoulder, a few small pats.
+        const taps = u > 0.3 && u < 0.85 ? Math.sin((u - 0.3) * Math.PI * 10) * 0.15 : 0;
+        set({ rShoulderX: -1.25 + taps, rShoulderZ: 0.15, rElbowX: -0.55 - taps, spineX: 0.1, neckX: 0.15 });
+        break;
+      }
+      case "hug":
+        set({ lShoulderX: -1.4, rShoulderX: -1.4, lShoulderZ: -0.55, rShoulderZ: 0.55, lElbowX: -1.0, rElbowX: -1.0, spineX: 0.18, neckX: 0.1 });
+        break;
+      case "push": {
+        // Both palms thrust forward hard.
+        const thrust = smoothstep((u - 0.15) / 0.2);
+        set({ lShoulderX: -1.5 * thrust, rShoulderX: -1.5 * thrust, lElbowX: lerp(-1.6, -0.1, thrust), rElbowX: lerp(-1.6, -0.1, thrust), spineX: 0.3 * thrust });
+        break;
+      }
+      case "stagger": {
+        // Knocked back: lean away, arms flung out, then recover.
+        const hit = Math.sin(clamp(u / 0.7, 0, 1) * Math.PI);
+        set({ spineX: -0.45 * hit, neckX: -0.3 * hit, lShoulderZ: 1.1 * hit, rShoulderZ: -1.1 * hit, lHipX: 0.3 * hit, rHipX: -0.4 * hit, bodyY: -0.02 * k * hit });
+        break;
+      }
+      case "give":
+        // Right hand held out, palm up, at chest height.
+        set({ rShoulderX: -1.1, rShoulderZ: 0.1, rElbowX: -0.7, spineX: 0.08 });
         break;
       case "unwrap":
         set({ lShoulderX: -2.7, rShoulderX: -2.7, lElbowX: -1.6, rElbowX: -1.6, lShoulderZ: 0.3, rShoulderZ: -0.3, neckX: 0.35 }, hold ? envelope(u, 0.15, 0.25) : w);

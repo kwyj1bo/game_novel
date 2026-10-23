@@ -1,3 +1,4 @@
+import { expandAction, type ActionRegistry } from "./actions";
 import type { Beat, Scene, Story } from "./schema";
 import type { Hud, Stage } from "./ports";
 
@@ -17,6 +18,7 @@ export class Director {
     private readonly story: Story,
     private readonly stage: Stage,
     private readonly hud: Hud,
+    private readonly actions: ActionRegistry = {},
   ) {}
 
   // Invalidates any scene currently playing; its next beat throws Aborted.
@@ -57,6 +59,12 @@ export class Director {
     const s = this.stage;
     if ("together" in beat) {
       await Promise.all(beat.together.map((b) => this.play(b, instant)));
+      return;
+    }
+    if ("act" in beat) {
+      const def = this.actions[beat.act];
+      if (!def) throw new Error(`unknown action "${beat.act}"`);
+      for (const step of expandAction(def, beat)) await this.play(step, instant);
       return;
     }
     if ("say" in beat) {
