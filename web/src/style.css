@@ -305,6 +305,10 @@ canvas.view {
 }
 .title-screen {
   background: radial-gradient(ellipse at 50% 45%, rgba(10, 8, 4, 0.35), rgba(0, 0, 0, 0.88) 80%);
+  /* A long library scrolls; "safe" keeps the top reachable when it overflows. */
+  justify-content: safe center;
+  overflow-y: auto;
+  padding: 48px 24px;
 }
 .screen .eyebrow {
   font-family: var(--display);
