@@ -8,6 +8,7 @@ from fastapi import APIRouter, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 
 from pipeline.__main__ import book_hero, build_chapter, chain_json, load_catalog
+from pipeline.analyze import analyze
 from pipeline.text import load_chapters
 
 router = APIRouter()
@@ -72,10 +73,11 @@ async def build(file: UploadFile = File(...)):
     source = Path(file.filename or "Novel").stem.replace("_", " ").replace("-", " ").title()
     stories, skipped = [], []
     chapters = chapters[:MAX_CHAPTERS]
-    hero = book_hero(chapters, catalog)
-    for ch in chapters:
+    analyses = [analyze(ch.paragraphs, catalog) for ch in chapters]
+    hero = book_hero(analyses)
+    for ch, a in zip(chapters, analyses):
         try:
-            story, _, _, _, chain = build_chapter(ch, catalog, source, hero)
+            story, _, _, _, chain = build_chapter(ch, catalog, source, hero, a)
             stories.append({"heading": ch.heading, "story": story, "events": chain_json(chain)})
         except Exception as e:  # one bad chapter should not sink the book
             skipped.append({"heading": ch.heading, "error": str(e)})

@@ -55,50 +55,82 @@ def _location_hits(text: str, catalog) -> dict[str, int]:
     return hits
 
 
+MIN_SCENE = 6  # paragraphs; shorter detours merge into their neighbours
+ARRIVAL_RE = r"\b(into|entered|enter|reached|arrived (?:at|in)|inside|back to|out (?:of|into))\b[\w' ,-]{0,40}?\b"
+
+
 def segment(paragraphs: list[str], lines: list[Line], catalog) -> list[Scene]:
+    """Splits a chapter into scenes by location. Real chapters mention places
+    in passing ("a lesson", "the kitchen"), so a move needs evidence: a scene
+    break or time jump, an arrival phrase ("into the Great Hall"), or the new
+    place staying in the narration for the next few paragraphs."""
     fallback = catalog.get("defaultScenery") or next(iter(catalog["locations"]))
     hits = [_location_hits(p, catalog) for p in paragraphs]
-    opening: dict[str, int] = {}
-    for h in hits[:4]:
-        for k, v in h.items():
-            opening[k] = opening.get(k, 0) + v
-    current = max(opening, key=opening.get) if opening else fallback
+    order = {lid: i for i, lid in enumerate(catalog["locations"])}
 
+    def top_of(window: list[dict[str, int]]) -> tuple[str | None, int, int]:
+        """Best location over some paragraphs: (id, total hits, paragraphs it appears in).
+        Ties go to the scenery listed first in the manifest."""
+        total: dict[str, int] = {}
+        seen: dict[str, int] = {}
+        for h in window:
+            for k, v in h.items():
+                total[k] = total.get(k, 0) + v
+                seen[k] = seen.get(k, 0) + 1
+        if not total:
+            return None, 0, 0
+        best = max(total, key=lambda k: (total[k], -order[k]))
+        return best, total[best], seen[best]
+
+    # Where the chapter opens: the first paragraphs that name a place.
+    current = top_of(hits[:3])[0] or top_of(hits[:10])[0] or fallback
     starts: dict[int, str] = {0: current}
+    last_start = 0
     for i, p in enumerate(paragraphs):
         if i == 0:
             continue
         low = p.lower().strip()
+        is_break = p.strip() in L.SCENE_SEPARATORS or low.startswith(L.TIME_MARKERS)
+        top, n, _ = top_of([hits[i]])
         new_loc = None
-        h = hits[i]
-        top = max(h, key=h.get) if h else None
-        if p.strip() in L.SCENE_SEPARATORS or low.startswith(L.TIME_MARKERS):
-            new_loc = top or current
-        elif top and top != current and (h[top] >= 2 or re.search(rf"\binto the [\w' ]*\b({'|'.join(catalog['locations'][top]['keywords'])})", low)):
-            new_loc = top
-        if new_loc is not None:
+        if is_break:
+            ahead = hits[i + 1 : i + 5] if p.strip() in L.SCENE_SEPARATORS else hits[i : i + 4]
+            new_loc = top_of(ahead)[0] or current
+        elif top and top != current:
+            kws = "|".join(re.escape(k.lower()) for k in catalog["locations"][top]["keywords"])
+            arrival = re.search(ARRIVAL_RE + rf"({kws})s?\b", re.sub(r"[“\"][^”\"]*[”\"]", " ", low))
+            w_top, w_n, w_paras = top_of(hits[i : i + 4])
+            here = sum(h.get(current, 0) for h in hits[i : i + 4])
+            sustained = w_top == top and w_n >= 3 and w_paras >= 2 and w_n > here
+            if (arrival or sustained) and (i - last_start >= MIN_SCENE or arrival):
+                new_loc = top
+        if new_loc is not None and new_loc != current or is_break:
             target = i + 1 if p.strip() in L.SCENE_SEPARATORS else i
-            # A separator's location is decided by what follows it.
-            if p.strip() in L.SCENE_SEPARATORS and target < len(hits) and hits[target]:
-                new_loc = max(hits[target], key=hits[target].get)
-            starts[target] = new_loc
-            current = new_loc
+            starts[target] = new_loc or current
+            current = new_loc or current
+            last_start = target
 
     scenes: list[Scene] = []
     by_para: dict[int, list[Line]] = {}
     for ln in lines:
         by_para.setdefault(ln.para, []).append(ln)
-    loc = starts[0]
-    scene = Scene(location=loc)
+    scene = Scene(location=starts[0])
     for i in range(len(paragraphs)):
-        if i in starts and i != 0:
+        if i in starts and i != 0 and starts[i] != scene.location:
             if scene.lines:
                 scenes.append(scene)
             scene = Scene(location=starts[i])
         scene.lines.extend(by_para.get(i, []))
     if scene.lines:
         scenes.append(scene)
-    return scenes
+    # Merge neighbours that ended up in the same place.
+    merged: list[Scene] = []
+    for sc in scenes:
+        if merged and merged[-1].location == sc.location:
+            merged[-1].lines.extend(sc.lines)
+        else:
+            merged.append(sc)
+    return merged
 
 
 # ---- moments and opposites -------------------------------------------------
