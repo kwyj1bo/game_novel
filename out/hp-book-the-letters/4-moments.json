@@ -1,0 +1,19 @@
+[
+  {
+    "line": 11,
+    "event": {
+      "actor": "harry",
+      "kind": "anim",
+      "verb": "grab",
+      "clip": "reach",
+      "run": false,
+      "target": null,
+      "sfx": null,
+      "phrase": "Grab the letter",
+      "obj": "the letter"
+    },
+    "correct": "Grab the letter",
+    "opposite": "Leave the letter",
+    "score": 2.23125
+  }
+]

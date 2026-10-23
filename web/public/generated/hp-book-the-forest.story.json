@@ -5,24 +5,6 @@
   "subtitle": "Hp Book",
   "start": "scene_1",
   "actors": {
-    "malfoy": {
-      "name": "Malfoy",
-      "kind": "human",
-      "height": 1.45,
-      "robe": "#18181f",
-      "trim": "#1a472a",
-      "skin": "#f0d8c8",
-      "hair": "#e8dca0",
-      "hairStyle": "short",
-      "eyes": "#8a9aa8",
-      "glasses": "none",
-      "beard": "none",
-      "outfit": "student",
-      "hat": "none",
-      "scar": false,
-      "voice": 1.05,
-      "subtitleColor": "#b8d8b8"
-    },
     "hound": {
       "name": "Hound",
       "kind": "dog3",
@@ -57,15 +39,33 @@
       "scar": true,
       "voice": 1.15,
       "subtitleColor": "#f3d27a"
+    },
+    "malfoy": {
+      "name": "Malfoy",
+      "kind": "human",
+      "height": 1.45,
+      "robe": "#18181f",
+      "trim": "#1a472a",
+      "skin": "#f0d8c8",
+      "hair": "#e8dca0",
+      "hairStyle": "short",
+      "eyes": "#8a9aa8",
+      "glasses": "none",
+      "beard": "none",
+      "outfit": "student",
+      "hat": "none",
+      "scar": false,
+      "voice": 1.05,
+      "subtitleColor": "#b8d8b8"
     }
   },
   "scenes": {
     "scene_1_wrong": {
       "location": "forbidden_forest",
       "cast": {
-        "malfoy": "auto_2",
         "hound": "auto_threat",
-        "harry": "auto_1"
+        "harry": "auto_1",
+        "malfoy": "auto_2"
       },
       "beats": [
         {

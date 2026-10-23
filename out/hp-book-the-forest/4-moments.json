@@ -1,0 +1,19 @@
+[
+  {
+    "line": 14,
+    "event": {
+      "actor": "harry",
+      "kind": "move",
+      "verb": "step",
+      "clip": null,
+      "run": false,
+      "target": "forward",
+      "sfx": null,
+      "phrase": "Step towards the clearing",
+      "obj": ""
+    },
+    "correct": "Step towards the clearing",
+    "opposite": "Hold back",
+    "score": 3.3909774436090228
+  }
+]

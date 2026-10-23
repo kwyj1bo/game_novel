@@ -1,0 +1,94 @@
+[
+  {
+    "id": "e1",
+    "next": "e2",
+    "location": "privet_drive",
+    "summary": "Uncle Vernon sat at the table behind his newspaper while Aunt Petunia fussed over Dudley.",
+    "characters": [
+      "vernon",
+      "dudley",
+      "petunia"
+    ],
+    "choice": false,
+    "score": 5.51,
+    "why": [
+      "introduces vernon, dudley, petunia",
+      "opens a scene",
+      "centrality 0.76"
+    ]
+  },
+  {
+    "id": "e2",
+    "next": "e3",
+    "location": "privet_drive",
+    "summary": "Harry walked to the front door and picked up the letters.",
+    "characters": [
+      "harry"
+    ],
+    "choice": false,
+    "score": 7.24,
+    "why": [
+      "hero",
+      "2 action(s)",
+      "hero decides",
+      "introduces harry",
+      "centrality 0.57"
+    ]
+  },
+  {
+    "id": "e3",
+    "next": "e4",
+    "location": "privet_drive",
+    "summary": "Dudley laughed and pointed at Harry.",
+    "characters": [
+      "dudley",
+      "harry"
+    ],
+    "choice": false,
+    "score": 4.54,
+    "why": [
+      "hero",
+      "1 action(s)",
+      "centrality 0.62",
+      "leads to a turn",
+      "sets up a choice"
+    ]
+  },
+  {
+    "id": "e4",
+    "next": "e5",
+    "location": "privet_drive",
+    "summary": "Harry grabbed the letter and held it behind his back.",
+    "characters": [
+      "harry",
+      "vernon"
+    ],
+    "choice": true,
+    "score": 7.4,
+    "why": [
+      "hero",
+      "3 action(s)",
+      "hero decides",
+      "centrality 1.00",
+      "choice"
+    ]
+  },
+  {
+    "id": "e5",
+    "next": null,
+    "location": "privet_drive",
+    "summary": "Harry stood in the kitchen doorway, shaking with anger.",
+    "characters": [
+      "harry"
+    ],
+    "choice": false,
+    "score": 6.2,
+    "why": [
+      "hero",
+      "1 action(s)",
+      "hero decides",
+      "climax",
+      "centrality 0.70"
+    ]
+  }
+]

@@ -1,0 +1,228 @@
+[
+  {
+    "kind": "narrate",
+    "text": "The kitchen at number four, Privet Drive, smelled of burnt toast.",
+    "para": 0,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Uncle Vernon sat at the table behind his newspaper while Aunt Petunia fussed over Dudley.",
+    "para": 0,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "A letter slid through the front door and landed on the mat.",
+    "para": 1,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "Get the post, boy,",
+    "para": 2,
+    "speaker": "vernon",
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Harry walked to the front door and picked up the letters.",
+    "para": 3,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": "harry",
+        "kind": "move",
+        "verb": "walk",
+        "clip": null,
+        "run": false,
+        "target": "forward",
+        "sfx": null,
+        "phrase": "Walk to the front door",
+        "obj": ""
+      },
+      {
+        "actor": "harry",
+        "kind": "anim",
+        "verb": "pick",
+        "clip": "reach",
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Pick up the letters",
+        "obj": "the letters"
+      }
+    ],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "One envelope was thick and heavy, and it was addressed to him in green ink.",
+    "para": 3,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "There's one for me,",
+    "para": 4,
+    "speaker": "harry",
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Mr. Dursley lowered his newspaper.",
+    "para": 5,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "His face turned purple.",
+    "para": 5,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "Give that here!",
+    "para": 5,
+    "speaker": "vernon",
+    "mood": "urgent",
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Dudley laughed and pointed at Harry.",
+    "para": 6,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": "dudley",
+        "kind": "anim",
+        "verb": "point",
+        "clip": "point",
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Point at Harry",
+        "obj": ""
+      }
+    ],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Harry grabbed the letter and held it behind his back.",
+    "para": 7,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": "harry",
+        "kind": "anim",
+        "verb": "grab",
+        "clip": "reach",
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Grab the letter",
+        "obj": "the letter"
+      },
+      {
+        "actor": "harry",
+        "kind": "anim",
+        "verb": "hold",
+        "clip": "reach",
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Hold it behind Vernon's back",
+        "obj": "it"
+      }
+    ],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Uncle Vernon lunged across the kitchen and snatched it out of his hand.",
+    "para": 7,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": "vernon",
+        "kind": "anim",
+        "verb": "snatch",
+        "clip": "reach",
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Snatch it out of your hand",
+        "obj": "it"
+      }
+    ],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "No one is writing to you,",
+    "para": 8,
+    "speaker": "harry",
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "Go to your cupboard.",
+    "para": 8,
+    "speaker": "harry",
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Harry stood in the kitchen doorway, shaking with anger.",
+    "para": 9,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": "harry",
+        "kind": "act",
+        "verb": "stand",
+        "clip": null,
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Stand in the kitchen doorway",
+        "obj": ""
+      }
+    ],
+    "danger": 0
+  }
+]

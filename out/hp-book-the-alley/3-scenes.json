@@ -1,0 +1,19 @@
+[
+  {
+    "location": "diagon_alley",
+    "lines": [
+      "Hagrid led Harry through the crowded alley."
+    ]
+  },
+  {
+    "location": "gringotts",
+    "lines": [
+      "Harry followed Hagrid up the steps and into Gringotts.",
+      "A goblin peered down at them.",
+      "And does Mr. Potter have his key?",
+      "Harry took the key from Hagrid and held it up.",
+      "The goblin nodded slowly.",
+      "Very well. Follow me."
+    ]
+  }
+]

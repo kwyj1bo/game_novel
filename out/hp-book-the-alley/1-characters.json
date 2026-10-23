@@ -1,0 +1,42 @@
+{
+  "harry": {
+    "id": "harry",
+    "name": "Harry",
+    "kind": "human",
+    "gender": "x",
+    "mentions": 4,
+    "aliases": [],
+    "asset": "harry",
+    "actions": 3
+  },
+  "hagrid": {
+    "id": "hagrid",
+    "name": "Hagrid",
+    "kind": "human",
+    "gender": "m",
+    "mentions": 8.0,
+    "aliases": [],
+    "asset": "hagrid",
+    "actions": 2
+  },
+  "witch": {
+    "id": "witch",
+    "name": "The Witch",
+    "kind": "human",
+    "gender": "x",
+    "mentions": 1,
+    "aliases": [],
+    "asset": null,
+    "actions": 0
+  },
+  "goblin": {
+    "id": "goblin",
+    "name": "The Goblin",
+    "kind": "human",
+    "gender": "x",
+    "mentions": 4.0,
+    "aliases": [],
+    "asset": null,
+    "actions": 1
+  }
+}
