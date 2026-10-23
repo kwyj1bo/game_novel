@@ -507,8 +507,16 @@ def _trim(text: str, limit: int = 240) -> str:
     return cut.rstrip(" ,;") + "…"
 
 
-def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str, source: str) -> tuple[dict, list[Scene], list[Moment]]:
+def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str, source: str):
+    """Scenes and choices come from the whole chapter; what the game shows is
+    only the event chain (the important events, in order)."""
+    from .events import build_chain
+
     scenes = segment(paragraphs, a.lines, catalog)
     moments = find_moments(a, scenes)
-    story = _Assembler(a, catalog, chapter_title, source).build(scenes, moments)
-    return story, scenes, moments
+    chain = build_chain(a, scenes, moments)
+    shown = {id(ln) for node in chain for ln in node.lines}
+    condensed = [Scene(location=sc.location, lines=[ln for ln in sc.lines if id(ln) in shown]) for sc in scenes]
+    condensed = [sc for sc in condensed if sc.lines]
+    story = _Assembler(a, catalog, chapter_title, source).build(condensed, moments)
+    return story, condensed, moments, chain

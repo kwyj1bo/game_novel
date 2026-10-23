@@ -30,8 +30,16 @@ def build_chapter(chapter, catalog, source: str, hero: str | None = None):
     a = analyze(chapter.paragraphs, catalog)
     if hero and hero in a.characters:
         a.protagonist = hero
-    story, scenes, moments = build_story(chapter.paragraphs, a, catalog, chapter.title, source)
-    return story, a, scenes, moments
+    story, scenes, moments, chain = build_story(chapter.paragraphs, a, catalog, chapter.title, source)
+    return story, a, scenes, moments, chain
+
+
+def chain_json(chain) -> list[dict]:
+    """The event chain as data: each event names the next one."""
+    return [
+        {"id": n.id, "next": n.next, "location": n.location, "summary": n.summary, "characters": n.characters, "choice": n.choice, "score": n.score, "why": n.reasons}
+        for n in chain
+    ]
 
 
 def book_hero(chapters, catalog) -> str | None:
@@ -84,10 +92,11 @@ def main(argv=None) -> int:
     # The hero is decided from the whole book, even when building one chapter.
     hero = book_hero(chapters, catalog)
     for ch in picked:
-        story, a, scenes, moments = build_chapter(ch, catalog, source, hero)
+        story, a, scenes, moments, chain = build_chapter(ch, catalog, source, hero)
         path = args.out / f"{story['id']}.story.json"
         path.write_text(json.dumps(story, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-        print(f"{path}: {len(story['scenes'])} scenes, {len(moments)} choices, hero {a.protagonist}")
+        total = len({ln.para for ln in a.lines})
+        print(f"{path}: {len(chain)} of {total} paragraphs kept as events, {len(moments)} choices, hero {a.protagonist}")
         for m in moments:
             print(f"  choice: [{m.correct}] vs [{m.opposite}]")
         if args.debug:
@@ -98,6 +107,7 @@ def main(argv=None) -> int:
             (d / "2-lines.json").write_text(dump([dataclasses.asdict(ln) for ln in a.lines]))
             (d / "3-scenes.json").write_text(dump([{"location": s.location, "lines": [ln.text for ln in s.lines]} for s in scenes]))
             (d / "4-moments.json").write_text(dump([dataclasses.asdict(m) for m in moments]))
+            (d / "5-event-chain.json").write_text(dump(chain_json(chain)))
         if args.validate:
             ok = validate(path) and ok
     return 0 if ok else 1

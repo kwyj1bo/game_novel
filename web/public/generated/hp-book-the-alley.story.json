@@ -51,17 +51,6 @@
       "scar": false,
       "voice": 0.7,
       "subtitleColor": "#e8b878"
-    },
-    "witch": {
-      "name": "The Witch",
-      "height": 1.52,
-      "robe": "#3a3044",
-      "skin": "#e3b08c",
-      "hair": "#c2501e",
-      "hairStyle": "messy",
-      "outfit": "adult",
-      "voice": 0.95,
-      "subtitleColor": "#f3d27a"
     }
   },
   "scenes": {
@@ -69,8 +58,7 @@
       "location": "diagon_alley",
       "cast": {
         "harry": "auto_1",
-        "hagrid": "auto_2",
-        "witch": "auto_3"
+        "hagrid": "auto_2"
       },
       "beats": [
         {
@@ -82,68 +70,6 @@
         },
         {
           "narrate": "Hagrid led Harry through the crowded alley."
-        },
-        {
-          "narrate": "Shop windows glittered on both sides of the cobbled street, full of cauldrons, owls and broomsticks."
-        },
-        {
-          "look": "hagrid",
-          "at": "harry"
-        },
-        {
-          "camera": "close",
-          "on": "hagrid",
-          "ms": 500
-        },
-        {
-          "say": "hagrid",
-          "text": "Welcome to Diagon Alley,"
-        },
-        {
-          "narrate": "said Hagrid, grinning down at him."
-        },
-        {
-          "narrate": "Harry stared at everything."
-        },
-        {
-          "narrate": "A witch was selling dragon livers from a stall, and a crowd of boys pressed their noses against a shop window."
-        },
-        {
-          "look": "hagrid",
-          "at": "harry"
-        },
-        {
-          "camera": "close",
-          "on": "hagrid",
-          "ms": 500
-        },
-        {
-          "say": "hagrid",
-          "text": "First, the bank,"
-        },
-        {
-          "look": "hagrid",
-          "at": "harry"
-        },
-        {
-          "camera": "close",
-          "on": "hagrid",
-          "ms": 500
-        },
-        {
-          "say": "hagrid",
-          "text": "Can't buy anything without gold."
-        },
-        {
-          "narrate": "At the end of the street stood a white marble building."
-        },
-        {
-          "camera": "medium",
-          "on": "harry",
-          "ms": 700
-        },
-        {
-          "narrate": "Harry followed Hagrid up the steps and into Gringotts."
         }
       ],
       "title": "Diagon Alley",
@@ -152,9 +78,8 @@
     "scene_2_wrong": {
       "location": "gringotts",
       "cast": {
-        "hagrid": "auto_2",
-        "goblin": "auto_3",
-        "harry": "auto_1"
+        "harry": "auto_1",
+        "goblin": "auto_2"
       },
       "beats": [
         {
@@ -187,8 +112,7 @@
       "location": "gringotts",
       "cast": {
         "harry": "auto_1",
-        "hagrid": "auto_2",
-        "goblin": "auto_3"
+        "goblin": "auto_2"
       },
       "beats": [
         {
@@ -199,33 +123,14 @@
           "music": "mystery"
         },
         {
-          "narrate": "The marble hall was enormous."
-        },
-        {
           "narrate": "Goblins sat at long counters, weighing coins and writing in ledgers."
-        },
-        {
-          "look": "hagrid",
-          "at": "goblin"
-        },
-        {
-          "camera": "close",
-          "on": "hagrid",
-          "ms": 500
-        },
-        {
-          "say": "hagrid",
-          "text": "Mr. Potter wishes to make a withdrawal,"
-        },
-        {
-          "narrate": "He pulled a tiny golden key from his coat."
         },
         {
           "narrate": "A goblin peered down at them."
         },
         {
           "look": "goblin",
-          "at": "hagrid"
+          "at": "harry"
         },
         {
           "camera": "close",
@@ -264,8 +169,8 @@
       "location": "gringotts",
       "cast": {
         "harry": "auto_1",
-        "hagrid": "auto_2",
-        "goblin": "auto_3"
+        "goblin": "auto_2",
+        "hagrid": "auto_3"
       },
       "beats": [
         {
@@ -301,7 +206,7 @@
         },
         {
           "look": "goblin",
-          "at": "hagrid"
+          "at": "harry"
         },
         {
           "camera": "close",

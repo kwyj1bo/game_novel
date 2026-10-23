@@ -5,24 +5,6 @@
   "subtitle": "Hp Book",
   "start": "scene_1",
   "actors": {
-    "hagrid": {
-      "name": "Hagrid",
-      "kind": "human",
-      "height": 2.6,
-      "robe": "#4a3626",
-      "trim": "#3a2a1a",
-      "skin": "#d8a888",
-      "hair": "#24160c",
-      "hairStyle": "messy",
-      "eyes": "#1a1a1a",
-      "glasses": "none",
-      "beard": "short",
-      "outfit": "adult",
-      "hat": "none",
-      "scar": false,
-      "voice": 0.7,
-      "subtitleColor": "#e8b878"
-    },
     "hound": {
       "name": "Hound",
       "kind": "dog3",
@@ -81,10 +63,9 @@
     "scene_1_wrong": {
       "location": "forbidden_forest",
       "cast": {
-        "hound": "auto_threat",
-        "hagrid": "auto_2",
         "harry": "auto_1",
-        "malfoy": "auto_3"
+        "hound": "auto_threat",
+        "malfoy": "auto_2"
       },
       "beats": [
         {
@@ -151,8 +132,7 @@
       "location": "forbidden_forest",
       "cast": {
         "harry": "auto_1",
-        "hagrid": "auto_2",
-        "malfoy": "auto_3"
+        "malfoy": "auto_2"
       },
       "beats": [
         {
@@ -163,85 +143,7 @@
           "music": "mystery"
         },
         {
-          "narrate": "The Forbidden Forest was black and silent."
-        },
-        {
           "narrate": "Tall trees closed over the path, and the moon barely reached the ground."
-        },
-        {
-          "look": "hagrid",
-          "at": "harry"
-        },
-        {
-          "camera": "close",
-          "on": "hagrid",
-          "ms": 500
-        },
-        {
-          "say": "hagrid",
-          "text": "Stay close,",
-          "mood": "whisper"
-        },
-        {
-          "look": "hagrid",
-          "at": "harry"
-        },
-        {
-          "camera": "close",
-          "on": "hagrid",
-          "ms": 500
-        },
-        {
-          "say": "hagrid",
-          "text": "There's something out here that's been hurting the unicorns."
-        },
-        {
-          "narrate": "Malfoy stopped walking."
-        },
-        {
-          "look": "malfoy",
-          "at": "hagrid"
-        },
-        {
-          "camera": "close",
-          "on": "malfoy",
-          "ms": 500
-        },
-        {
-          "say": "malfoy",
-          "text": "I'm not going in there,"
-        },
-        {
-          "look": "malfoy",
-          "at": "hagrid"
-        },
-        {
-          "camera": "close",
-          "on": "malfoy",
-          "ms": 500
-        },
-        {
-          "say": "malfoy",
-          "text": "My father will hear about this."
-        },
-        {
-          "spawn": "hound",
-          "at": "auto_threat"
-        },
-        {
-          "sfx": "growl"
-        },
-        {
-          "narrate": "Hagrid's huge hound growled and pressed against his legs."
-        },
-        {
-          "narrate": "They reached a clearing."
-        },
-        {
-          "narrate": "Something silver lay on the ground, very still."
-        },
-        {
-          "narrate": "A hooded figure crawled out of the trees and bent over the silver shape."
         },
         {
           "camera": "medium",
@@ -250,6 +152,13 @@
         },
         {
           "narrate": "Malfoy screamed and ran back down the path."
+        },
+        {
+          "spawn": "hound",
+          "at": "auto_threat"
+        },
+        {
+          "sfx": "growl"
         },
         {
           "camera": "medium",
@@ -296,8 +205,7 @@
       "location": "forbidden_forest",
       "cast": {
         "harry": "auto_1",
-        "hagrid": "auto_2",
-        "malfoy": "auto_3",
+        "malfoy": "auto_2",
         "hound": "auto_threat"
       },
       "beats": [
@@ -316,9 +224,6 @@
         },
         {
           "narrate": "The hooded figure lifted its head and glided towards Harry."
-        },
-        {
-          "narrate": "A searing pain burst through his scar."
         },
         {
           "camera": "medium",

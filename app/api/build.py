@@ -7,7 +7,7 @@ from pathlib import Path
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 
-from pipeline.__main__ import book_hero, build_chapter, load_catalog
+from pipeline.__main__ import book_hero, build_chapter, chain_json, load_catalog
 from pipeline.text import load_chapters
 
 router = APIRouter()
@@ -45,7 +45,7 @@ def save_book(source: str, stories: list[dict]) -> dict:
     for i, s in enumerate(stories, 1):
         name = f"{i:02d}-{_slug(s['story']['title'])}.story.json"
         (folder / name).write_text(json.dumps(s["story"], ensure_ascii=False))
-        chapters.append({"heading": s["heading"], "title": s["story"]["title"], "file": f"{book}/{name}"})
+        chapters.append({"heading": s["heading"], "title": s["story"]["title"], "file": f"{book}/{name}", "events": s.get("events", [])})
     entry = {"id": book, "source": source, "chapters": chapters}
     index = [b for b in read_index() if b["id"] != book] + [entry]
     _index_path().write_text(json.dumps(index, indent=2, ensure_ascii=False))
@@ -75,8 +75,8 @@ async def build(file: UploadFile = File(...)):
     hero = book_hero(chapters, catalog)
     for ch in chapters:
         try:
-            story, *_ = build_chapter(ch, catalog, source, hero)
-            stories.append({"heading": ch.heading, "story": story})
+            story, _, _, _, chain = build_chapter(ch, catalog, source, hero)
+            stories.append({"heading": ch.heading, "story": story, "events": chain_json(chain)})
         except Exception as e:  # one bad chapter should not sink the book
             skipped.append({"heading": ch.heading, "error": str(e)})
     book = save_book(source, stories) if stories else None

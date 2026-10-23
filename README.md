@@ -105,8 +105,9 @@ The steps are:
 3. **Dialogue:** pull out quotes, attribute each one to a speaker from tags such as "said Ron" or "she whispered", and set the mood from the speech verb.
 4. **Actions:** map verbs to engine actions through the dependency parse: moves, animations, sounds and spells. Actions that did not happen ("did not run", "before he went") are ignored. Pronouns are resolved to the most recent character of the right gender.
 5. **Scenes:** start a new scene at a scene break, a time jump, or a change of location. Locations come from keyword matches in narration, using the keywords each location declares.
-6. **Choices:** the hero is the character the whole book follows (most named in narration, actions count double). Score the hero's decisive actions by tension, verb and position. Pick up to three. The correct option is what the hero did. The wrong option is its direct opposite ("Unlock the door" against "Leave the door locked"). A wrong choice plays its consequence and ends the run, and the ending says what the hero did in the book.
-7. **Story:** stage the cast on each location's generic `auto_*` marks, add camera shots, and write story JSON that the engine validator accepts.
+6. **Event chain:** reduce the chapter to its important events. Each paragraph is a candidate. It scores for involving the hero, real actions, decisions, tension, a sudden rise in tension, spells, creatures, sounds, a character's first appearance, a change of location, closeness to the climax, leading straight into a choice or a turn, and TextRank centrality (how many words it shares with the rest of the chapter). Scene openings, choices and the last paragraph are always kept. At most half the paragraphs survive, and never more than 14. The events form a chain: each one names the next. An event shows its key sentence, the lines with actions, and at most two lines of dialogue. Only the chain is played.
+7. **Choices:** the hero is the character the whole book follows (most named in narration, actions count double). Score the hero's decisive actions by tension, verb and position. Pick up to three. The correct option is what the hero did. The wrong option is its direct opposite ("Unlock the door" against "Leave the door locked"). A wrong choice plays its consequence and ends the run, and the ending says what the hero did in the book.
+8. **Story:** stage the cast on each location's generic `auto_*` marks, add camera shots, and write story JSON that the engine validator accepts.
 
 ### Run it
 
@@ -117,7 +118,7 @@ You need Python 3.12.
 3. Get WordNet: `python -c "import nltk; nltk.download('wordnet')"`
 4. Build a novel: `python -m pipeline build book.pdf --validate`
 
-Each chapter is written to `web/public/generated/`. Open one with `http://localhost:5173/?story=/generated/<file>.story.json`. Add `--debug out/` to write the output of each step for inspection.
+Each chapter is written to `web/public/generated/`. Open one with `http://localhost:5173/?story=/generated/<file>.story.json`. Add `--debug out/` to write the output of each step for inspection. `5-event-chain.json` is the chapter's outline: each event with its summary, characters, location, score, the reasons for the score, and the next event. The upload API returns the same chain with each chapter.
 
 To upload from the browser, start the backend with `uvicorn app.main:app --port 8000` next to `npm run dev`. The chapter menu then has an "Upload a novel" card.
 
