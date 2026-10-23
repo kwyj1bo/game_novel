@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ActorSpecSchema, ANIM_CLIPS } from "../story/schema";
+import { ActorSpecSchema } from "../story/schema";
 
 // The asset manifest: everything the engine can put on screen, as data.
 // The novel pipeline reads the same file to decide what a chapter can use.
@@ -70,14 +70,31 @@ export const CreatureAssetSchema = z
   })
   .strict();
 
+// An action is a small piece of choreography with parameters. Its steps are
+// story beats in which "$actor", "$target" and "$object" stand for the
+// parameters; the engine fills them in when a story says
+// {"act": "pat", "actor": "ron", "target": "harry"}.
 export const ActionAssetSchema = z
   .object({
-    clip: z.enum(ANIM_CLIPS),
+    id: z.string(),
+    // Verbs in a text that mean this action.
     verbs: z.array(z.string()).default([]),
-    // verb -> object word, for actions that need both ("raise" + "wand" = cast).
+    // verb -> object word, for verbs that mean this only with that object ("raise" + "wand" = cast).
     with: z.record(z.string(), z.string()).default({}),
+    params: z.array(z.enum(["actor", "target", "object"])).default(["actor"]),
+    steps: z.array(z.unknown()).min(1),
+    // Narration, e.g. "{actor} pats {target} on the head."
+    text: z.string(),
+    // Choice label addressed to the player, e.g. "Pat {target} on the head".
+    label: z.string(),
+    // The action that is its direct opposite (for the wrong choice).
+    opposite: z.string().optional(),
+    // Something a character chooses to do, so it can become a choice
+    // (falling or flinching happen to you; opening a door is a decision).
+    decision: z.boolean().default(false),
   })
   .strict();
+export type ActionAsset = z.infer<typeof ActionAssetSchema>;
 
 export const SoundAssetSchema = z.object({ id: z.string(), words: z.array(z.string()).min(1) }).strict();
 

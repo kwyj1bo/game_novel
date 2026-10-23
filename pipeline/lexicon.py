@@ -17,6 +17,7 @@ SPEECH_VERBS = {
     "shriek", "roar", "bellow", "groan", "moan", "breathe", "laugh", "sob",
     "plead", "beg", "insist", "demand", "announce", "declare", "growl", "squeak",
     "tell", "explain", "promise", "admit", "agree", "suggest", "continue", "repeat", "order", "command",
+    "sneer", "smirk", "mock", "taunt", "jeer", "scoff", "drawl", "grumble", "whimper", "stammer", "stutter",
 }
 
 # Words that mark an action as not happening ("before he went", "if she ran").
@@ -36,6 +37,7 @@ SPEECH_MOOD = {
     "shout": "urgent", "yell": "urgent", "call": "urgent", "exclaim": "urgent", "bellow": "urgent",
     "scream": "scared", "shriek": "scared", "gasp": "scared", "sob": "scared", "plead": "scared", "beg": "scared",
     "snap": "angry", "hiss": "angry", "growl": "angry", "roar": "angry", "demand": "angry",
+    "sneer": "angry", "taunt": "angry", "jeer": "angry", "whimper": "scared", "stammer": "scared",
 }
 
 # Movement verbs. Value: True when the move is a run.

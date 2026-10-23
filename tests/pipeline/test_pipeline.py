@@ -76,10 +76,10 @@ def test_speech_tags_are_not_narration(halloween):
 
 def test_choices_are_the_heros_action_and_its_opposite(halloween, lighthouse):
     assert [(m.correct, m.opposite) for m in halloween[3]] == [
-        ("Unlock the door", "Leave the door locked"),
-        ("Run at the troll", "Keep away from the troll"),
+        ("Open the door", "Keep the door shut"),
+        ("Run to the troll", "Back away from the troll"),
     ]
-    assert [(m.correct, m.opposite) for m in lighthouse[3]] == [("Pick up the lantern", "Leave the lantern where it is")]
+    assert [(m.correct, m.opposite) for m in lighthouse[3]] == [("Grab the lantern", "Leave the lantern")]
 
 
 def test_scenes_follow_locations(halloween):
@@ -169,10 +169,10 @@ def test_book_choices(hp_book, voyage):
     pairs = [(m.correct, m.opposite) for r in hp_book + voyage for m in r[3]]
     assert pairs == [
         ("Grab the letter", "Leave the letter"),
-        ("Take the key from Hagrid", "Refuse the key"),
-        ("Step towards the clearing", "Hold back"),
-        ("Take the innkeeper's hand", "Refuse the handshake"),
-        ("Run to the sailor", "Keep away from the sailor"),
+        ("Grab the key", "Leave the key"),
+        ("Raise your wand", "Lower your wand"),
+        ("Shake the innkeeper's hand", "Refuse the handshake"),
+        ("Run to the sailor", "Back away from the sailor"),
     ]
 
 
@@ -213,12 +213,42 @@ def test_chain_drops_minor_paragraphs(halloween):
 
 def test_story_shows_only_chain_lines(halloween):
     story = halloween[0]
-    shown = [b.get("narrate") or b.get("say") and b["text"] for s in story["scenes"].values() for b in s["beats"]]
-    shown = [t for t in shown if t]
-    chain_text = {ln.text for n in halloween[4] for ln in n.lines}
-    generated = {"Harry hesitates", "The moment slips away"}
-    assert all(t in chain_text or t.strip("“”") in chain_text or any(t.startswith(g) for g in generated) for t in shown)
-    assert len(shown) < len(halloween[1].lines)
+    main = {k: s for k, s in story["scenes"].items() if not k.endswith("_wrong")}
+    said = [b["text"] for s in main.values() for b in s["beats"] if "say" in b]
+    narrated = [b["narrate"] for s in main.values() for b in s["beats"] if "narrate" in b]
+    chain = [ln for n in halloween[4] for ln in n.lines]
+    # Dialogue is the characters' own words, and only from the chain.
+    assert set(said) <= {ln.text for ln in chain if ln.kind == "say"}
+    # One narration per chain narration line at most, far fewer than the chapter has.
+    assert len(narrated) <= sum(1 for ln in chain if ln.kind == "narrate")
+    assert len(said) + len(narrated) < len(halloween[1].lines)
+
+
+def test_narration_is_written_from_actions_not_copied(catalog):
+    from pipeline.analyze import analyze
+    from pipeline.build import build_story
+
+    paras = [
+        "The common room was quiet.",
+        "Ron walked up to Harry and patted him on the head.",
+        "Harry grinned at him.",
+        "Hermione opened the door.",
+        "Then they all went to bed.",
+    ]
+    a = analyze(paras, catalog)
+    story, *_ = build_story(paras, a, catalog, "Test", "Test")
+    beats = [b for s in story["scenes"].values() for b in s["beats"]]
+    acts = [(b["act"], b["actor"], b.get("target")) for b in beats if "act" in b]
+    assert ("approach", "ron", "harry") in acts and ("pat", "ron", "harry") in acts
+    narration = [b["narrate"] for b in beats if "narrate" in b]
+    assert "Ron walks over to Harry. Ron gives Harry a pat." in narration
+    assert "Ron walked up to Harry and patted him on the head." not in narration
+
+
+def test_wrong_choice_acts_out_the_opposite(halloween):
+    story = halloween[0]
+    wrong = [s for k, s in story["scenes"].items() if k.endswith("_wrong")]
+    assert {b["act"] for s in wrong for b in s["beats"] if "act" in b} == {"keep_shut", "back_away"}
 
 
 def test_each_event_shows_at_most_two_lines_of_dialogue(halloween):

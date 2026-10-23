@@ -1,4 +1,5 @@
 import { ManifestSchema, type Manifest } from "../engine/assets/manifest";
+import type { ActionRegistry } from "../engine/story/actions";
 import type { LocationRegistryInfo } from "../engine/story/validate";
 import type { LocationDef } from "../engine/world/Location";
 import manifestJson from "../../assets/manifest.json";
@@ -37,5 +38,8 @@ export function locationsFromManifest(m: Manifest): Record<string, LocationDef> 
 }
 
 export const LOCATIONS: Record<string, LocationDef> = locationsFromManifest(MANIFEST);
+
+// Action assets by id, for "act" beats.
+export const ACTIONS: ActionRegistry = Object.fromEntries(MANIFEST.actions.map((a) => [a.id, a]));
 
 export const LOCATION_INFO: LocationRegistryInfo = Object.fromEntries(Object.values(LOCATIONS).map((l) => [l.id, l.info]));

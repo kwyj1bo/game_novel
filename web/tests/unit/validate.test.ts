@@ -70,3 +70,15 @@ describe("validateStory", () => {
     expect(m).toContain("scene is unreachable from start");
   });
 });
+
+describe("action assets", () => {
+  it("every manifest action expands to valid beats and has a known opposite", async () => {
+    const { MANIFEST } = await import("../../src/locations");
+    const { expandAction } = await import("../../src/engine/story/actions");
+    const ids = new Set(MANIFEST.actions.map((a) => a.id));
+    for (const a of MANIFEST.actions) {
+      expect(() => expandAction(a, { actor: "a", target: "b", object: "the key" })).not.toThrow();
+      if (a.opposite) expect(ids.has(a.opposite)).toBe(true);
+    }
+  });
+});

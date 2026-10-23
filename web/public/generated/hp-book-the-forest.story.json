@@ -5,6 +5,42 @@
   "subtitle": "Hp Book",
   "start": "scene_1",
   "actors": {
+    "malfoy": {
+      "name": "Malfoy",
+      "kind": "human",
+      "height": 1.45,
+      "robe": "#18181f",
+      "trim": "#1a472a",
+      "skin": "#f0d8c8",
+      "hair": "#e8dca0",
+      "hairStyle": "short",
+      "eyes": "#8a9aa8",
+      "glasses": "none",
+      "beard": "none",
+      "outfit": "student",
+      "hat": "none",
+      "scar": false,
+      "voice": 1.05,
+      "subtitleColor": "#b8d8b8"
+    },
+    "hagrid": {
+      "name": "Hagrid",
+      "kind": "human",
+      "height": 2.6,
+      "robe": "#4a3626",
+      "trim": "#3a2a1a",
+      "skin": "#d8a888",
+      "hair": "#24160c",
+      "hairStyle": "messy",
+      "eyes": "#1a1a1a",
+      "glasses": "none",
+      "beard": "short",
+      "outfit": "adult",
+      "hat": "none",
+      "scar": false,
+      "voice": 0.7,
+      "subtitleColor": "#e8b878"
+    },
     "hound": {
       "name": "Hound",
       "kind": "dog3",
@@ -39,30 +75,13 @@
       "scar": true,
       "voice": 1.15,
       "subtitleColor": "#f3d27a"
-    },
-    "malfoy": {
-      "name": "Malfoy",
-      "kind": "human",
-      "height": 1.45,
-      "robe": "#18181f",
-      "trim": "#1a472a",
-      "skin": "#f0d8c8",
-      "hair": "#e8dca0",
-      "hairStyle": "short",
-      "eyes": "#8a9aa8",
-      "glasses": "none",
-      "beard": "none",
-      "outfit": "student",
-      "hat": "none",
-      "scar": false,
-      "voice": 1.05,
-      "subtitleColor": "#b8d8b8"
     }
   },
   "scenes": {
     "scene_1_wrong": {
       "location": "forbidden_forest",
       "cast": {
+        "hagrid": "auto_3",
         "hound": "auto_threat",
         "harry": "auto_1",
         "malfoy": "auto_2"
@@ -74,12 +93,11 @@
           "ms": 500
         },
         {
-          "narrate": "Harry hesitates — and chooses to hold back."
+          "act": "lower_wand",
+          "actor": "harry"
         },
         {
-          "move": "harry",
-          "to": "auto_entry",
-          "async": true
+          "narrate": "Harry lowers the wand."
         },
         {
           "camera": "low",
@@ -125,14 +143,15 @@
       "ending": {
         "kind": "death",
         "title": "Wrong Turn",
-        "text": "In the book, Harry chose to step towards the clearing. Choosing to hold back ended the story here."
+        "text": "In the book, Harry chose to raise your wand. Choosing to lower your wand ended the story here."
       }
     },
     "scene_1": {
       "location": "forbidden_forest",
       "cast": {
         "harry": "auto_1",
-        "malfoy": "auto_2"
+        "malfoy": "auto_2",
+        "hagrid": "auto_3"
       },
       "beats": [
         {
@@ -146,12 +165,33 @@
           "narrate": "Tall trees closed over the path, and the moon barely reached the ground."
         },
         {
-          "camera": "medium",
-          "on": "malfoy",
-          "ms": 700
+          "narrate": "Malfoy stopped walking."
         },
         {
-          "narrate": "Malfoy screamed and ran back down the path."
+          "look": "malfoy",
+          "at": "hagrid"
+        },
+        {
+          "camera": "close",
+          "on": "malfoy",
+          "ms": 500
+        },
+        {
+          "say": "malfoy",
+          "text": "I'm not going in there,"
+        },
+        {
+          "look": "malfoy",
+          "at": "hagrid"
+        },
+        {
+          "camera": "close",
+          "on": "malfoy",
+          "ms": 500
+        },
+        {
+          "say": "malfoy",
+          "text": "My father will hear about this."
         },
         {
           "spawn": "hound",
@@ -161,18 +201,23 @@
           "sfx": "growl"
         },
         {
+          "narrate": "Hagrid's huge hound growled and pressed against his legs."
+        },
+        {
+          "narrate": "Malfoy screamed and ran back down the path."
+        },
+        {
           "camera": "medium",
           "on": "hound",
           "ms": 700
         },
         {
-          "move": "hound",
-          "to": "auto_entry",
-          "run": true,
-          "async": true
+          "act": "back_away",
+          "actor": "hound",
+          "target": "malfoy"
         },
         {
-          "narrate": "The hound bolted after him."
+          "narrate": "The hound backs away from Malfoy."
         },
         {
           "narrate": "Harry did not run."
@@ -189,14 +234,14 @@
         "seconds": 10,
         "options": [
           {
-            "label": "Hold back",
-            "correct": false,
-            "goto": "scene_1_wrong"
-          },
-          {
-            "label": "Step towards the clearing",
+            "label": "Raise your wand",
             "correct": true,
             "goto": "scene_2"
+          },
+          {
+            "label": "Lower your wand",
+            "correct": false,
+            "goto": "scene_1_wrong"
           }
         ]
       }
@@ -205,7 +250,8 @@
       "location": "forbidden_forest",
       "cast": {
         "harry": "auto_1",
-        "malfoy": "auto_2",
+        "hagrid": "auto_2",
+        "malfoy": "auto_3",
         "hound": "auto_threat"
       },
       "beats": [
@@ -215,12 +261,11 @@
           "ms": 700
         },
         {
-          "anim": "harry",
-          "clip": "cast",
-          "async": true
+          "act": "cast",
+          "actor": "harry"
         },
         {
-          "narrate": "He raised his wand and stepped towards the clearing."
+          "narrate": "Harry raises a wand."
         },
         {
           "narrate": "The hooded figure lifted its head and glided towards Harry."
@@ -231,13 +276,11 @@
           "ms": 700
         },
         {
-          "anim": "harry",
-          "clip": "fall",
-          "async": true,
-          "hold": true
+          "act": "fall",
+          "actor": "harry"
         },
         {
-          "narrate": "Harry fell to his knees, clutching his forehead."
+          "narrate": "Harry falls."
         },
         {
           "sfx": "thud"

@@ -59,3 +59,21 @@ describe("StoryRuntime", () => {
     expect(stage.log).toContain("remove:ron");
   });
 });
+
+describe("act beats", () => {
+  it("expand an action asset with its parameters", async () => {
+    const story = makeStory();
+    story.scenes.s1.beats.push({ act: "pat", actor: "ron", target: "harry" });
+    const stage = new FakeStage();
+    const hud = new FakeHud([0], []);
+    const actions = {
+      pat: { id: "pat", params: ["actor", "target"] as const, steps: [{ move: "$actor", to: "$target" }, { anim: "$actor", clip: "pat" }], text: "", label: "" },
+    };
+    const rt = new StoryRuntime(story, stage, hud, actions);
+    await rt.start({ skipTitle: true }).catch((e) => {
+      if (!(e instanceof StopRun)) throw e;
+    });
+    expect(stage.log).toContain("move:ron->harry");
+    expect(stage.log).toContain("anim:ron:pat");
+  });
+});

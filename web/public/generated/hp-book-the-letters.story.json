@@ -22,24 +22,6 @@
       "voice": 0.8,
       "subtitleColor": "#d8a888"
     },
-    "harry": {
-      "name": "Harry",
-      "kind": "human",
-      "height": 1.45,
-      "robe": "#18181f",
-      "trim": "#7f0909",
-      "skin": "#e3b08c",
-      "hair": "#120d08",
-      "hairStyle": "messy",
-      "eyes": "#2e7d32",
-      "glasses": "round",
-      "beard": "none",
-      "outfit": "student",
-      "hat": "none",
-      "scar": true,
-      "voice": 1.15,
-      "subtitleColor": "#f3d27a"
-    },
     "dudley": {
       "name": "Dudley",
       "kind": "human",
@@ -73,16 +55,34 @@
       "scar": false,
       "voice": 1.3,
       "subtitleColor": "#e8e0a8"
+    },
+    "harry": {
+      "name": "Harry",
+      "kind": "human",
+      "height": 1.45,
+      "robe": "#18181f",
+      "trim": "#7f0909",
+      "skin": "#e3b08c",
+      "hair": "#120d08",
+      "hairStyle": "messy",
+      "eyes": "#2e7d32",
+      "glasses": "round",
+      "beard": "none",
+      "outfit": "student",
+      "hat": "none",
+      "scar": true,
+      "voice": 1.15,
+      "subtitleColor": "#f3d27a"
     }
   },
   "scenes": {
     "scene_1_wrong": {
       "location": "privet_drive",
       "cast": {
-        "harry": "auto_1",
         "vernon": "auto_2",
-        "dudley": "auto_3",
-        "petunia": "auto_4"
+        "harry": "auto_1",
+        "petunia": "auto_4",
+        "dudley": "auto_3"
       },
       "beats": [
         {
@@ -91,7 +91,12 @@
           "ms": 500
         },
         {
-          "narrate": "Harry hesitates — and chooses to leave the letter."
+          "act": "leave_it",
+          "actor": "harry",
+          "object": "the letter"
+        },
+        {
+          "narrate": "Harry leaves the letter."
         },
         {
           "anim": "harry",
@@ -144,12 +149,29 @@
           "ms": 700
         },
         {
-          "anim": "harry",
-          "clip": "reach",
-          "async": true
+          "act": "take",
+          "actor": "harry",
+          "object": "the letters"
         },
         {
-          "narrate": "Harry walked to the front door and picked up the letters."
+          "narrate": "Harry grabs the letters."
+        },
+        {
+          "narrate": "Mr. Dursley lowered his newspaper."
+        },
+        {
+          "look": "vernon",
+          "at": "harry"
+        },
+        {
+          "camera": "close",
+          "on": "vernon",
+          "ms": 500
+        },
+        {
+          "say": "vernon",
+          "text": "Give that here!",
+          "mood": "urgent"
         },
         {
           "camera": "medium",
@@ -157,12 +179,11 @@
           "ms": 700
         },
         {
-          "anim": "dudley",
-          "clip": "point",
-          "async": true
+          "act": "point",
+          "actor": "dudley"
         },
         {
-          "narrate": "Dudley laughed and pointed at Harry."
+          "narrate": "Dudley points."
         },
         {
           "camera": "close",
@@ -193,8 +214,8 @@
       "cast": {
         "harry": "auto_1",
         "vernon": "auto_2",
-        "dudley": "auto_3",
-        "petunia": "auto_4"
+        "petunia": "auto_3",
+        "dudley": "auto_4"
       },
       "beats": [
         {
@@ -203,17 +224,17 @@
           "ms": 700
         },
         {
-          "anim": "harry",
-          "clip": "reach",
-          "async": true
+          "act": "take",
+          "actor": "harry",
+          "object": "the letter"
         },
         {
-          "anim": "harry",
-          "clip": "reach",
-          "async": true
+          "act": "hold_on",
+          "actor": "harry",
+          "object": "it"
         },
         {
-          "narrate": "Harry grabbed the letter and held it behind his back."
+          "narrate": "Harry grabs the letter. Harry keeps hold of it."
         },
         {
           "camera": "medium",
@@ -221,12 +242,42 @@
           "ms": 700
         },
         {
-          "anim": "vernon",
-          "clip": "reach",
-          "async": true
+          "act": "lunge",
+          "actor": "vernon"
         },
         {
-          "narrate": "Uncle Vernon lunged across the kitchen and snatched it out of his hand."
+          "act": "take",
+          "actor": "vernon",
+          "object": "it"
+        },
+        {
+          "narrate": "Vernon lunges. Vernon grabs it."
+        },
+        {
+          "look": "harry",
+          "at": "vernon"
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 500
+        },
+        {
+          "say": "harry",
+          "text": "No one is writing to you,"
+        },
+        {
+          "look": "harry",
+          "at": "vernon"
+        },
+        {
+          "camera": "close",
+          "on": "harry",
+          "ms": 500
+        },
+        {
+          "say": "harry",
+          "text": "Go to your cupboard."
         },
         {
           "narrate": "Harry stood in the kitchen doorway, shaking with anger."

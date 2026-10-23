@@ -1,3 +1,4 @@
+import { expandAction, type ActionRegistry } from "./actions";
 import type { Beat, Scene, Story, Target } from "./schema";
 
 // Static facts a location exposes so stories can be checked without a renderer.
@@ -21,14 +22,14 @@ export interface ValidationIssue {
 // - a wrong option is a dead end: its branch reaches an ending without another choice
 // - a correct option leads on (never straight into a losing ending)
 // - the graph has no cycles and every scene is reachable from the start
-export function validateStory(story: Story, locations: LocationRegistryInfo): ValidationIssue[] {
+export function validateStory(story: Story, locations: LocationRegistryInfo, actions: ActionRegistry = {}): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   const scenes = story.scenes;
 
   if (!scenes[story.start]) issues.push({ message: `start scene "${story.start}" does not exist` });
 
   for (const [id, scene] of Object.entries(scenes)) {
-    checkScene(id, scene, story, locations, issues);
+    checkScene(id, scene, story, locations, issues, actions);
   }
 
   for (const [id, scene] of Object.entries(scenes)) {
@@ -63,6 +64,7 @@ function checkScene(
   story: Story,
   locations: LocationRegistryInfo,
   issues: ValidationIssue[],
+  actions: ActionRegistry,
 ): void {
   const loc = locations[scene.location];
   if (!loc) {
@@ -91,6 +93,22 @@ function checkScene(
 
   const visit = (beat: Beat, path: string) => {
     if ("together" in beat) return beat.together.forEach((b, i) => visit(b, `${path}.together[${i}]`));
+    if ("act" in beat) {
+      const def = actions[beat.act];
+      if (!def) return err(`${path}: unknown action "${beat.act}"`);
+      checkActor(beat.actor, path);
+      if (def.params.includes("target")) {
+        if (!beat.target) return err(`${path}: action "${beat.act}" needs a target`);
+        checkActor(beat.target, path);
+      }
+      // The expanded steps must be valid in this scene too.
+      try {
+        expandAction(def, beat).forEach((b, i) => visit(b, `${path}<${beat.act}>[${i}]`));
+      } catch (e) {
+        err(`${path}: action "${beat.act}" expands to an invalid beat: ${(e as Error).message.slice(0, 120)}`);
+      }
+      return;
+    }
     if ("say" in beat) checkActor(beat.say, path);
     if ("move" in beat) {
       checkActor(beat.move, path);

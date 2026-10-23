@@ -1,7 +1,7 @@
 import "./style.css";
 import { Engine, type Chapter } from "./engine/Engine";
 import { parseStory } from "./engine/story/schema";
-import { LOCATIONS } from "./locations";
+import { ACTIONS, LOCATIONS } from "./locations";
 import trollJson from "./content/hp/troll.story.json";
 import trapdoorJson from "./content/hp/trapdoor.story.json";
 
@@ -42,6 +42,7 @@ async function boot() {
     title: "Novel Engine",
     chapters,
     locations: LOCATIONS,
+    actions: ACTIONS,
     menuScenery: "great_hall",
     uploadUrl: "/api/build",
     libraryUrl: "/api/library",

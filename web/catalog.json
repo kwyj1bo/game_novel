@@ -1940,50 +1940,1070 @@
   },
   "actions": [
     {
-      "clip": "point",
+      "id": "approach",
       "verbs": [
-        "point"
+        "walk",
+        "go",
+        "come",
+        "step",
+        "approach",
+        "stride",
+        "wander",
+        "edge",
+        "move",
+        "creep",
+        "lumber",
+        "pad",
+        "stroll",
+        "march"
       ],
-      "with": {}
+      "with": {},
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "move": "$actor",
+          "to": "$target"
+        }
+      ],
+      "text": "{actor} walks over to {target}.",
+      "label": "Go to {target}",
+      "opposite": "back_away",
+      "decision": true
     },
     {
-      "clip": "wave",
+      "id": "run_to",
       "verbs": [
-        "wave",
-        "beckon"
+        "run",
+        "rush",
+        "dash",
+        "hurry",
+        "sprint",
+        "race",
+        "charge",
+        "dart",
+        "bolt",
+        "scramble"
       ],
-      "with": {}
+      "with": {},
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "move": "$actor",
+          "to": "$target",
+          "run": true
+        }
+      ],
+      "text": "{actor} runs to {target}.",
+      "label": "Run to {target}",
+      "opposite": "back_away",
+      "decision": true
     },
     {
-      "clip": "nod",
+      "id": "back_away",
       "verbs": [
-        "nod"
+        "back",
+        "retreat"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "move": "$actor",
+          "to": "auto_entry"
+        }
+      ],
+      "text": "{actor} backs away from {target}.",
+      "label": "Back away from {target}",
+      "opposite": "approach",
+      "decision": true
+    },
+    {
+      "id": "flee",
+      "verbs": [
+        "flee",
+        "escape"
+      ],
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "move": "$actor",
+          "to": "auto_entry",
+          "run": true
+        }
+      ],
+      "text": "{actor} runs away.",
+      "label": "Run away",
+      "opposite": "stand_firm",
+      "decision": true
+    },
+    {
+      "id": "stand_firm",
+      "verbs": [],
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "auto_threat"
+        },
+        {
+          "anim": "$actor",
+          "clip": "nod"
+        }
+      ],
+      "text": "{actor} stands firm.",
+      "label": "Stand your ground",
+      "opposite": "flee",
+      "decision": true
+    },
+    {
+      "id": "pat",
+      "verbs": [
+        "pat",
+        "tap"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "move": "$actor",
+          "to": "$target"
+        },
+        {
+          "look": "$target",
+          "at": "$actor"
+        },
+        {
+          "together": [
+            {
+              "anim": "$actor",
+              "clip": "pat"
+            },
+            {
+              "anim": "$target",
+              "clip": "nod"
+            }
+          ]
+        }
+      ],
+      "text": "{actor} gives {target} a pat.",
+      "label": "Pat {target}",
+      "opposite": "shove",
+      "decision": true
+    },
+    {
+      "id": "hug",
+      "verbs": [
+        "hug",
+        "embrace",
+        "cuddle"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "move": "$actor",
+          "to": "$target"
+        },
+        {
+          "look": "$target",
+          "at": "$actor"
+        },
+        {
+          "together": [
+            {
+              "anim": "$actor",
+              "clip": "hug"
+            },
+            {
+              "anim": "$target",
+              "clip": "hug"
+            }
+          ]
+        }
+      ],
+      "text": "{actor} hugs {target}.",
+      "label": "Hug {target}",
+      "opposite": "shove",
+      "decision": true
+    },
+    {
+      "id": "shove",
+      "verbs": [
+        "push",
+        "shove",
+        "elbow",
+        "jostle"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "move": "$actor",
+          "to": "$target"
+        },
+        {
+          "together": [
+            {
+              "anim": "$actor",
+              "clip": "push"
+            },
+            {
+              "anim": "$target",
+              "clip": "stagger"
+            },
+            {
+              "sfx": "thud"
+            }
+          ]
+        }
+      ],
+      "text": "{actor} shoves {target} away.",
+      "label": "Shove {target} away",
+      "opposite": "hug",
+      "decision": true
+    },
+    {
+      "id": "hit",
+      "verbs": [
+        "hit",
+        "punch",
+        "strike",
+        "slap",
+        "smack",
+        "kick",
+        "attack",
+        "thump"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "move": "$actor",
+          "to": "$target"
+        },
+        {
+          "together": [
+            {
+              "anim": "$actor",
+              "clip": "cast"
+            },
+            {
+              "anim": "$target",
+              "clip": "stagger"
+            },
+            {
+              "sfx": "thud"
+            }
+          ]
+        }
+      ],
+      "text": "{actor} hits {target}.",
+      "label": "Hit {target}",
+      "opposite": "spare",
+      "decision": true
+    },
+    {
+      "id": "spare",
+      "verbs": [],
+      "with": {},
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} lets {target} be.",
+      "label": "Let {target} be",
+      "opposite": "hit",
+      "decision": true
+    },
+    {
+      "id": "help",
+      "verbs": [
+        "help",
+        "save",
+        "rescue",
+        "aid",
+        "support"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "move": "$actor",
+          "to": "$target",
+          "run": true
+        },
+        {
+          "together": [
+            {
+              "anim": "$actor",
+              "clip": "reach"
+            },
+            {
+              "anim": "$target",
+              "clip": "nod"
+            }
+          ]
+        }
+      ],
+      "text": "{actor} rushes to help {target}.",
+      "label": "Help {target}",
+      "opposite": "abandon",
+      "decision": true
+    },
+    {
+      "id": "abandon",
+      "verbs": [
+        "abandon",
+        "desert"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        },
+        {
+          "move": "$actor",
+          "to": "auto_entry"
+        }
+      ],
+      "text": "{actor} turns away from {target}.",
+      "label": "Leave {target} to it",
+      "opposite": "help",
+      "decision": true
+    },
+    {
+      "id": "give",
+      "verbs": [
+        "give",
+        "hand",
+        "offer",
+        "pass"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "target",
+        "object"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "move": "$actor",
+          "to": "$target"
+        },
+        {
+          "look": "$target",
+          "at": "$actor"
+        },
+        {
+          "together": [
+            {
+              "anim": "$actor",
+              "clip": "give"
+            },
+            {
+              "anim": "$target",
+              "clip": "give"
+            }
+          ]
+        }
+      ],
+      "text": "{actor} hands {object} to {target}.",
+      "label": "Give {target} {object}",
+      "opposite": "keep",
+      "decision": true
+    },
+    {
+      "id": "keep",
+      "verbs": [],
+      "with": {},
+      "params": [
+        "actor",
+        "target",
+        "object"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} keeps {object}.",
+      "label": "Keep {object}",
+      "opposite": "give",
+      "decision": true
+    },
+    {
+      "id": "handshake",
+      "verbs": [],
+      "with": {
+        "shake": "hand",
+        "take": "hand"
+      },
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "move": "$actor",
+          "to": "$target"
+        },
+        {
+          "look": "$target",
+          "at": "$actor"
+        },
+        {
+          "together": [
+            {
+              "anim": "$actor",
+              "clip": "give"
+            },
+            {
+              "anim": "$target",
+              "clip": "give"
+            }
+          ]
+        }
+      ],
+      "text": "{actor} shakes hands with {target}.",
+      "label": "Shake {target}'s hand",
+      "opposite": "refuse_hand",
+      "decision": true
+    },
+    {
+      "id": "refuse_hand",
+      "verbs": [],
+      "with": {},
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} refuses to shake hands with {target}.",
+      "label": "Refuse the handshake",
+      "opposite": "handshake",
+      "decision": true
+    },
+    {
+      "id": "talk_to",
+      "verbs": [
+        "greet",
+        "thank",
+        "comfort"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "move": "$actor",
+          "to": "$target"
+        },
+        {
+          "look": "$target",
+          "at": "$actor"
+        },
+        {
+          "anim": "$actor",
+          "clip": "nod"
+        }
+      ],
+      "text": "{actor} turns to {target}.",
+      "label": "Speak to {target}",
+      "opposite": "ignore",
+      "decision": true
+    },
+    {
+      "id": "ignore",
+      "verbs": [
+        "ignore"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} ignores {target}.",
+      "label": "Ignore {target}",
+      "opposite": "talk_to",
+      "decision": true
+    },
+    {
+      "id": "take",
+      "verbs": [
+        "grab",
+        "seize",
+        "snatch",
+        "take",
+        "pick",
+        "catch",
+        "grip",
+        "clutch",
+        "lift",
+        "collect"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "reach"
+        }
+      ],
+      "text": "{actor} grabs {object}.",
+      "label": "Grab {object}",
+      "opposite": "leave_it",
+      "decision": true
+    },
+    {
+      "id": "leave_it",
+      "verbs": [
+        "leave",
+        "drop",
+        "release"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} leaves {object}.",
+      "label": "Leave {object}",
+      "opposite": "take",
+      "decision": true
+    },
+    {
+      "id": "open",
+      "verbs": [
+        "open",
+        "unlock",
+        "unbolt",
+        "unlatch"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "reach"
+        },
+        {
+          "sfx": "creak"
+        }
+      ],
+      "text": "{actor} opens {object}.",
+      "label": "Open {object}",
+      "opposite": "keep_shut",
+      "decision": true
+    },
+    {
+      "id": "keep_shut",
+      "verbs": [],
+      "with": {},
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} keeps {object} shut.",
+      "label": "Keep {object} shut",
+      "opposite": "open",
+      "decision": true
+    },
+    {
+      "id": "close",
+      "verbs": [
+        "close",
+        "shut",
+        "slam",
+        "lock",
+        "bolt"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "push"
+        },
+        {
+          "sfx": "thud"
+        }
+      ],
+      "text": "{actor} shuts {object}.",
+      "label": "Shut {object}",
+      "opposite": "leave_open",
+      "decision": true
+    },
+    {
+      "id": "leave_open",
+      "verbs": [],
+      "with": {},
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} leaves {object} open.",
+      "label": "Leave {object} open",
+      "opposite": "close",
+      "decision": true
+    },
+    {
+      "id": "throw",
+      "verbs": [
+        "throw",
+        "hurl",
+        "fling",
+        "toss",
+        "lob"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "cast"
+        },
+        {
+          "sfx": "whoosh"
+        }
+      ],
+      "text": "{actor} throws {object}.",
+      "label": "Throw {object}",
+      "opposite": "hold_on",
+      "decision": true
+    },
+    {
+      "id": "hold_on",
+      "verbs": [
+        "hold",
+        "keep"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "reach"
+        }
+      ],
+      "text": "{actor} keeps hold of {object}.",
+      "label": "Keep hold of {object}",
+      "opposite": "throw",
+      "decision": true
+    },
+    {
+      "id": "drink",
+      "verbs": [
+        "drink",
+        "sip",
+        "swallow",
+        "gulp",
+        "quaff"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "drink"
+        },
+        {
+          "sfx": "gulp"
+        }
+      ],
+      "text": "{actor} drinks {object}.",
+      "label": "Drink {object}",
+      "opposite": "refuse_drink",
+      "decision": true
+    },
+    {
+      "id": "refuse_drink",
+      "verbs": [],
+      "with": {},
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} puts {object} down.",
+      "label": "Put {object} down",
+      "opposite": "drink",
+      "decision": true
+    },
+    {
+      "id": "read",
+      "verbs": [
+        "read",
+        "study",
+        "examine"
+      ],
+      "with": {},
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "reach"
+        }
+      ],
+      "text": "{actor} reads {object}.",
+      "label": "Read {object}",
+      "opposite": "ignore_it",
+      "decision": true
+    },
+    {
+      "id": "ignore_it",
+      "verbs": [],
+      "with": {},
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} ignores {object}.",
+      "label": "Ignore {object}",
+      "opposite": "read",
+      "decision": true
+    },
+    {
+      "id": "play_flute",
+      "verbs": [],
+      "with": {
+        "play": "flute"
+      },
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "play_flute"
+        }
+      ],
+      "text": "{actor} plays the flute.",
+      "label": "Play the flute",
+      "opposite": "stop_playing",
+      "decision": true
+    },
+    {
+      "id": "stop_playing",
+      "verbs": [],
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} stops playing.",
+      "label": "Stop playing",
+      "opposite": "play_flute",
+      "decision": true
+    },
+    {
+      "id": "cast",
+      "verbs": [
+        "cast",
+        "conjure",
+        "enchant",
+        "curse",
+        "jinx",
+        "hex"
       ],
       "with": {
-        "nod": "head"
-      }
+        "raise": "wand",
+        "point": "wand",
+        "wave": "wand",
+        "lift": "wand",
+        "draw": "wand"
+      },
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "cast"
+        },
+        {
+          "sfx": "spell"
+        }
+      ],
+      "text": "{actor} raises a wand.",
+      "label": "Raise your wand",
+      "opposite": "lower_wand",
+      "decision": true
     },
     {
-      "clip": "fall",
+      "id": "lower_wand",
+      "verbs": [],
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} lowers the wand.",
+      "label": "Lower your wand",
+      "opposite": "cast",
+      "decision": true
+    },
+    {
+      "id": "jump",
+      "verbs": [
+        "jump",
+        "leap",
+        "spring",
+        "hop",
+        "vault"
+      ],
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "jump"
+        }
+      ],
+      "text": "{actor} jumps.",
+      "label": "Jump",
+      "opposite": "hold_back",
+      "decision": true
+    },
+    {
+      "id": "hold_back",
+      "verbs": [],
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "cower"
+        }
+      ],
+      "text": "{actor} holds back.",
+      "label": "Hold back",
+      "opposite": "jump",
+      "decision": true
+    },
+    {
+      "id": "fall",
       "verbs": [
         "fall",
         "collapse",
         "topple",
         "trip",
         "stumble",
-        "faint"
+        "faint",
+        "sway"
       ],
-      "with": {}
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "fall",
+          "hold": true
+        },
+        {
+          "sfx": "thud"
+        }
+      ],
+      "text": "{actor} falls.",
+      "label": "Let go",
+      "opposite": "stand_firm",
+      "decision": false
     },
     {
-      "clip": "kneel",
+      "id": "kneel",
       "verbs": [
         "kneel"
       ],
-      "with": {}
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "kneel",
+          "hold": true
+        }
+      ],
+      "text": "{actor} kneels.",
+      "label": "Kneel",
+      "opposite": "stand_firm",
+      "decision": false
     },
     {
-      "clip": "cower",
+      "id": "cower",
       "verbs": [
         "crouch",
         "cower",
@@ -1993,122 +3013,246 @@
         "shiver",
         "shrink"
       ],
-      "with": {}
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "cower"
+        }
+      ],
+      "text": "{actor} shrinks back.",
+      "label": "Shrink back",
+      "opposite": "stand_firm",
+      "decision": false
     },
     {
-      "clip": "laugh",
+      "id": "laugh",
       "verbs": [
         "laugh",
         "grin",
-        "chuckle"
+        "chuckle",
+        "giggle",
+        "smile"
       ],
-      "with": {}
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "laugh"
+        }
+      ],
+      "text": "{actor} laughs.",
+      "label": "Laugh",
+      "opposite": "frown",
+      "decision": false
     },
     {
-      "clip": "cast",
+      "id": "frown",
       "verbs": [
-        "cast",
-        "throw",
-        "hurl",
-        "fling",
-        "toss"
+        "frown",
+        "scowl",
+        "glare"
+      ],
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} frowns.",
+      "label": "Frown",
+      "opposite": "laugh",
+      "decision": false
+    },
+    {
+      "id": "wave",
+      "verbs": [
+        "wave",
+        "beckon"
+      ],
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "wave"
+        }
+      ],
+      "text": "{actor} waves.",
+      "label": "Wave",
+      "opposite": "frown",
+      "decision": false
+    },
+    {
+      "id": "nod",
+      "verbs": [
+        "nod",
+        "agree"
       ],
       "with": {
-        "raise": "wand",
-        "point": "wand",
-        "wave": "wand",
-        "lift": "wand"
-      }
-    },
-    {
-      "clip": "drink",
-      "verbs": [
-        "drink",
-        "sip",
-        "swallow",
-        "gulp"
+        "nod": "head"
+      },
+      "params": [
+        "actor"
       ],
-      "with": {}
-    },
-    {
-      "clip": "reach",
-      "verbs": [
-        "grab",
-        "seize",
-        "snatch",
-        "reach",
-        "catch",
-        "take",
-        "pick",
-        "grip",
-        "clutch",
-        "lift",
-        "hold"
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "nod"
+        }
       ],
-      "with": {}
+      "text": "{actor} nods.",
+      "label": "Nod",
+      "opposite": "shake_head",
+      "decision": false
     },
     {
-      "clip": "struggle",
+      "id": "shake_head",
+      "verbs": [],
+      "with": {
+        "shake": "head"
+      },
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} shakes their head.",
+      "label": "Shake your head",
+      "opposite": "nod",
+      "decision": false
+    },
+    {
+      "id": "point",
+      "verbs": [
+        "point",
+        "gesture"
+      ],
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "point"
+        }
+      ],
+      "text": "{actor} points.",
+      "label": "Point",
+      "opposite": "nod",
+      "decision": false
+    },
+    {
+      "id": "struggle",
       "verbs": [
         "struggle",
-        "fight",
         "wrestle",
-        "kick",
-        "thrash"
+        "thrash",
+        "fight"
       ],
-      "with": {}
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "struggle"
+        }
+      ],
+      "text": "{actor} struggles.",
+      "label": "Fight back",
+      "opposite": "hold_back",
+      "decision": false
     },
     {
-      "clip": "jump",
-      "verbs": [
-        "jump",
-        "leap",
-        "spring",
-        "hop"
-      ],
-      "with": {}
-    },
-    {
-      "clip": "celebrate",
+      "id": "celebrate",
       "verbs": [
         "cheer",
         "celebrate"
       ],
-      "with": {}
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "celebrate"
+        }
+      ],
+      "text": "{actor} cheers.",
+      "label": "Cheer",
+      "opposite": "frown",
+      "decision": false
     },
     {
-      "clip": "roar",
+      "id": "roar",
       "verbs": [
         "roar",
         "howl",
-        "bellow"
+        "bellow",
+        "growl",
+        "snarl"
       ],
-      "with": {}
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "roar"
+        },
+        {
+          "sfx": "roar"
+        }
+      ],
+      "text": "{actor} roars.",
+      "label": "Roar",
+      "decision": false
     },
     {
-      "clip": "lunge",
+      "id": "lunge",
       "verbs": [
         "swing",
         "lunge",
         "pounce",
-        "strike",
         "smash"
       ],
-      "with": {}
-    },
-    {
-      "clip": "shake",
-      "verbs": [],
-      "with": {
-        "shake": "head"
-      }
-    },
-    {
-      "clip": "play_flute",
-      "verbs": [],
-      "with": {
-        "play": "flute"
-      }
+      "with": {},
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "lunge"
+        },
+        {
+          "sfx": "crash"
+        }
+      ],
+      "text": "{actor} lunges.",
+      "label": "Lunge",
+      "decision": false
     }
   ],
   "sounds": [
@@ -2198,6 +3342,11 @@
     "laugh",
     "unwrap",
     "crumble",
+    "pat",
+    "hug",
+    "push",
+    "stagger",
+    "give",
     "sleep",
     "wake",
     "lunge",
