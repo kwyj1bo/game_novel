@@ -54,7 +54,7 @@ def test_characters_kinds_and_genders(halloween, lighthouse):
     assert {c.id: (c.kind, c.gender) for c in b.characters.values()} == {
         "mara": ("human", "f"),
         "tobin": ("human", "m"),
-        "dog": ("dog3", "n"),
+        "dog": ("dog", "n"),
     }
 
 
@@ -279,3 +279,41 @@ def test_places_mentioned_in_passing_do_not_move_the_scene(catalog):
 
     a = analyze(paras, catalog)
     assert [s.location for s in segment(paras, a.lines, catalog)] == ["privet_drive"]
+
+
+
+# ---- assets found in the book: named creatures, roles, multi-meaning verbs
+
+
+def test_named_creatures_use_their_rig(catalog):
+    from pipeline.analyze import analyze
+
+    a = analyze(["Hedwig hooted softly and flew to Harry.", "Harry stroked Hedwig and smiled.", "Fang bounded over to Hagrid."], catalog)
+    kinds = {c.id: c.kind for c in a.characters.values()}
+    assert kinds["hedwig"] == "owl"
+    assert kinds["fang"] == "dog"
+
+
+def test_unnamed_roles_match_role_assets(catalog):
+    from pipeline.analyze import analyze
+
+    a = analyze(["The goblin peered down at Harry.", '"Very well," said the goblin.'], catalog)
+    assert a.characters["goblin"].asset == "goblin"
+
+
+def test_a_verb_picks_the_action_its_sentence_supports(catalog):
+    from pipeline.analyze import analyze
+
+    a = analyze(["Ron pulled Harry behind the statue.", "Harry pulled the lever."], catalog)
+    got = [(e.action, e.target, e.obj) for ln in a.lines for e in ln.events if e.kind == "action"]
+    assert ("drag", "harry", "") in got
+    assert ("pull", None, "the lever") in got
+
+
+def test_inventory_reports_coverage(catalog):
+    from pipeline.inventory import inventory, report
+
+    inv = inventory(load_chapters(FIX / "hp_book.txt"), catalog)
+    text = report(inv)
+    assert "Characters:" in text and "Visible verbs:" in text
+    assert any(c["asset"] == "hagrid" for c in inv["characters"])

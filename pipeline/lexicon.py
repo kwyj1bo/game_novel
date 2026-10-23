@@ -18,6 +18,7 @@ SPEECH_VERBS = {
     "plead", "beg", "insist", "demand", "announce", "declare", "growl", "squeak",
     "tell", "explain", "promise", "admit", "agree", "suggest", "continue", "repeat", "order", "command",
     "sneer", "smirk", "mock", "taunt", "jeer", "scoff", "drawl", "grumble", "whimper", "stammer", "stutter",
+    "mumble", "complain", "remind", "chorus", "wail", "howl", "bark", "mutter",
 }
 
 # Words that mark an action as not happening ("before he went", "if she ran").

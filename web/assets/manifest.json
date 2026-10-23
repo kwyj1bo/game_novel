@@ -1650,16 +1650,729 @@
         "outfit": "adult",
         "voice": 1.2
       }
-    }
-  ],
-  "creatures": [
+    },
+    {
+      "id": "flitwick",
+      "names": [
+        "Flitwick",
+        "Professor Flitwick"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Professor Flitwick",
+        "height": 1.0,
+        "robe": "#2e3a5a",
+        "trim": "#c0a040",
+        "skin": "#ecd2bc",
+        "hair": "#e8e8e8",
+        "hairStyle": "bushy",
+        "eyes": "#4a5a8a",
+        "voice": 1.5,
+        "subtitleColor": "#b8c8ff"
+      }
+    },
+    {
+      "id": "sprout",
+      "names": [
+        "Sprout",
+        "Professor Sprout"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Professor Sprout",
+        "height": 1.55,
+        "robe": "#5a4a2a",
+        "trim": "#3a5a2a",
+        "skin": "#e8c4a0",
+        "hair": "#8a8a7a",
+        "hairStyle": "bushy",
+        "hat": "witch",
+        "voice": 1.15,
+        "subtitleColor": "#c8e0a0"
+      }
+    },
+    {
+      "id": "binns",
+      "names": [
+        "Binns",
+        "Professor Binns"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Professor Binns",
+        "height": 1.65,
+        "robe": "#3a3a3a",
+        "skin": "#e8e0d8",
+        "hair": "#d8d8d8",
+        "hairStyle": "short",
+        "glasses": "round",
+        "ghost": true,
+        "voice": 0.8
+      }
+    },
+    {
+      "id": "pince",
+      "names": [
+        "Madam Pince",
+        "Pince"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Madam Pince",
+        "height": 1.65,
+        "robe": "#2a2a2a",
+        "skin": "#e0ccb8",
+        "hair": "#3a3a3a",
+        "hairStyle": "bun",
+        "voice": 1.2
+      }
+    },
+    {
+      "id": "malkin",
+      "names": [
+        "Madam Malkin",
+        "Malkin"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Madam Malkin",
+        "height": 1.5,
+        "robe": "#8a5a9a",
+        "skin": "#ecd2bc",
+        "hair": "#b8b8b8",
+        "hairStyle": "bun",
+        "voice": 1.25,
+        "subtitleColor": "#e0b8f0"
+      }
+    },
+    {
+      "id": "griphook",
+      "names": [
+        "Griphook"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Griphook",
+        "height": 1.05,
+        "robe": "#2a3a2a",
+        "trim": "#8a6a2a",
+        "skin": "#b8ae8a",
+        "hair": "#3a3a3a",
+        "hairStyle": "bald",
+        "eyes": "#1a1a1a",
+        "voice": 0.75,
+        "subtitleColor": "#d8d0a0"
+      }
+    },
+    {
+      "id": "flint",
+      "names": [
+        "Flint",
+        "Marcus Flint",
+        "Marcus"
+      ],
+      "spec": {
+        "robe": "#18181f",
+        "outfit": "student",
+        "height": 1.75,
+        "name": "Marcus Flint",
+        "trim": "#1a472a",
+        "skin": "#e8c0a0",
+        "hair": "#2a1a10",
+        "hairStyle": "short",
+        "voice": 0.8
+      }
+    },
+    {
+      "id": "lee",
+      "names": [
+        "Lee",
+        "Lee Jordan",
+        "Jordan"
+      ],
+      "spec": {
+        "robe": "#18181f",
+        "outfit": "student",
+        "height": 1.6,
+        "name": "Lee Jordan",
+        "trim": "#7f0909",
+        "skin": "#6a4228",
+        "hair": "#1a1410",
+        "hairStyle": "bushy",
+        "voice": 1.05,
+        "subtitleColor": "#ffd090"
+      }
+    },
+    {
+      "id": "angelina",
+      "names": [
+        "Angelina",
+        "Angelina Johnson"
+      ],
+      "spec": {
+        "robe": "#18181f",
+        "outfit": "student",
+        "height": 1.65,
+        "name": "Angelina Johnson",
+        "trim": "#7f0909",
+        "skin": "#6a4228",
+        "hair": "#1a1410",
+        "hairStyle": "long",
+        "voice": 1.3
+      }
+    },
+    {
+      "id": "katie",
+      "names": [
+        "Katie",
+        "Katie Bell"
+      ],
+      "spec": {
+        "robe": "#18181f",
+        "outfit": "student",
+        "height": 1.55,
+        "name": "Katie Bell",
+        "trim": "#7f0909",
+        "skin": "#f0cdb2",
+        "hair": "#5a3a1a",
+        "hairStyle": "long",
+        "voice": 1.35
+      }
+    },
+    {
+      "id": "alicia",
+      "names": [
+        "Alicia",
+        "Alicia Spinnet"
+      ],
+      "spec": {
+        "robe": "#18181f",
+        "outfit": "student",
+        "height": 1.6,
+        "name": "Alicia Spinnet",
+        "trim": "#7f0909",
+        "skin": "#f0cdb2",
+        "hair": "#3a2414",
+        "hairStyle": "bun",
+        "voice": 1.3
+      }
+    },
+    {
+      "id": "parvati",
+      "names": [
+        "Parvati",
+        "Parvati Patil",
+        "Patil"
+      ],
+      "spec": {
+        "robe": "#18181f",
+        "outfit": "student",
+        "height": 1.45,
+        "name": "Parvati Patil",
+        "trim": "#7f0909",
+        "skin": "#b8845a",
+        "hair": "#120d08",
+        "hairStyle": "long",
+        "voice": 1.4
+      }
+    },
+    {
+      "id": "lavender",
+      "names": [
+        "Lavender",
+        "Lavender Brown"
+      ],
+      "spec": {
+        "robe": "#18181f",
+        "outfit": "student",
+        "height": 1.45,
+        "name": "Lavender Brown",
+        "trim": "#7f0909",
+        "skin": "#f0cdb2",
+        "hair": "#c8a870",
+        "hairStyle": "long",
+        "voice": 1.4
+      }
+    },
+    {
+      "id": "hannah",
+      "names": [
+        "Hannah",
+        "Hannah Abbott",
+        "Abbott"
+      ],
+      "spec": {
+        "robe": "#18181f",
+        "outfit": "student",
+        "height": 1.45,
+        "name": "Hannah Abbott",
+        "trim": "#d8b830",
+        "skin": "#f0cdb2",
+        "hair": "#d8c080",
+        "hairStyle": "bun",
+        "voice": 1.4
+      }
+    },
+    {
+      "id": "susan",
+      "names": [
+        "Susan",
+        "Susan Bones"
+      ],
+      "spec": {
+        "robe": "#18181f",
+        "outfit": "student",
+        "height": 1.45,
+        "name": "Susan Bones",
+        "trim": "#d8b830",
+        "skin": "#f0cdb2",
+        "hair": "#c2501e",
+        "hairStyle": "long",
+        "voice": 1.4
+      }
+    },
+    {
+      "id": "justin",
+      "names": [
+        "Justin",
+        "Justin Finch-Fletchley"
+      ],
+      "spec": {
+        "robe": "#18181f",
+        "outfit": "student",
+        "height": 1.45,
+        "name": "Justin Finch-Fletchley",
+        "trim": "#d8b830",
+        "skin": "#f0cdb2",
+        "hair": "#5a3a1a",
+        "hairStyle": "short",
+        "voice": 1.05
+      }
+    },
+    {
+      "id": "ginny",
+      "names": [
+        "Ginny",
+        "Ginny Weasley"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Ginny",
+        "height": 1.3,
+        "robe": "#6a3a5a",
+        "skin": "#f0cdb2",
+        "hair": "#c2501e",
+        "hairStyle": "long",
+        "voice": 1.5,
+        "subtitleColor": "#ffb090"
+      }
+    },
+    {
+      "id": "charlie",
+      "names": [
+        "Charlie",
+        "Charlie Weasley"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Charlie Weasley",
+        "height": 1.7,
+        "robe": "#5a3a28",
+        "skin": "#e8b898",
+        "hair": "#c2501e",
+        "hairStyle": "ginger_mop",
+        "voice": 0.9
+      }
+    },
+    {
+      "id": "piers",
+      "names": [
+        "Piers",
+        "Piers Polkiss",
+        "Polkiss"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Piers",
+        "height": 1.4,
+        "robe": "#6a6a7a",
+        "skin": "#f0d0b8",
+        "hair": "#8a6a4a",
+        "hairStyle": "short",
+        "voice": 1.1
+      }
+    },
+    {
+      "id": "marge",
+      "names": [
+        "Marge",
+        "Aunt Marge"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Aunt Marge",
+        "height": 1.6,
+        "robe": "#7a5a6a",
+        "skin": "#e8b498",
+        "hair": "#6a5a4a",
+        "hairStyle": "short",
+        "voice": 1.0
+      }
+    },
+    {
+      "id": "dedalus",
+      "names": [
+        "Dedalus",
+        "Dedalus Diggle",
+        "Diggle"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Dedalus Diggle",
+        "height": 1.3,
+        "robe": "#5a3a8a",
+        "trim": "#5a3a8a",
+        "skin": "#ecd2bc",
+        "hair": "#8a8a8a",
+        "hairStyle": "short",
+        "hat": "witch",
+        "voice": 1.25
+      }
+    },
+    {
+      "id": "doris",
+      "names": [
+        "Doris",
+        "Doris Crockford"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Doris Crockford",
+        "height": 1.55,
+        "robe": "#6a5a7a",
+        "skin": "#ecd2bc",
+        "hair": "#9a9a9a",
+        "hairStyle": "bun",
+        "voice": 1.3
+      }
+    },
+    {
+      "id": "tom",
+      "names": [
+        "Tom"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Tom",
+        "height": 1.6,
+        "robe": "#4a3a2a",
+        "skin": "#d8c0a0",
+        "hair": "#c8c8c8",
+        "hairStyle": "bald",
+        "voice": 0.8
+      }
+    },
+    {
+      "id": "peeves",
+      "names": [
+        "Peeves"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Peeves",
+        "height": 1.3,
+        "robe": "#c86a2a",
+        "trim": "#5a8a2a",
+        "skin": "#e8d8c8",
+        "hair": "#2a1a0a",
+        "hairStyle": "messy",
+        "hat": "witch",
+        "ghost": true,
+        "voice": 1.4,
+        "subtitleColor": "#ffb060"
+      }
+    },
+    {
+      "id": "nick",
+      "names": [
+        "Nick",
+        "Nearly Headless Nick",
+        "Sir Nicholas"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Nearly Headless Nick",
+        "height": 1.75,
+        "robe": "#5a5a6a",
+        "skin": "#e8e8f0",
+        "hair": "#c8c8d8",
+        "hairStyle": "long",
+        "beard": "short",
+        "ghost": true,
+        "voice": 0.95
+      }
+    },
+    {
+      "id": "friar",
+      "names": [
+        "Fat Friar",
+        "Friar"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "the Fat Friar",
+        "height": 1.6,
+        "robe": "#6a5a3a",
+        "skin": "#e8e8f0",
+        "hair": "#c8c8d8",
+        "hairStyle": "bald",
+        "ghost": true,
+        "voice": 0.9
+      }
+    },
+    {
+      "id": "voldemort",
+      "names": [
+        "Voldemort",
+        "Lord Voldemort",
+        "You-Know-Who"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Voldemort",
+        "height": 1.85,
+        "robe": "#0a0a0c",
+        "trim": "#0a0a0c",
+        "skin": "#e0e4e0",
+        "hair": "#e0e4e0",
+        "hairStyle": "bald",
+        "eyes": "#cc1010",
+        "voice": 0.75,
+        "subtitleColor": "#ff6a5a"
+      }
+    },
+    {
+      "id": "lily",
+      "names": [
+        "Lily",
+        "Lily Potter"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "Lily Potter",
+        "height": 1.65,
+        "robe": "#3a4a6a",
+        "skin": "#f0d0b8",
+        "hair": "#a8301a",
+        "hairStyle": "long",
+        "eyes": "#2e7d32",
+        "voice": 1.3
+      }
+    },
+    {
+      "id": "james",
+      "names": [
+        "James",
+        "James Potter"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "James Potter",
+        "height": 1.8,
+        "robe": "#3a2a2a",
+        "skin": "#ecc4a4",
+        "hair": "#120d08",
+        "hairStyle": "messy",
+        "glasses": "round",
+        "voice": 0.95
+      }
+    },
+    {
+      "id": "bertha",
+      "names": [
+        "Fat Lady"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "the Fat Lady",
+        "height": 1.6,
+        "robe": "#d8a0b8",
+        "skin": "#f0d0b8",
+        "hair": "#6a4a2a",
+        "hairStyle": "bun",
+        "voice": 1.3
+      }
+    },
+    {
+      "id": "hedwig",
+      "names": [
+        "Hedwig"
+      ],
+      "spec": {
+        "name": "Hedwig",
+        "kind": "owl",
+        "height": 0.55,
+        "robe": "#f4f4f0",
+        "eyes": "#e8b020"
+      }
+    },
+    {
+      "id": "fang",
+      "names": [
+        "Fang"
+      ],
+      "spec": {
+        "name": "Fang",
+        "kind": "dog",
+        "height": 1.0,
+        "robe": "#1e1a18",
+        "eyes": "#5a3a1a"
+      }
+    },
+    {
+      "id": "norris",
+      "names": [
+        "Mrs. Norris",
+        "Mrs Norris",
+        "Norris"
+      ],
+      "spec": {
+        "name": "Mrs Norris",
+        "kind": "cat",
+        "height": 0.4,
+        "robe": "#6a6a5a",
+        "eyes": "#e8c040"
+      }
+    },
+    {
+      "id": "norbert",
+      "names": [
+        "Norbert"
+      ],
+      "spec": {
+        "name": "Norbert",
+        "kind": "dragon",
+        "height": 1.2,
+        "robe": "#1e2a1e",
+        "eyes": "#ff8a20"
+      }
+    },
+    {
+      "id": "ronan",
+      "names": [
+        "Ronan"
+      ],
+      "spec": {
+        "name": "Ronan",
+        "kind": "centaur",
+        "height": 2.1,
+        "robe": "#6a3a24",
+        "skin": "#d8a080",
+        "hair": "#8a3a1a",
+        "eyes": "#3a2a1a"
+      }
+    },
+    {
+      "id": "bane",
+      "names": [
+        "Bane"
+      ],
+      "spec": {
+        "name": "Bane",
+        "kind": "centaur",
+        "height": 2.1,
+        "robe": "#1a1a1a",
+        "skin": "#8a5a3a",
+        "hair": "#0a0a0a",
+        "eyes": "#1a1a1a"
+      }
+    },
+    {
+      "id": "firenze",
+      "names": [
+        "Firenze"
+      ],
+      "spec": {
+        "name": "Firenze",
+        "kind": "centaur",
+        "height": 2.1,
+        "robe": "#c8b890",
+        "skin": "#f0d0b0",
+        "hair": "#e8dca0",
+        "eyes": "#4a7ab0"
+      }
+    },
+    {
+      "id": "goblin",
+      "names": [
+        "Goblin"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "the Goblin",
+        "height": 1.05,
+        "robe": "#2a3a2a",
+        "trim": "#8a6a2a",
+        "skin": "#b8ae8a",
+        "hairStyle": "bald",
+        "voice": 0.75
+      }
+    },
+    {
+      "id": "witch",
+      "names": [
+        "Witch"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "the Witch",
+        "height": 1.6,
+        "robe": "#3a2a4a",
+        "skin": "#ecd2bc",
+        "hair": "#3a2a1a",
+        "hairStyle": "long",
+        "hat": "witch",
+        "voice": 1.3
+      }
+    },
+    {
+      "id": "wizard",
+      "names": [
+        "Wizard"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "the Wizard",
+        "height": 1.75,
+        "robe": "#2a2a4a",
+        "skin": "#e8c4a0",
+        "hair": "#8a8a8a",
+        "hairStyle": "short",
+        "beard": "short",
+        "hat": "witch",
+        "voice": 0.9
+      }
+    },
+    {
+      "id": "guard",
+      "names": [
+        "Guard"
+      ],
+      "spec": {
+        "outfit": "adult",
+        "name": "the Guard",
+        "height": 1.8,
+        "robe": "#2a2a3a",
+        "skin": "#e0b898",
+        "hair": "#2a2a2a",
+        "hairStyle": "short",
+        "voice": 0.85
+      }
+    },
     {
       "id": "fluffy",
-      "words": [
-        "fluffy",
-        "three-headed dog",
-        "dog",
-        "hound"
+      "names": [
+        "Fluffy"
       ],
       "spec": {
         "name": "Fluffy",
@@ -1667,7 +2380,9 @@
         "height": 3.4,
         "robe": "#3e2c1f"
       }
-    },
+    }
+  ],
+  "creatures": [
     {
       "id": "troll",
       "words": [
@@ -1680,6 +2395,102 @@
         "height": 3.6,
         "skin": "#7d8572",
         "robe": "#4a3a28"
+      }
+    },
+    {
+      "id": "fluffy",
+      "words": [
+        "fluffy"
+      ],
+      "spec": {
+        "name": "Fluffy",
+        "kind": "dog3",
+        "height": 3.4,
+        "robe": "#3e2c1f"
+      }
+    },
+    {
+      "id": "dog",
+      "words": [
+        "dog",
+        "hound",
+        "boarhound"
+      ],
+      "spec": {
+        "name": "Dog",
+        "kind": "dog",
+        "height": 0.9,
+        "robe": "#4a3a2a",
+        "eyes": "#3a2a1a"
+      }
+    },
+    {
+      "id": "cat",
+      "words": [
+        "cat",
+        "kitten",
+        "tabby"
+      ],
+      "spec": {
+        "name": "Cat",
+        "kind": "cat",
+        "height": 0.4,
+        "robe": "#8a6a4a",
+        "eyes": "#d8c040"
+      }
+    },
+    {
+      "id": "owl",
+      "words": [
+        "owl"
+      ],
+      "spec": {
+        "name": "Owl",
+        "kind": "owl",
+        "height": 0.5,
+        "robe": "#8a6a4a",
+        "eyes": "#e8a020"
+      }
+    },
+    {
+      "id": "dragon",
+      "words": [
+        "dragon"
+      ],
+      "spec": {
+        "name": "Dragon",
+        "kind": "dragon",
+        "height": 2.0,
+        "robe": "#2a3a2a",
+        "eyes": "#ff8a20"
+      }
+    },
+    {
+      "id": "unicorn",
+      "words": [
+        "unicorn"
+      ],
+      "spec": {
+        "name": "Unicorn",
+        "kind": "unicorn",
+        "height": 1.7,
+        "robe": "#f4f2f8",
+        "eyes": "#4a6aa8"
+      }
+    },
+    {
+      "id": "centaur",
+      "words": [
+        "centaur"
+      ],
+      "spec": {
+        "name": "Centaur",
+        "kind": "centaur",
+        "height": 2.1,
+        "robe": "#6a4a2a",
+        "skin": "#d8a880",
+        "hair": "#3a2a1a",
+        "eyes": "#3a2a1a"
       }
     }
   ],
@@ -1822,7 +2633,11 @@
       "id": "pat",
       "verbs": [
         "pat",
-        "tap"
+        "tap",
+        "touch",
+        "stroke",
+        "nudge",
+        "poke"
       ],
       "params": [
         "actor",
@@ -1952,7 +2767,6 @@
         "slap",
         "smack",
         "kick",
-        "attack",
         "thump"
       ],
       "params": [
@@ -2213,7 +3027,12 @@
       "verbs": [
         "greet",
         "thank",
-        "comfort"
+        "comfort",
+        "speak",
+        "talk",
+        "chat",
+        "meet",
+        "visit"
       ],
       "params": [
         "actor",
@@ -2274,7 +3093,12 @@
         "grip",
         "clutch",
         "lift",
-        "collect"
+        "collect",
+        "reach",
+        "steal",
+        "pocket",
+        "swipe",
+        "nick"
       ],
       "params": [
         "actor",
@@ -2630,7 +3454,10 @@
         "leap",
         "spring",
         "hop",
-        "vault"
+        "vault",
+        "leapt",
+        "land",
+        "bound"
       ],
       "params": [
         "actor"
@@ -2672,7 +3499,10 @@
         "trip",
         "stumble",
         "faint",
-        "sway"
+        "sway",
+        "die",
+        "slip",
+        "tumble"
       ],
       "params": [
         "actor"
@@ -2941,6 +3771,718 @@
       ],
       "text": "{actor} lunges.",
       "label": "Lunge"
+    },
+    {
+      "id": "turn_to",
+      "verbs": [
+        "turn",
+        "face",
+        "glance",
+        "peer",
+        "look"
+      ],
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        }
+      ],
+      "text": "{actor} turns to {target}.",
+      "label": "Turn to {target}",
+      "decision": true,
+      "opposite": "turn_away"
+    },
+    {
+      "id": "turn_away",
+      "verbs": [],
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "auto_entry"
+        }
+      ],
+      "text": "{actor} turns away from {target}.",
+      "label": "Turn away from {target}",
+      "decision": true,
+      "opposite": "turn_to"
+    },
+    {
+      "id": "watch",
+      "verbs": [
+        "watch",
+        "stare",
+        "star",
+        "gaze",
+        "observe",
+        "eye",
+        "spot",
+        "recognize",
+        "recognise",
+        "listen"
+      ],
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        }
+      ],
+      "text": "{actor} watches {target}.",
+      "label": "Watch {target}",
+      "decision": false,
+      "opposite": "turn_away"
+    },
+    {
+      "id": "sit",
+      "verbs": [
+        "sit",
+        "settle",
+        "perch",
+        "slump"
+      ],
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "sit",
+          "hold": true
+        }
+      ],
+      "text": "{actor} sits down.",
+      "label": "Sit down",
+      "decision": false,
+      "opposite": "stand_up"
+    },
+    {
+      "id": "stand_up",
+      "verbs": [
+        "stand",
+        "rise"
+      ],
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "idle"
+        }
+      ],
+      "text": "{actor} gets up.",
+      "label": "Stand up",
+      "decision": false,
+      "opposite": "sit"
+    },
+    {
+      "id": "lie_down",
+      "verbs": [
+        "lie",
+        "sleep",
+        "doze",
+        "rest",
+        "collapse"
+      ],
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "sleep",
+          "hold": true
+        }
+      ],
+      "text": "{actor} lies down.",
+      "label": "Lie down",
+      "decision": false,
+      "opposite": "stand_up"
+    },
+    {
+      "id": "wake",
+      "verbs": [
+        "wake",
+        "awake",
+        "stir",
+        "awaken"
+      ],
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "idle"
+        }
+      ],
+      "text": "{actor} wakes up.",
+      "label": "Wake up",
+      "decision": false,
+      "opposite": "lie_down"
+    },
+    {
+      "id": "drag",
+      "verbs": [
+        "pull",
+        "drag",
+        "tug",
+        "yank",
+        "haul",
+        "heave"
+      ],
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "move": "$actor",
+          "to": "$target"
+        },
+        {
+          "anim": "$actor",
+          "clip": "reach"
+        },
+        {
+          "together": [
+            {
+              "move": "$actor",
+              "to": "auto_entry"
+            },
+            {
+              "move": "$target",
+              "to": "auto_entry"
+            }
+          ]
+        }
+      ],
+      "text": "{actor} pulls {target} away.",
+      "label": "Pull {target} away",
+      "decision": true,
+      "opposite": "let_be"
+    },
+    {
+      "id": "let_be",
+      "verbs": [],
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} leaves {target} where they are.",
+      "label": "Leave {target} be",
+      "decision": true,
+      "opposite": "drag"
+    },
+    {
+      "id": "pull",
+      "verbs": [
+        "pull",
+        "tug",
+        "yank",
+        "heave",
+        "drag"
+      ],
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "reach"
+        }
+      ],
+      "text": "{actor} pulls {object}.",
+      "label": "Pull {object}",
+      "decision": true,
+      "opposite": "leave_it"
+    },
+    {
+      "id": "follow",
+      "verbs": [
+        "follow",
+        "chase",
+        "pursue",
+        "trail",
+        "join"
+      ],
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "move": "$actor",
+          "to": "$target"
+        }
+      ],
+      "text": "{actor} follows {target}.",
+      "label": "Follow {target}",
+      "decision": true,
+      "opposite": "stay_behind"
+    },
+    {
+      "id": "stay_behind",
+      "verbs": [],
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} stays behind.",
+      "label": "Stay behind",
+      "decision": true,
+      "opposite": "follow"
+    },
+    {
+      "id": "lead",
+      "verbs": [
+        "lead",
+        "guide",
+        "usher",
+        "steer"
+      ],
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "anim": "$actor",
+          "clip": "wave"
+        },
+        {
+          "together": [
+            {
+              "move": "$actor",
+              "to": "auto_3"
+            },
+            {
+              "move": "$target",
+              "to": "auto_2"
+            }
+          ]
+        }
+      ],
+      "text": "{actor} leads {target} on.",
+      "label": "Lead {target} on",
+      "decision": true,
+      "opposite": "stay_behind"
+    },
+    {
+      "id": "climb",
+      "verbs": [
+        "climb",
+        "clamber",
+        "scale",
+        "mount",
+        "ascend"
+      ],
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "jump"
+        },
+        {
+          "sfx": "whoosh"
+        }
+      ],
+      "text": "{actor} climbs up.",
+      "label": "Climb up",
+      "decision": true,
+      "opposite": "hold_back"
+    },
+    {
+      "id": "lean",
+      "verbs": [
+        "lean",
+        "bend",
+        "stoop",
+        "bow"
+      ],
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "lean"
+        }
+      ],
+      "text": "{actor} leans in.",
+      "label": "Lean in",
+      "decision": false,
+      "opposite": "hold_back"
+    },
+    {
+      "id": "eat",
+      "verbs": [
+        "eat",
+        "munch",
+        "chew",
+        "bite",
+        "nibble",
+        "swallow"
+      ],
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "drink"
+        }
+      ],
+      "text": "{actor} eats {object}.",
+      "label": "Eat {object}",
+      "decision": true,
+      "opposite": "refuse_food"
+    },
+    {
+      "id": "refuse_food",
+      "verbs": [],
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "shake"
+        }
+      ],
+      "text": "{actor} pushes {object} away.",
+      "label": "Push {object} away",
+      "decision": true,
+      "opposite": "eat"
+    },
+    {
+      "id": "knock",
+      "verbs": [
+        "knock",
+        "rap",
+        "hammer",
+        "pound"
+      ],
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "push"
+        },
+        {
+          "sfx": "thud"
+        }
+      ],
+      "text": "{actor} knocks on {object}.",
+      "label": "Knock on {object}",
+      "decision": true,
+      "opposite": "leave_it"
+    },
+    {
+      "id": "break_it",
+      "verbs": [
+        "break",
+        "smash",
+        "shatter",
+        "snap",
+        "crack",
+        "tear",
+        "rip"
+      ],
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "push"
+        },
+        {
+          "sfx": "shatter"
+        }
+      ],
+      "text": "{actor} breaks {object}.",
+      "label": "Break {object}",
+      "decision": true,
+      "opposite": "hold_on"
+    },
+    {
+      "id": "fly",
+      "verbs": [
+        "fly",
+        "soar",
+        "swoop",
+        "dive",
+        "zoom",
+        "hover",
+        "glide"
+      ],
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "jump"
+        },
+        {
+          "sfx": "whoosh"
+        }
+      ],
+      "text": "{actor} flies.",
+      "label": "Fly",
+      "decision": true,
+      "opposite": "hold_back"
+    },
+    {
+      "id": "carry",
+      "verbs": [
+        "carry",
+        "bring",
+        "fetch",
+        "lug"
+      ],
+      "params": [
+        "actor",
+        "object"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "give"
+        }
+      ],
+      "text": "{actor} carries {object}.",
+      "label": "Carry {object}",
+      "decision": true,
+      "opposite": "leave_it"
+    },
+    {
+      "id": "show",
+      "verbs": [
+        "show",
+        "present",
+        "hand",
+        "bring",
+        "offer"
+      ],
+      "params": [
+        "actor",
+        "target",
+        "object"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "move": "$actor",
+          "to": "$target"
+        },
+        {
+          "look": "$target",
+          "at": "$actor"
+        },
+        {
+          "together": [
+            {
+              "anim": "$actor",
+              "clip": "give"
+            },
+            {
+              "anim": "$target",
+              "clip": "nod"
+            }
+          ]
+        }
+      ],
+      "text": "{actor} shows {target} {object}.",
+      "label": "Show {target} {object}",
+      "decision": true,
+      "opposite": "keep"
+    },
+    {
+      "id": "strike_down",
+      "verbs": [
+        "kill",
+        "stun",
+        "curse",
+        "attack",
+        "fell"
+      ],
+      "params": [
+        "actor",
+        "target"
+      ],
+      "steps": [
+        {
+          "look": "$actor",
+          "at": "$target"
+        },
+        {
+          "together": [
+            {
+              "anim": "$actor",
+              "clip": "cast"
+            },
+            {
+              "fx": "spell",
+              "from": "$actor",
+              "to": "$target",
+              "color": "#ff5a3a"
+            }
+          ]
+        },
+        {
+          "anim": "$target",
+          "clip": "fall",
+          "hold": true
+        }
+      ],
+      "text": "{actor} strikes {target} down.",
+      "label": "Strike {target} down",
+      "decision": true,
+      "opposite": "spare"
+    },
+    {
+      "id": "stop",
+      "verbs": [
+        "stop",
+        "halt",
+        "freeze",
+        "pause",
+        "hesitate"
+      ],
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "idle"
+        }
+      ],
+      "text": "{actor} stops.",
+      "label": "Stop",
+      "decision": false,
+      "opposite": "hold_back"
+    },
+    {
+      "id": "sigh",
+      "verbs": [
+        "sigh",
+        "groan",
+        "grunt",
+        "yawn",
+        "shrug"
+      ],
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "nod"
+        }
+      ],
+      "text": "{actor} sighs.",
+      "label": "Sigh",
+      "decision": false
+    },
+    {
+      "id": "clap",
+      "verbs": [
+        "clap",
+        "applaud"
+      ],
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "celebrate"
+        }
+      ],
+      "text": "{actor} claps.",
+      "label": "Clap",
+      "decision": false,
+      "opposite": "frown"
+    },
+    {
+      "id": "wait",
+      "verbs": [
+        "wait",
+        "linger",
+        "stay",
+        "remain"
+      ],
+      "params": [
+        "actor"
+      ],
+      "steps": [
+        {
+          "anim": "$actor",
+          "clip": "idle"
+        }
+      ],
+      "text": "{actor} waits.",
+      "label": "Wait",
+      "decision": false,
+      "opposite": "flee"
     }
   ],
   "sounds": [

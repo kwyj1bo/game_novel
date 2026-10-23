@@ -222,8 +222,18 @@
                 "enum": [
                   "human",
                   "dog3",
-                  "troll"
+                  "troll",
+                  "dog",
+                  "cat",
+                  "owl",
+                  "dragon",
+                  "centaur",
+                  "unicorn"
                 ]
+              },
+              "ghost": {
+                "default": false,
+                "type": "boolean"
               },
               "height": {
                 "default": 1.6,
@@ -351,8 +361,18 @@
                 "type": "string",
                 "enum": [
                   "dog3",
-                  "troll"
+                  "troll",
+                  "dog",
+                  "cat",
+                  "owl",
+                  "dragon",
+                  "centaur",
+                  "unicorn"
                 ]
+              },
+              "ghost": {
+                "default": false,
+                "type": "boolean"
               },
               "height": {
                 "default": 1.6,
