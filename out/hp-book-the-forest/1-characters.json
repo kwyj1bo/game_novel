@@ -1,0 +1,42 @@
+{
+  "harry": {
+    "id": "harry",
+    "name": "Harry",
+    "kind": "human",
+    "gender": "m",
+    "mentions": 3,
+    "aliases": [],
+    "asset": "harry",
+    "actions": 3
+  },
+  "malfoy": {
+    "id": "malfoy",
+    "name": "Malfoy",
+    "kind": "human",
+    "gender": "m",
+    "mentions": 3.0,
+    "aliases": [],
+    "asset": "malfoy",
+    "actions": 1
+  },
+  "hagrid": {
+    "id": "hagrid",
+    "name": "Hagrid",
+    "kind": "human",
+    "gender": "x",
+    "mentions": 3.0,
+    "aliases": [],
+    "asset": "hagrid",
+    "actions": 0
+  },
+  "hound": {
+    "id": "hound",
+    "name": "Hound",
+    "kind": "dog3",
+    "gender": "n",
+    "mentions": 2,
+    "aliases": [],
+    "asset": "fluffy",
+    "actions": 1
+  }
+}

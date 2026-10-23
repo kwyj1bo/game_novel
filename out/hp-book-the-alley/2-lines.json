@@ -1,0 +1,235 @@
+[
+  {
+    "kind": "narrate",
+    "text": "Hagrid led Harry through the crowded alley.",
+    "para": 0,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Shop windows glittered on both sides of the cobbled street, full of cauldrons, owls and broomsticks.",
+    "para": 0,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "Welcome to Diagon Alley,",
+    "para": 1,
+    "speaker": "hagrid",
+    "mood": null,
+    "events": [
+      {
+        "actor": "hagrid",
+        "kind": "anim",
+        "verb": "grin",
+        "clip": "laugh",
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Grin down at Hagrid",
+        "obj": ""
+      }
+    ],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Harry stared at everything.",
+    "para": 2,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "A witch was selling dragon livers from a stall, and a crowd of boys pressed their noses against a shop window.",
+    "para": 2,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "First, the bank,",
+    "para": 3,
+    "speaker": "hagrid",
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "Can't buy anything without gold.",
+    "para": 3,
+    "speaker": "hagrid",
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "At the end of the street stood a white marble building.",
+    "para": 4,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 1
+  },
+  {
+    "kind": "narrate",
+    "text": "Harry followed Hagrid up the steps and into Gringotts.",
+    "para": 4,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": "harry",
+        "kind": "move",
+        "verb": "follow",
+        "clip": null,
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Follow up Hagrid",
+        "obj": "Hagrid"
+      }
+    ],
+    "danger": 1
+  },
+  {
+    "kind": "narrate",
+    "text": "The marble hall was enormous.",
+    "para": 5,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Goblins sat at long counters, weighing coins and writing in ledgers.",
+    "para": 5,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "Mr. Potter wishes to make a withdrawal,",
+    "para": 6,
+    "speaker": "hagrid",
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "He pulled a tiny golden key from his coat.",
+    "para": 6,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": "hagrid",
+        "kind": "act",
+        "verb": "pull",
+        "clip": null,
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Pull a tiny golden key from your coat",
+        "obj": "a tiny golden key"
+      }
+    ],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "A goblin peered down at them.",
+    "para": 7,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "And does Mr. Potter have his key?",
+    "para": 7,
+    "speaker": "goblin",
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Harry took the key from Hagrid and held it up.",
+    "para": 8,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": "harry",
+        "kind": "anim",
+        "verb": "take",
+        "clip": "reach",
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Take the key from Hagrid",
+        "obj": "the key"
+      },
+      {
+        "actor": "harry",
+        "kind": "anim",
+        "verb": "hold",
+        "clip": "reach",
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Hold up it",
+        "obj": "it"
+      }
+    ],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "The goblin nodded slowly.",
+    "para": 9,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": "goblin",
+        "kind": "anim",
+        "verb": "nod",
+        "clip": "nod",
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Nod",
+        "obj": ""
+      }
+    ],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "Very well. Follow me.",
+    "para": 9,
+    "speaker": "goblin",
+    "mood": null,
+    "events": [],
+    "danger": 0
+  }
+]

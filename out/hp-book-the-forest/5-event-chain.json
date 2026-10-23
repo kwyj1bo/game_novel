@@ -1,0 +1,102 @@
+[
+  {
+    "id": "e1",
+    "next": "e2",
+    "location": "forbidden_forest",
+    "summary": "Tall trees closed over the path, and the moon barely reached the ground.",
+    "characters": [],
+    "choice": false,
+    "score": 2.6,
+    "why": [
+      "opens a scene",
+      "centrality 0.80"
+    ]
+  },
+  {
+    "id": "e2",
+    "next": "e3",
+    "location": "forbidden_forest",
+    "summary": "Malfoy screamed and ran back down the path.",
+    "characters": [
+      "malfoy",
+      "hound"
+    ],
+    "choice": false,
+    "score": 6.24,
+    "why": [
+      "2 action(s)",
+      "creature acts",
+      "tension 1",
+      "centrality 0.82",
+      "leads to a turn",
+      "sets up a choice"
+    ]
+  },
+  {
+    "id": "e3",
+    "next": "e4",
+    "location": "forbidden_forest",
+    "summary": "He raised his wand and stepped towards the clearing.",
+    "characters": [
+      "harry"
+    ],
+    "choice": true,
+    "score": 7.23,
+    "why": [
+      "hero",
+      "2 action(s)",
+      "hero decides",
+      "introduces harry",
+      "centrality 0.57",
+      "choice"
+    ]
+  },
+  {
+    "id": "e4",
+    "next": "e5",
+    "location": "forbidden_forest",
+    "summary": "The hooded figure lifted its head and glided towards Harry.",
+    "characters": [
+      "harry"
+    ],
+    "choice": false,
+    "score": 3.22,
+    "why": [
+      "hero",
+      "centrality 0.86"
+    ]
+  },
+  {
+    "id": "e5",
+    "next": "e6",
+    "location": "forbidden_forest",
+    "summary": "Harry fell to his knees, clutching his forehead.",
+    "characters": [
+      "harry"
+    ],
+    "choice": false,
+    "score": 4.9,
+    "why": [
+      "hero",
+      "1 action(s)",
+      "tension 1",
+      "climax",
+      "centrality 0.40"
+    ]
+  },
+  {
+    "id": "e6",
+    "next": null,
+    "location": "forbidden_forest",
+    "summary": "Hoofbeats thundered through the trees, and the hooded figure fled into the dark.",
+    "characters": [],
+    "choice": false,
+    "score": 5.09,
+    "why": [
+      "tension 1",
+      "sound",
+      "climax",
+      "centrality 0.84"
+    ]
+  }
+]

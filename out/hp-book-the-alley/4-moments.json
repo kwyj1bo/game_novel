@@ -1,0 +1,19 @@
+[
+  {
+    "line": 15,
+    "event": {
+      "actor": "harry",
+      "kind": "anim",
+      "verb": "take",
+      "clip": "reach",
+      "run": false,
+      "target": null,
+      "sfx": null,
+      "phrase": "Take the key from Hagrid",
+      "obj": "the key"
+    },
+    "correct": "Take the key from Hagrid",
+    "opposite": "Refuse the key",
+    "score": 2.05
+  }
+]

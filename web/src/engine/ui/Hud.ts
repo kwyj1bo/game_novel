@@ -149,8 +149,9 @@ export class DomHud implements Hud {
       };
       chapters.forEach((c) => addCard(c));
       if (!upload) return;
-      // Upload card: a novel goes to the pipeline and comes back as chapters.
-      const card = el("div", "chapter upload", list);
+      // Upload card first, so a long library never buries it.
+      const card = el("div", "chapter upload");
+      list.prepend(card);
       el("div", "chapter-number", card, "Your own book");
       el("div", "chapter-title", card, "Upload a novel");
       const input = el("input", "file-input", card) as HTMLInputElement;
@@ -167,7 +168,11 @@ export class DomHud implements Hud {
         status.textContent = `Reading “${file.name}”…`;
         try {
           const added = await upload(file);
-          added.forEach((c) => addCard(c, card));
+          // A re-uploaded book replaces its old cards; new chapters go right
+          // after the upload card, in book order.
+          added.forEach((c) => list.querySelector(`.chapter[data-id="${CSS.escape(c.id)}"]`)?.remove());
+          const anchor = (card.nextSibling as HTMLElement | null) ?? undefined;
+          added.forEach((c) => addCard(c, anchor));
           status.textContent = `Added ${added.length} chapter${added.length === 1 ? "" : "s"}.`;
         } catch (e) {
           status.textContent = e instanceof Error ? e.message : String(e);

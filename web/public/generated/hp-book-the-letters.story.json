@@ -5,6 +5,23 @@
   "subtitle": "Hp Book",
   "start": "scene_1",
   "actors": {
+    "vernon": {
+      "name": "Uncle Vernon",
+      "kind": "human",
+      "height": 1.75,
+      "robe": "#3a3a4a",
+      "skin": "#e8b498",
+      "hair": "#3a2a1a",
+      "hairStyle": "short",
+      "eyes": "#3a5a2a",
+      "glasses": "none",
+      "beard": "short",
+      "outfit": "adult",
+      "hat": "none",
+      "scar": false,
+      "voice": 0.8,
+      "subtitleColor": "#d8a888"
+    },
     "harry": {
       "name": "Harry",
       "kind": "human",
@@ -22,23 +39,6 @@
       "scar": true,
       "voice": 1.15,
       "subtitleColor": "#f3d27a"
-    },
-    "vernon": {
-      "name": "Uncle Vernon",
-      "kind": "human",
-      "height": 1.75,
-      "robe": "#3a3a4a",
-      "skin": "#e8b498",
-      "hair": "#3a2a1a",
-      "hairStyle": "short",
-      "eyes": "#3a5a2a",
-      "glasses": "none",
-      "beard": "short",
-      "outfit": "adult",
-      "hat": "none",
-      "scar": false,
-      "voice": 0.8,
-      "subtitleColor": "#d8a888"
     },
     "dudley": {
       "name": "Dudley",
@@ -79,8 +79,8 @@
     "scene_1_wrong": {
       "location": "privet_drive",
       "cast": {
-        "vernon": "auto_2",
         "harry": "auto_1",
+        "vernon": "auto_2",
         "dudley": "auto_3",
         "petunia": "auto_4"
       },

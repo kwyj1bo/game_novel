@@ -1,0 +1,94 @@
+[
+  {
+    "id": "e1",
+    "next": "e2",
+    "location": "diagon_alley",
+    "summary": "Hagrid led Harry through the crowded alley.",
+    "characters": [
+      "harry",
+      "hagrid"
+    ],
+    "choice": false,
+    "score": 7.47,
+    "why": [
+      "hero",
+      "introduces harry, hagrid",
+      "opens a scene",
+      "centrality 0.98"
+    ]
+  },
+  {
+    "id": "e2",
+    "next": "e3",
+    "location": "gringotts",
+    "summary": "Harry followed Hagrid up the steps and into Gringotts.",
+    "characters": [
+      "harry",
+      "hagrid"
+    ],
+    "choice": false,
+    "score": 8.85,
+    "why": [
+      "hero",
+      "1 action(s)",
+      "hero decides",
+      "tension 1",
+      "opens a scene",
+      "centrality 0.88"
+    ]
+  },
+  {
+    "id": "e3",
+    "next": "e4",
+    "location": "gringotts",
+    "summary": "A goblin peered down at them.",
+    "characters": [
+      "goblin"
+    ],
+    "choice": false,
+    "score": 4.56,
+    "why": [
+      "charged dialogue",
+      "introduces goblin",
+      "centrality 0.78",
+      "leads to a turn",
+      "sets up a choice"
+    ]
+  },
+  {
+    "id": "e4",
+    "next": "e5",
+    "location": "gringotts",
+    "summary": "Harry took the key from Hagrid and held it up.",
+    "characters": [
+      "harry",
+      "hagrid"
+    ],
+    "choice": true,
+    "score": 7.6,
+    "why": [
+      "hero",
+      "2 action(s)",
+      "hero decides",
+      "climax",
+      "centrality 1.00",
+      "choice"
+    ]
+  },
+  {
+    "id": "e5",
+    "next": null,
+    "location": "gringotts",
+    "summary": "The goblin nodded slowly.",
+    "characters": [
+      "goblin"
+    ],
+    "choice": false,
+    "score": 2.35,
+    "why": [
+      "1 action(s)",
+      "climax",
+      "centrality 0.28"
+    ]
+  }
+]

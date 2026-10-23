@@ -1,0 +1,244 @@
+[
+  {
+    "kind": "narrate",
+    "text": "The Forbidden Forest was black and silent.",
+    "para": 0,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Tall trees closed over the path, and the moon barely reached the ground.",
+    "para": 0,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "Stay close,",
+    "para": 1,
+    "speaker": "hagrid",
+    "mood": "whisper",
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "There's something out here that's been hurting the unicorns.",
+    "para": 1,
+    "speaker": "hagrid",
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Malfoy stopped walking.",
+    "para": 2,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "I'm not going in there,",
+    "para": 2,
+    "speaker": "malfoy",
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "say",
+    "text": "My father will hear about this.",
+    "para": 2,
+    "speaker": "malfoy",
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Hagrid's huge hound growled and pressed against his legs.",
+    "para": 3,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 1
+  },
+  {
+    "kind": "narrate",
+    "text": "They reached a clearing.",
+    "para": 4,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Something silver lay on the ground, very still.",
+    "para": 4,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "A hooded figure crawled out of the trees and bent over the silver shape.",
+    "para": 5,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Malfoy screamed and ran back down the path.",
+    "para": 6,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": "malfoy",
+        "kind": "move",
+        "verb": "run",
+        "clip": null,
+        "run": true,
+        "target": "forward",
+        "sfx": null,
+        "phrase": "Run down the path",
+        "obj": ""
+      }
+    ],
+    "danger": 1
+  },
+  {
+    "kind": "narrate",
+    "text": "The hound bolted after him.",
+    "para": 6,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": "hound",
+        "kind": "move",
+        "verb": "bolt",
+        "clip": null,
+        "run": true,
+        "target": "away",
+        "sfx": null,
+        "phrase": "Bolt after Malfoy",
+        "obj": ""
+      }
+    ],
+    "danger": 1
+  },
+  {
+    "kind": "narrate",
+    "text": "Harry did not run.",
+    "para": 7,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "He raised his wand and stepped towards the clearing.",
+    "para": 7,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": "harry",
+        "kind": "anim",
+        "verb": "raise",
+        "clip": "cast",
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Raise your wand",
+        "obj": "his wand"
+      },
+      {
+        "actor": "harry",
+        "kind": "move",
+        "verb": "step",
+        "clip": null,
+        "run": false,
+        "target": "forward",
+        "sfx": null,
+        "phrase": "Step towards the clearing",
+        "obj": ""
+      }
+    ],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "The hooded figure lifted its head and glided towards Harry.",
+    "para": 8,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "A searing pain burst through his scar.",
+    "para": 8,
+    "speaker": null,
+    "mood": null,
+    "events": [],
+    "danger": 0
+  },
+  {
+    "kind": "narrate",
+    "text": "Harry fell to his knees, clutching his forehead.",
+    "para": 9,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": "harry",
+        "kind": "anim",
+        "verb": "fall",
+        "clip": "fall",
+        "run": false,
+        "target": null,
+        "sfx": null,
+        "phrase": "Fall to your knees",
+        "obj": ""
+      }
+    ],
+    "danger": 1
+  },
+  {
+    "kind": "narrate",
+    "text": "Hoofbeats thundered through the trees, and the hooded figure fled into the dark.",
+    "para": 10,
+    "speaker": null,
+    "mood": null,
+    "events": [
+      {
+        "actor": null,
+        "kind": "sound",
+        "verb": "thunder",
+        "clip": null,
+        "run": false,
+        "target": null,
+        "sfx": "thud",
+        "phrase": "",
+        "obj": ""
+      }
+    ],
+    "danger": 1
+  }
+]

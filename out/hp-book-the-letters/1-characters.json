@@ -1,0 +1,42 @@
+{
+  "harry": {
+    "id": "harry",
+    "name": "Harry",
+    "kind": "human",
+    "gender": "x",
+    "mentions": 6.5,
+    "aliases": [],
+    "asset": "harry",
+    "actions": 5
+  },
+  "vernon": {
+    "id": "vernon",
+    "name": "Vernon",
+    "kind": "human",
+    "gender": "m",
+    "mentions": 4.0,
+    "aliases": [],
+    "asset": "vernon",
+    "actions": 1
+  },
+  "dudley": {
+    "id": "dudley",
+    "name": "Dudley",
+    "kind": "human",
+    "gender": "x",
+    "mentions": 2,
+    "aliases": [],
+    "asset": "dudley",
+    "actions": 1
+  },
+  "petunia": {
+    "id": "petunia",
+    "name": "Petunia",
+    "kind": "human",
+    "gender": "x",
+    "mentions": 1,
+    "aliases": [],
+    "asset": "petunia",
+    "actions": 0
+  }
+}

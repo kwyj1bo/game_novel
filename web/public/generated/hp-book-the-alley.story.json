@@ -5,23 +5,16 @@
   "subtitle": "Hp Book",
   "start": "scene_1",
   "actors": {
-    "hagrid": {
-      "name": "Hagrid",
-      "kind": "human",
-      "height": 2.6,
-      "robe": "#4a3626",
-      "trim": "#3a2a1a",
-      "skin": "#d8a888",
-      "hair": "#24160c",
+    "goblin": {
+      "name": "The Goblin",
+      "height": 1.59,
+      "robe": "#22262e",
+      "skin": "#e3b08c",
+      "hair": "#d8c080",
       "hairStyle": "messy",
-      "eyes": "#1a1a1a",
-      "glasses": "none",
-      "beard": "short",
       "outfit": "adult",
-      "hat": "none",
-      "scar": false,
-      "voice": 0.7,
-      "subtitleColor": "#e8b878"
+      "voice": 0.95,
+      "subtitleColor": "#e0e0e0"
     },
     "harry": {
       "name": "Harry",
@@ -41,16 +34,23 @@
       "voice": 1.15,
       "subtitleColor": "#f3d27a"
     },
-    "goblin": {
-      "name": "The Goblin",
-      "height": 1.59,
-      "robe": "#22262e",
-      "skin": "#e3b08c",
-      "hair": "#d8c080",
+    "hagrid": {
+      "name": "Hagrid",
+      "kind": "human",
+      "height": 2.6,
+      "robe": "#4a3626",
+      "trim": "#3a2a1a",
+      "skin": "#d8a888",
+      "hair": "#24160c",
       "hairStyle": "messy",
+      "eyes": "#1a1a1a",
+      "glasses": "none",
+      "beard": "short",
       "outfit": "adult",
-      "voice": 0.95,
-      "subtitleColor": "#e0e0e0"
+      "hat": "none",
+      "scar": false,
+      "voice": 0.7,
+      "subtitleColor": "#e8b878"
     }
   },
   "scenes": {
@@ -78,9 +78,9 @@
     "scene_2_wrong": {
       "location": "gringotts",
       "cast": {
+        "harry": "auto_1",
         "hagrid": "auto_2",
-        "goblin": "auto_3",
-        "harry": "auto_1"
+        "goblin": "auto_3"
       },
       "beats": [
         {
@@ -137,7 +137,7 @@
         },
         {
           "look": "goblin",
-          "at": "hagrid"
+          "at": "harry"
         },
         {
           "camera": "close",
@@ -213,7 +213,7 @@
         },
         {
           "look": "goblin",
-          "at": "hagrid"
+          "at": "harry"
         },
         {
           "camera": "close",
