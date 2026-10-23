@@ -41,6 +41,8 @@ class Character:
     # Actions the narration gives this character, and actions aimed at them
     # (both drive who the hero is).
     actions: int = 0
+    named_actions: int = 0  # actions where the text names them, not "he"/"she"
+    spoken: int = 0
     targeted: int = 0
     first_seen: int = 10**9  # index of the first line they appear in
 
@@ -81,6 +83,7 @@ class Event:
     phrase: str = ""  # imperative verb phrase, for choices
     obj: str = ""  # object phrase, as written ("his wand")
     obj_label: str = ""  # object phrase addressed to the player ("your wand")
+    named: bool = False  # the actor was named, not a pronoun ("Harry took", not "he took")
 
 
 @dataclass
@@ -186,6 +189,34 @@ class _Detector:
             return False  # one passing mention, or never labelled a person
         return e["other"] <= 2 * e["person"]
 
+    def _split_families(self):
+        """"Mr. Dursley" and "Mrs. Dursley" are two people: a surname seen with
+        more than one family honorific becomes one character per honorific."""
+        seen: dict[str, Counter] = {}
+        for doc, spans in self.docs:
+            for tok in doc:
+                if tok.i == 0 or tok.pos_ != "PROPN" or _in_quotes(tok, spans):
+                    continue
+                honor = doc[tok.i - 1].lower_.rstrip(".")
+                if honor in L.FAMILY_HONORIFICS:
+                    seen.setdefault(tok.lower_, Counter())[honor] += 1
+        for surname, honors in seen.items():
+            cid = self.alias.get(surname)
+            if len(honors) < 2 or cid not in self.chars:
+                continue
+            base = self.chars[cid]
+            for honor, n in honors.items():
+                key = f"{honor} {surname}"
+                c = self.chars.get(key) or Character(id=key, name=f"{honor.capitalize()}. {surname.capitalize()}")
+                c.mentions += n
+                c.gender = "f" if honor in L.FEMALE_HONORIFICS else "m" if honor in L.MALE_HONORIFICS else c.gender
+                self.chars[key] = c
+                self.alias[key] = key
+            if base.id == surname:
+                # Only the bare surname was known: it was never one person.
+                del self.chars[cid]
+                self.alias.pop(surname, None)
+
     def run(self) -> dict[str, Character]:
         names: Counter[tuple[str, ...]] = Counter()
         honors: dict[tuple[str, ...], str] = {}
@@ -215,7 +246,8 @@ class _Detector:
         # Cluster: single words fold into the longer name that contains them.
         full = sorted(names, key=lambda n: (-len(n), -names[n]))
         for n in full:
-            # "Professor McGonagall" is known by surname, "Harry Potter" by first name.
+            # "Professor McGonagall" is known by surname, "Harry Potter" by first
+            # name; "Mr. Dursley" and "Mrs. Dursley" stay two people.
             key = n[-1].lower() if n in honors else n[0].lower()
             owner = self.alias.get(n[-1].lower()) or self.alias.get(n[0].lower())
             if owner and len(n) == 1:
@@ -233,6 +265,7 @@ class _Detector:
             for w in n:
                 self.alias.setdefault(w.lower(), key)
             self.chars[key] = c
+        self._split_families()
         self._creatures()
         self._match_assets()
         self._genders()
@@ -247,7 +280,9 @@ class _Detector:
         by_name = {}
         for aid, a in self.catalog["characters"].items():
             for n in a["names"]:
-                words, _ = _strip_name(n.replace(".", "").split())
+                words, honor = _strip_name(n.replace(".", "").split())
+                if honor in L.FAMILY_HONORIFICS:
+                    by_name.setdefault(f"{honor} {' '.join(words).lower()}", aid)
                 by_name.setdefault(" ".join(words).lower(), aid)
         merged: dict[str, Character] = {}
         for c in self.chars.values():
@@ -326,6 +361,11 @@ class _Detector:
                 c.gender = v.most_common(1)[0][0]
 
     def resolve_name(self, tok) -> str | None:
+        prev = tok.doc[tok.i - 1] if tok.i > 0 else None
+        if prev is not None:
+            honor = prev.lower_.rstrip(".")
+            if honor in L.FAMILY_HONORIFICS and f"{honor} {tok.lower_}" in self.alias:
+                return self.alias[f"{honor} {tok.lower_}"]
         low = tok.text.lower()
         if low in self.alias:
             return self.alias[low]
@@ -343,16 +383,32 @@ class _Reader:
         self.d = detector
         self.chars = detector.chars
         self.recent: list[str] = []
+        # Characters most recently mentioned as a subject: "he"/"she" as a
+        # subject usually continues the last subject, not the last object.
+        self.recent_subjects: list[str] = []
         self.last_speakers: list[str] = []
         self.by_verb, self.by_verb_obj, self.sounds = asset_tables(catalog)
         self.action_defs = {a["id"]: a for a in catalog["actions"]}
 
-    def _see(self, cid: str | None):
+    def _see(self, cid: str | None, subject: bool = False):
         if not cid:
             return
         if cid in self.recent:
             self.recent.remove(cid)
         self.recent.append(cid)
+        if subject:
+            if cid in self.recent_subjects:
+                self.recent_subjects.remove(cid)
+            self.recent_subjects.append(cid)
+
+    def _pronoun_in(self, pool: list[str], low: str, exclude: str | None) -> str | None:
+        want = {"he": "m", "she": "f", "it": "n"}.get(low)
+        if not want:
+            return None
+        for cid in reversed(pool[-3:]):
+            if cid != exclude and self.chars[cid].gender == want:
+                return cid
+        return None
 
     def _pronoun(self, low: str, exclude: str | None = None) -> str | None:
         want = {"he": "m", "him": "m", "his": "m", "himself": "m", "she": "f", "her": "f", "herself": "f", "it": "n", "its": "n"}.get(low)
@@ -370,11 +426,16 @@ class _Reader:
 
     def who(self, tok, exclude: str | None = None) -> str | None:
         """Character a token refers to (name, creature noun or pronoun). An
-        object pronoun never means the actor themselves ("shoved him")."""
+        object pronoun never means the actor themselves ("shoved him"); a
+        subject pronoun continues the last subject of that gender."""
         cid = self.d.resolve_name(tok)
         if cid in self.chars:
             return cid
         if tok.pos_ == "PRON":
+            if tok.dep_ == "nsubj":
+                hit = self._pronoun_in(self.recent_subjects, tok.text.lower(), exclude)
+                if hit:
+                    return hit
             return self._pronoun(tok.text.lower(), exclude)
         # Compound names ("Professor McGonagall") resolve through any part.
         for child in tok.children:
@@ -411,7 +472,7 @@ class _Reader:
                     head = tok.head
                     if tok.dep_ == "nsubj" and head.lemma_.lower() in L.SPEECH_VERBS:
                         tag_speaker, tag_verb = cid, head.lemma_.lower()
-                    self._see(cid)
+                    self._see(cid, subject=tok.dep_ == "nsubj")
             # A short sentence like "Ron asked." names the speaker of the quotes before it.
             if not quotes and tag_speaker and self._only_tag(sent, spans):
                 gestures = self._events(sent, spans, participles=True)
@@ -452,6 +513,15 @@ class _Reader:
                     first_quote.events.extend(e for e in self._events(sent, spans, participles=True) if e.kind == "action")
             else:
                 text = sent.text.strip()
+                # "sobbed Hagrid, taking out a handkerchief": a tag whose quote
+                # is in the previous block. Not narration.
+                if tag_speaker and self._only_tag(sent, spans):
+                    continue
+                first = next((t for t in sent if not t.is_punct), sent[0])
+                if text[:1].islower() and len([t for t in sent if not t.is_punct]) <= 6:
+                    continue  # a tag or a fragment, not a sentence
+                if text[:1].islower() and (first.lemma_.lower() in L.SPEECH_VERBS or any(b <= sent.start_char for _, b, _ in spans)):
+                    continue  # "faltered Professor McGonagall." after a quote
                 if text and text not in L.SCENE_SEPARATORS:
                     lines.append(Line(kind="narrate", text=text, para=idx, events=self._events(sent, spans), danger=danger))
         return lines
@@ -526,6 +596,9 @@ class _Reader:
                 continue
             if any(c.dep_ == "aux" and c.lemma_.lower() in L.HYPOTHETICAL_AUX for c in tok.children):
                 continue
+            # "fell asleep", "went white", "fell silent": a state, not an action.
+            if any((c.dep_ in ("acomp", "oprd") and c.pos_ == "ADJ") or c.lower_ in L.STATE_WORDS for c in tok.children):
+                continue
             subj = self._subject(tok)
             actor = self.who(subj) if subj is not None else None
             # "said Hagrid, grinning": the participle's actor is the speaker.
@@ -541,8 +614,19 @@ class _Reader:
                 events.append(Event(actor=actor, kind="sound", sfx=self.sounds[lem], verb=lem))
             if actor is None:
                 continue
-            events.extend(self._action(tok, lem, actor, obj_tok, prt, prep, pobj, phrase))
+            found = self._action(tok, lem, actor, obj_tok, prt, prep, pobj, phrase)
+            for e in found:
+                e.named = subj is not None and subj.pos_ == "PROPN"
+            events.extend(found)
         return events
+
+    def _concrete(self, thing) -> bool:
+        """Whether a token is a thing you can act on: not a person, a pronoun,
+        a body part, a place or the noun of an idiom ("took a swig")."""
+        if thing is None or thing.pos_ == "PRON" or self.who(thing) is not None:
+            return False
+        lem = thing.lemma_.lower()
+        return lem not in L.BODY_PARTS and lem not in L.LIGHT_OBJECTS and lem not in L.PLACE_NOUNS
 
     def _action(self, tok, lem, actor, obj_tok, prt, prep, pobj, phrase) -> list[Event]:
         """Matches a verb to an action asset and fills its parameters: the
@@ -554,14 +638,13 @@ class _Reader:
             target = self.who(pobj, exclude=actor)
         if target == actor:
             target = None
-        # The object is the thing acted on: the direct object unless it is a
-        # person, else a prepositional object that is not a person.
-        if obj_tok is not None and self.who(obj_tok) is None:
-            obj = self._phrase(obj_tok)
-        elif obj_tok is None and pobj is not None and self.who(pobj) is None:
-            obj = self._phrase(pobj)
-        else:
-            obj = ""
+        # The object is the thing acted on: the direct object (not a person, not
+        # a body part, not a bare pronoun), or the object of "on"/"at" ("knocked
+        # on the door"). "Pulled into the driveway" acts on nothing.
+        obj = ""
+        thing = obj_tok if obj_tok is not None else (pobj if prep is not None and prep.lower_ in L.OBJECT_PREPS else None)
+        if self._concrete(thing):
+            obj = self._phrase(thing)
         action = self._pick_action(lem, obj_head, target, obj_tok, pobj, actor)
         # "took his hand": the hand's owner is who the action is aimed at.
         if target is None and obj_tok is not None:
@@ -593,14 +676,16 @@ class _Reader:
                 action = None
             elif kind not in HANDED_KINDS and action not in CREATURE_ACTIONS:
                 action = None
+            elif kind == "human" and action in ("lunge", "roar"):
+                action = None  # a person "roaring" is speaking
         else:
             action = None
         obj_label = self._second_person(obj, actor) if obj else ""
+        if action and "object" in self.action_defs[action]["params"] and not obj:
+            action = None  # nothing concrete to act on
         if action:
-            if "object" in self.action_defs[action]["params"] and not obj:
-                obj, obj_label = "it", "it"
             out.append(Event(actor=actor, kind="action", verb=lem, action=action, target=target, obj=obj, obj_label=obj_label, phrase=phrase))
-        elif lem in L.DECISIVE_VERBS:
+        elif lem in L.DECISIVE_VERBS and (obj or target):
             # No asset for it, but still a candidate decision.
             out.append(Event(actor=actor, kind="act", verb=lem, target=target, obj=obj, obj_label=obj_label, phrase=phrase))
         return out
@@ -619,7 +704,8 @@ class _Reader:
             owner = next((self.who(c) for c in obj_tok.children if c.dep_ == "poss"), None)
             if owner and owner != actor and any("target" in self.action_defs[c]["params"] for c in cands):
                 target = owner
-        has_thing = (obj_tok is not None and self.who(obj_tok) is None) or (obj_tok is None and pobj is not None and self.who(pobj) is None)
+        thing = obj_tok if obj_tok is not None else (pobj if pobj is not None and pobj.head.lower_ in L.OBJECT_PREPS else None)
+        has_thing = self._concrete(thing)
         def fits(c: str) -> int:
             params = self.action_defs[c]["params"]
             if "target" in params and not target:
@@ -643,16 +729,22 @@ class _Reader:
 
     @staticmethod
     def _phrase(tok) -> str:
-        words = [t.text for t in tok.subtree]
+        # Relative clauses add detail, not the thing: "a piece of paper (that
+        # was lying on the table)".
+        cut = {t.i for c in tok.children if c.dep_ in ("relcl", "acl") for t in c.subtree}
+        words = [t.text for t in tok.subtree if t.i not in cut]
         return " ".join(words).replace(" 's", "'s").replace(" ’s", "’s")
 
     def _imperative(self, verb, obj, prt, prep) -> str:
         """'Harry unlocked the door' -> 'Unlock the door'."""
         parts = [verb.lemma_.lower()]
-        if prt:
-            parts.append(prt)
-        if obj is not None:
-            parts.append(self._phrase(obj))
+        if obj is not None and obj.pos_ == "PRON" and prt:
+            parts += [self._phrase(obj), prt]  # "pick it up", not "pick up it"
+        else:
+            if prt:
+                parts.append(prt)
+            if obj is not None:
+                parts.append(self._phrase(obj))
         if obj is not None and prt == "" and any(c.dep_ in ("acomp", "oprd") for c in verb.children):
             parts.append(next(c.text for c in verb.children if c.dep_ in ("acomp", "oprd")))
         if prep is not None and (obj is None or len(parts) < 3):
@@ -709,9 +801,13 @@ def analyze(paragraphs: list[str], catalog) -> Analysis:
     for i, ln in enumerate(lines):
         if ln.kind == "say" and ln.speaker in chars:
             chars[ln.speaker].mentions += 0.5
+        if ln.kind == "say" and ln.speaker in chars:
+            chars[ln.speaker].spoken += 1
         for e in ln.events:
             if e.actor in chars and e.kind in ("action", "move", "act"):
                 chars[e.actor].actions += 1
+                if e.named:
+                    chars[e.actor].named_actions += 1
             if e.target in chars and e.kind == "action":
                 chars[e.target].targeted += 1
         for cid, c in chars.items():

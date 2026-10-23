@@ -92,6 +92,9 @@ export const ActionAssetSchema = z
     // Something a character chooses to do, so it can become a choice
     // (falling or flinching happen to you; opening a door is a decision).
     decision: z.boolean().default(false),
+    // Everyday business (sitting, nodding, glancing): real, but not story.
+    // Minor actions are never played unless they are the choice itself.
+    minor: z.boolean().default(false),
   })
   .strict();
 export type ActionAsset = z.infer<typeof ActionAssetSchema>;

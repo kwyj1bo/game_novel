@@ -176,6 +176,13 @@ def test_book_choices(hp_book, voyage):
     ]
 
 
+def test_minor_actions_are_not_played(hp_book, voyage, catalog):
+    # "Dudley laughed and pointed", "Elena sat down": real, but not story.
+    minor = {x["id"] for x in catalog["actions"] if x.get("minor")}
+    played = [b["act"] for r in hp_book + voyage for sc in r[0]["scenes"].values() for b in sc["beats"] if "act" in b]
+    assert played and not minor & set(played)
+
+
 def test_actions_that_did_not_happen_are_ignored(hp_book):
     # "Harry did not run" must not become "Run" / "Stand still".
     forest = hp_book[2][1]

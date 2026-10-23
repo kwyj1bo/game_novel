@@ -532,6 +532,10 @@
           "decision": {
             "default": false,
             "type": "boolean"
+          },
+          "minor": {
+            "default": false,
+            "type": "boolean"
           }
         },
         "required": [

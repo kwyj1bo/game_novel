@@ -218,6 +218,11 @@ def find_moments(a: Analysis, scenes: list[Scene], catalog) -> list[Moment]:
     hero = a.protagonist
     if not hero:
         return []
+    # A chapter where the hero barely acts (a baby on a doorstep) has no
+    # decision of theirs to offer.
+    h = a.characters[hero]
+    if h.named_actions < 2 and not (h.named_actions and h.actions + h.spoken >= 3):
+        return []
     n = len(a.lines)
     scene_of = {}
     for si, sc in enumerate(scenes):
@@ -237,13 +242,15 @@ def find_moments(a: Analysis, scenes: list[Scene], catalog) -> list[Moment]:
             if ev.actor != hero or not ev.phrase:
                 continue
             act = actions.get(ev.action) if ev.kind == "action" else None
-            if act and not act.get("decision"):
-                continue  # things that happen to you are not choices
+            if act and (not act.get("decision") or act.get("minor")):
+                continue  # things that happen to you, or everyday business, are not choices
             opp = actions.get(act.get("opposite")) if act else None
             toward_threat = ev.action in ("approach", "run_to") and ev.target in a.characters and a.characters[ev.target].kind != "human"
             # A decision is an action with a defined opposite, or a decisive verb.
             if not opp and ev.verb not in L.DECISIVE_VERBS and not toward_threat:
                 continue
+            if not act and not ev.obj and "{obj}" in L.OPPOSITES.get(ev.verb, ""):
+                continue  # "Grab Uncle Vernon" has no clean opposite
             window = a.lines[max(0, i - 4) : i + 3]
             tension = sum(w.danger for w in window) / max(1, len(window))
             score = tension + VERB_WEIGHT.get(ev.verb, 0.8) + (1.5 if toward_threat else 0) + (1.0 if creatures_in[scene_of[id(ln)]] else 0) + 1.5 * i / n
@@ -311,6 +318,7 @@ class _Assembler:
         self.chars = a.characters
         self.hero = a.protagonist
         self._last_speaker: str | None = None
+        self._last_narration = ""
         self.actions = {x["id"]: x for x in catalog["actions"]}
 
     def name(self, cid: str | None) -> str:
@@ -366,7 +374,7 @@ class _Assembler:
         narrations = 0
         for ln in lines:
             actions: list = []
-            for e in ln.events:
+            for e in self.story_events(ln):
                 actions.extend(self.event_beats(e, slots, on_stage))
             if ln.kind == "say" and ln.speaker in on_stage:
                 if ln.speaker != last_cam:
@@ -396,8 +404,12 @@ class _Assembler:
                 out.append({"camera": "wide", "ms": 900})
                 last_cam = None
             out.extend(actions)
-            if narrations < MAX_NARRATION_PER_SCENE or ln.events:
-                out.append({"narrate": self.narration(ln, on_stage)})
+            text = self.narration(ln, on_stage)
+            if text and text[:1].islower():
+                text = ""  # a dialogue tag cut loose ("faltered Professor McGonagall.")
+            if text and text != self._last_narration and (narrations < MAX_NARRATION_PER_SCENE or ln.events):
+                out.append({"narrate": text})
+                self._last_narration = text
                 narrations += 1
         self._last_speaker = last_speaker
         return out
@@ -431,16 +443,28 @@ class _Assembler:
             beat["object"] = e.obj or "it"
         return beat
 
+    def story_events(self, ln: Line) -> list[Event]:
+        """The events a line plays: sounds and spells, plus its single most
+        important story action and the walk-up to it. Minor everyday actions
+        (sitting, nodding, glancing) never play."""
+        story = [e for e in ln.events if e.kind == "action" and not self.actions[e.action].get("minor")]
+        others = [e for e in ln.events if e.kind in ("sound", "spell")]
+        if not story:
+            return others
+        main = max(story, key=lambda e: (3 if e.target else 2 if e.obj else 1, story.index(e)))
+        lead_in = [e for e in story if e is not main and e.action in ("approach", "run_to") and e.actor == main.actor and e.target and e.target == main.target]
+        return others + lead_in + [main]
+
     def narration(self, ln: Line, on_stage: set[str]) -> str:
         """What the narrator says for a line: written from the actions it holds
         ("Ron walks over to Harry. Ron pats Harry on the shoulder."), or the
         book's sentence, shortened, when no action asset matched."""
         parts = [
             fill_template(self.actions[e.action]["text"], e, self.chars)
-            for e in ln.events
+            for e in self.story_events(ln)
             if e.kind == "action" and e.actor in on_stage and ("target" not in self.actions[e.action]["params"] or e.target in on_stage)
         ]
-        return " ".join(parts) if parts else _trim(ln.text)
+        return " ".join(parts) if parts else _trim(ln.text, 170)
 
     def build(self, scenes: list[Scene], moments: list[Moment]) -> dict:
         a = self.a
@@ -588,6 +612,11 @@ class _Assembler:
 
 
 def _trim(text: str, limit: int = 240) -> str:
+    """Shortens a book sentence to its first clause or two, so narration
+    stays a summary, not a transcript."""
+    for sep in ("; ", " -- ", " — "):
+        if sep in text and text.index(sep) > 40:
+            text = text[: text.index(sep)].rstrip(",") + "."
     if len(text) <= limit:
         return text
     cut = text[:limit].rsplit(",", 1)[0] if "," in text[:limit] else text[:limit].rsplit(" ", 1)[0]
@@ -601,7 +630,7 @@ def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str,
 
     scenes = segment(paragraphs, a.lines, catalog)
     moments = find_moments(a, scenes, catalog)
-    chain = build_chain(a, scenes, moments)
+    chain = build_chain(a, scenes, moments, catalog)
     shown = {id(ln) for node in chain for ln in node.lines}
     condensed = [Scene(location=sc.location, lines=[ln for ln in sc.lines if id(ln) in shown]) for sc in scenes]
     condensed = [sc for sc in condensed if sc.lines]

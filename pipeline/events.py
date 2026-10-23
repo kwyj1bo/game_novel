@@ -86,13 +86,21 @@ def _who(lines: list[Line], a: Analysis) -> list[str]:
     return seen
 
 
+MINOR: set[str] = set()  # minor action ids, set from the catalog by build_chain
+
+
+def story_actions(lines: list[Line]) -> list:
+    """Actions that move the story (minor everyday ones left out)."""
+    return [e for ln in lines for e in ln.events if (e.kind == "action" and e.action not in MINOR) or e.kind in ("act", "spell")]
+
+
 def score_paragraph(lines: list[Line], a: Analysis, centrality: float, first_seen: set[str], opens_scene: bool, position: float, prev_danger: int = 0) -> tuple[float, list[str]]:
     """Importance of one paragraph, with the reasons (kept for the debug file)."""
     score = 0.0
     why: list[str] = []
     hero = a.protagonist
     people = _who(lines, a)
-    actions = [e for ln in lines for e in ln.events if e.kind in ("action", "act", "spell")]
+    actions = story_actions(lines)
     if hero in people:
         score += 1.5
         why.append("hero")
@@ -165,13 +173,16 @@ def _summary(lines: list[Line], names: list[str]) -> str:
 
 
 def _shown_lines(lines: list[Line], hero: str | None, must_keep: set[int], names: list[str]) -> list[Line]:
-    """What the game shows for an event: the key narration sentence, the
-    lines carrying actions, and at most two lines of dialogue."""
+    """What the game shows for an event: one story beat. The line with the
+    event's main action (or, without one, its key sentence), an entrance if
+    someone arrives, and at most two lines of dialogue."""
     keep: list[Line] = []
     narr = [ln for ln in lines if ln.kind == "narrate"]
     summary = _summary(lines, names)
+    acting = [ln for ln in narr if story_actions([ln])]
+    main = max(acting, key=lambda ln: _main_weight(ln)) if acting else next((ln for ln in narr if ln.text == summary), None)
     for ln in narr:
-        if ln.text == summary or any(e.kind in ("action", "act", "spell", "move") for e in ln.events) or id(ln) in must_keep:
+        if ln is main or id(ln) in must_keep or any(e.kind == "move" for e in ln.events):
             keep.append(ln)
     says = [ln for ln in lines if ln.kind == "say"]
     ranked = sorted(says, key=lambda ln: (ln.speaker == hero, ln.text.endswith(("!", "?")), bool(ln.events), len(ln.text)), reverse=True)
@@ -183,8 +194,20 @@ def _shown_lines(lines: list[Line], hero: str | None, must_keep: set[int], names
     return [ln for ln in lines if id(ln) in kept]
 
 
-def build_chain(a: Analysis, scenes, moments) -> list[EventNode]:
+def _main_weight(ln: Line) -> int:
+    """How much a line's actions matter: one character acting on another
+    beats acting on a thing, which beats acting alone."""
+    best = 0
+    for e in story_actions([ln]):
+        best = max(best, 3 if e.target else 2 if e.obj else 1)
+    return best
+
+
+def build_chain(a: Analysis, scenes, moments, catalog=None) -> list[EventNode]:
     """Picks the important paragraphs and links them into a chain."""
+    if catalog is not None:
+        MINOR.clear()
+        MINOR.update(x["id"] for x in catalog["actions"] if x.get("minor"))
     by_para = _paragraph_lines(a)
     paras = sorted(by_para)
     if not paras:

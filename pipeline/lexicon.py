@@ -52,6 +52,42 @@ MOVE_VERBS = {
 # Moves that take the actor away from the action.
 AWAY_VERBS = {"flee", "retreat", "back", "escape", "slink", "bolt"}
 
+# Words that make a verb a change of state ("fell asleep", "went pale").
+STATE_WORDS = {
+    "asleep", "awake", "silent", "quiet", "still", "pale", "white", "red", "ill", "sick", "dead",
+    "unconscious", "rigid", "stiff", "limp", "numb", "mad", "crazy", "faint", "dizzy",
+}
+
+# Honorifics that tell people apart ("Mr. Dursley" and "Mrs. Dursley" are two people).
+FAMILY_HONORIFICS = {"mr", "mrs", "miss", "ms"}
+
+# Objects that make a light-verb idiom, not a thing in the hand ("took a
+# swig", "caught sight of", "pushed his luck").
+LIGHT_OBJECTS = {
+    "swig", "sip", "gulp", "bite", "mouthful", "look", "glance", "peek", "sight", "breath", "step", "jump",
+    "leap", "seat", "chance", "luck", "turn", "nap", "notice", "care", "part", "place", "time", "aim",
+    "hold", "interest", "pity", "advantage", "shot", "rest", "pleasure", "way", "deep", "notes", "note",
+}
+
+# Places: you go to them or leave them, you don't pick them up.
+PLACE_NOUNS = {
+    "room", "hall", "table", "dormitory", "shed", "house", "home", "kitchen", "corridor", "castle", "classroom",
+    "library", "office", "street", "road", "station", "platform", "cupboard", "stairs", "staircase", "garden",
+    "field", "forest", "lake", "bed", "school", "tower", "common", "village", "shop", "bank", "hut", "yard",
+    "pitch", "ground", "floor", "path", "train", "boat", "car", "compartment", "chamber", "dungeon", "class",
+}
+
+# Body parts are not things you act on ("opened her mouth", "rubbed his eyes").
+BODY_PARTS = {
+    "mouth", "eyes", "eye", "face", "head", "hand", "hands", "arm", "arms", "leg", "legs", "foot", "feet",
+    "nose", "ear", "ears", "lip", "lips", "teeth", "tongue", "finger", "fingers", "shoulder", "shoulders",
+    "back", "neck", "chin", "brow", "eyebrows", "fist", "fists", "knee", "knees", "hair", "breath",
+}
+
+# Prepositions whose object is acted on ("knocked on the door"); others are
+# directions or places ("pulled into the driveway").
+OBJECT_PREPS = {"on", "at"}
+
 # Verbs only a living thing does: an acting subject of these is a character.
 # (Which animation a verb plays is asset data: see "actions" in the manifest.)
 ACTION_VERBS = {
@@ -138,7 +174,8 @@ OPPOSITES = {
 }
 
 # Verbs whose subject is the protagonist and that make a good choice moment.
-DECISIVE_VERBS = set(OPPOSITES) - {"stay", "wait", "speak"}
+# Everyday movement ("went down the hall", "turned over the bacon") is not.
+DECISIVE_VERBS = set(OPPOSITES) - {"stay", "wait", "speak", "go", "turn", "jump", "climb", "stand", "play", "shout", "call"}
 
 # Possessives and pronouns rewritten when a choice addresses the player.
 SECOND_PERSON = {"his": "your", "her": "your", "him": "you", "himself": "yourself", "herself": "yourself"}
