@@ -69,6 +69,21 @@ def paragraphs_from_pdf(path: Path) -> list[str]:
     return paras
 
 
+def join_broken(paras: list[str]) -> list[str]:
+    """Rejoins sentences a PDF split across blocks or pages: a block that does
+    not end a sentence, followed by one that starts in lower case."""
+    out: list[str] = []
+    for p in paras:
+        if out and not _is_heading(out[-1]) and not _is_heading(p):
+            prev = out[-1]
+            unfinished = not prev.rstrip().endswith((".", "!", "?", '"', "”", "'", "’", ":"))
+            if unfinished and (p[:1].islower() or prev.rstrip().endswith((",", ";", "-", "--"))):
+                out[-1] = prev.rstrip() + " " + p.lstrip()
+                continue
+        out.append(p)
+    return out
+
+
 def split_chapters(paragraphs: list[str]) -> list[Chapter]:
     """Group paragraphs under chapter headings. The line after a heading is
     taken as the chapter title when it is short and has no sentence ending."""
@@ -99,7 +114,7 @@ def split_chapters(paragraphs: list[str]) -> list[Chapter]:
 def load_chapters(path: str | Path) -> list[Chapter]:
     path = Path(path)
     if path.suffix.lower() == ".pdf":
-        paras = paragraphs_from_pdf(path)
+        paras = join_broken(paragraphs_from_pdf(path))
     else:
         paras = paragraphs_from_text(path.read_text(encoding="utf-8"))
     return split_chapters(paras)

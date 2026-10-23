@@ -3162,7 +3162,8 @@
       "text": "{actor} walks over to {target}.",
       "label": "Go to {target}",
       "opposite": "back_away",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "run_to",
@@ -3193,7 +3194,8 @@
       "text": "{actor} runs to {target}.",
       "label": "Run to {target}",
       "opposite": "back_away",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "back_away",
@@ -3219,7 +3221,8 @@
       "text": "{actor} backs away from {target}.",
       "label": "Back away from {target}",
       "opposite": "approach",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "flee",
@@ -3241,7 +3244,8 @@
       "text": "{actor} runs away.",
       "label": "Run away",
       "opposite": "stand_firm",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "stand_firm",
@@ -3263,7 +3267,8 @@
       "text": "{actor} stands firm.",
       "label": "Stand your ground",
       "opposite": "flee",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "pat",
@@ -3309,7 +3314,8 @@
       "text": "{actor} gives {target} a pat.",
       "label": "Pat {target}",
       "opposite": "shove",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "hug",
@@ -3352,7 +3358,8 @@
       "text": "{actor} hugs {target}.",
       "label": "Hug {target}",
       "opposite": "shove",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "shove",
@@ -3395,7 +3402,8 @@
       "text": "{actor} shoves {target} away.",
       "label": "Shove {target} away",
       "opposite": "hug",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "hit",
@@ -3441,7 +3449,8 @@
       "text": "{actor} hits {target}.",
       "label": "Hit {target}",
       "opposite": "spare",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "spare",
@@ -3464,7 +3473,8 @@
       "text": "{actor} lets {target} be.",
       "label": "Let {target} be",
       "opposite": "hit",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "help",
@@ -3502,7 +3512,8 @@
       "text": "{actor} rushes to help {target}.",
       "label": "Help {target}",
       "opposite": "abandon",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "abandon",
@@ -3532,7 +3543,8 @@
       "text": "{actor} turns away from {target}.",
       "label": "Leave {target} to it",
       "opposite": "help",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "give",
@@ -3577,7 +3589,8 @@
       "text": "{actor} hands {object} to {target}.",
       "label": "Give {target} {object}",
       "opposite": "keep",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "keep",
@@ -3601,7 +3614,8 @@
       "text": "{actor} keeps {object}.",
       "label": "Keep {object}",
       "opposite": "give",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "handshake",
@@ -3643,7 +3657,8 @@
       "text": "{actor} shakes hands with {target}.",
       "label": "Shake {target}'s hand",
       "opposite": "refuse_hand",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "refuse_hand",
@@ -3666,7 +3681,8 @@
       "text": "{actor} refuses to shake hands with {target}.",
       "label": "Refuse the handshake",
       "opposite": "handshake",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "talk_to",
@@ -3706,7 +3722,8 @@
       "text": "{actor} turns to {target}.",
       "label": "Speak to {target}",
       "opposite": "ignore",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "ignore",
@@ -3727,7 +3744,8 @@
       "text": "{actor} ignores {target}.",
       "label": "Ignore {target}",
       "opposite": "talk_to",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "take",
@@ -3762,7 +3780,8 @@
       "text": "{actor} grabs {object}.",
       "label": "Grab {object}",
       "opposite": "leave_it",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "leave_it",
@@ -3785,7 +3804,8 @@
       "text": "{actor} leaves {object}.",
       "label": "Leave {object}",
       "opposite": "take",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "open",
@@ -3812,7 +3832,8 @@
       "text": "{actor} opens {object}.",
       "label": "Open {object}",
       "opposite": "keep_shut",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "keep_shut",
@@ -3831,7 +3852,8 @@
       "text": "{actor} keeps {object} shut.",
       "label": "Keep {object} shut",
       "opposite": "open",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "close",
@@ -3859,7 +3881,8 @@
       "text": "{actor} shuts {object}.",
       "label": "Shut {object}",
       "opposite": "leave_open",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "leave_open",
@@ -3878,7 +3901,8 @@
       "text": "{actor} leaves {object} open.",
       "label": "Leave {object} open",
       "opposite": "close",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "throw",
@@ -3906,7 +3930,8 @@
       "text": "{actor} throws {object}.",
       "label": "Throw {object}",
       "opposite": "hold_on",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "hold_on",
@@ -3928,7 +3953,8 @@
       "text": "{actor} keeps hold of {object}.",
       "label": "Keep hold of {object}",
       "opposite": "throw",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "drink",
@@ -3956,7 +3982,8 @@
       "text": "{actor} drinks {object}.",
       "label": "Drink {object}",
       "opposite": "refuse_drink",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "refuse_drink",
@@ -3975,7 +4002,8 @@
       "text": "{actor} puts {object} down.",
       "label": "Put {object} down",
       "opposite": "drink",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "read",
@@ -3998,7 +4026,8 @@
       "text": "{actor} reads {object}.",
       "label": "Read {object}",
       "opposite": "ignore_it",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "ignore_it",
@@ -4017,7 +4046,8 @@
       "text": "{actor} ignores {object}.",
       "label": "Ignore {object}",
       "opposite": "read",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "play_flute",
@@ -4037,7 +4067,8 @@
       "text": "{actor} plays the flute.",
       "label": "Play the flute",
       "opposite": "stop_playing",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "stop_playing",
@@ -4055,7 +4086,8 @@
       "text": "{actor} stops playing.",
       "label": "Stop playing",
       "opposite": "play_flute",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "cast",
@@ -4089,7 +4121,8 @@
       "text": "{actor} raises a wand.",
       "label": "Raise your wand",
       "opposite": "lower_wand",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "lower_wand",
@@ -4107,7 +4140,8 @@
       "text": "{actor} lowers the wand.",
       "label": "Lower your wand",
       "opposite": "cast",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "jump",
@@ -4134,7 +4168,8 @@
       "text": "{actor} jumps.",
       "label": "Jump",
       "opposite": "hold_back",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "hold_back",
@@ -4152,7 +4187,8 @@
       "text": "{actor} holds back.",
       "label": "Hold back",
       "opposite": "jump",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "fall",
@@ -4185,7 +4221,8 @@
       "text": "{actor} falls.",
       "label": "Let go",
       "opposite": "stand_firm",
-      "decision": false
+      "decision": false,
+      "minor": false
     },
     {
       "id": "kneel",
@@ -4206,7 +4243,8 @@
       "text": "{actor} kneels.",
       "label": "Kneel",
       "opposite": "stand_firm",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "cower",
@@ -4232,7 +4270,8 @@
       "text": "{actor} shrinks back.",
       "label": "Shrink back",
       "opposite": "stand_firm",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "laugh",
@@ -4256,7 +4295,8 @@
       "text": "{actor} laughs.",
       "label": "Laugh",
       "opposite": "frown",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "frown",
@@ -4278,7 +4318,8 @@
       "text": "{actor} frowns.",
       "label": "Frown",
       "opposite": "laugh",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "wave",
@@ -4299,7 +4340,8 @@
       "text": "{actor} waves.",
       "label": "Wave",
       "opposite": "frown",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "nod",
@@ -4322,7 +4364,8 @@
       "text": "{actor} nods.",
       "label": "Nod",
       "opposite": "shake_head",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "shake_head",
@@ -4342,7 +4385,8 @@
       "text": "{actor} shakes their head.",
       "label": "Shake your head",
       "opposite": "nod",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "point",
@@ -4363,7 +4407,8 @@
       "text": "{actor} points.",
       "label": "Point",
       "opposite": "nod",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "struggle",
@@ -4386,7 +4431,8 @@
       "text": "{actor} struggles.",
       "label": "Fight back",
       "opposite": "hold_back",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "celebrate",
@@ -4407,7 +4453,8 @@
       "text": "{actor} cheers.",
       "label": "Cheer",
       "opposite": "frown",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "roar",
@@ -4433,7 +4480,8 @@
       ],
       "text": "{actor} roars.",
       "label": "Roar",
-      "decision": false
+      "decision": false,
+      "minor": false
     },
     {
       "id": "lunge",
@@ -4458,7 +4506,8 @@
       ],
       "text": "{actor} lunges.",
       "label": "Lunge",
-      "decision": false
+      "decision": false,
+      "minor": false
     },
     {
       "id": "turn_to",
@@ -4483,7 +4532,8 @@
       "text": "{actor} turns to {target}.",
       "label": "Turn to {target}",
       "opposite": "turn_away",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "turn_away",
@@ -4502,7 +4552,8 @@
       "text": "{actor} turns away from {target}.",
       "label": "Turn away from {target}",
       "opposite": "turn_to",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "watch",
@@ -4532,7 +4583,8 @@
       "text": "{actor} watches {target}.",
       "label": "Watch {target}",
       "opposite": "turn_away",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "sit",
@@ -4556,7 +4608,8 @@
       "text": "{actor} sits down.",
       "label": "Sit down",
       "opposite": "stand_up",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "stand_up",
@@ -4577,7 +4630,8 @@
       "text": "{actor} gets up.",
       "label": "Stand up",
       "opposite": "sit",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "lie_down",
@@ -4602,7 +4656,8 @@
       "text": "{actor} lies down.",
       "label": "Lie down",
       "opposite": "stand_up",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "wake",
@@ -4625,7 +4680,8 @@
       "text": "{actor} wakes up.",
       "label": "Wake up",
       "opposite": "lie_down",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "drag",
@@ -4671,7 +4727,8 @@
       "text": "{actor} pulls {target} away.",
       "label": "Pull {target} away",
       "opposite": "let_be",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "let_be",
@@ -4694,7 +4751,8 @@
       "text": "{actor} leaves {target} where they are.",
       "label": "Leave {target} be",
       "opposite": "drag",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "pull",
@@ -4719,7 +4777,8 @@
       "text": "{actor} pulls {object}.",
       "label": "Pull {object}",
       "opposite": "leave_it",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "follow",
@@ -4748,7 +4807,8 @@
       "text": "{actor} follows {target}.",
       "label": "Follow {target}",
       "opposite": "stay_behind",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "stay_behind",
@@ -4771,7 +4831,8 @@
       "text": "{actor} stays behind.",
       "label": "Stay behind",
       "opposite": "follow",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "lead",
@@ -4811,7 +4872,8 @@
       "text": "{actor} leads {target} on.",
       "label": "Lead {target} on",
       "opposite": "stay_behind",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "climb",
@@ -4838,7 +4900,8 @@
       "text": "{actor} climbs up.",
       "label": "Climb up",
       "opposite": "hold_back",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "lean",
@@ -4861,7 +4924,8 @@
       "text": "{actor} leans in.",
       "label": "Lean in",
       "opposite": "hold_back",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "eat",
@@ -4887,7 +4951,8 @@
       "text": "{actor} eats {object}.",
       "label": "Eat {object}",
       "opposite": "refuse_food",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "refuse_food",
@@ -4906,7 +4971,8 @@
       "text": "{actor} pushes {object} away.",
       "label": "Push {object} away",
       "opposite": "eat",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "knock",
@@ -4933,7 +4999,8 @@
       "text": "{actor} knocks on {object}.",
       "label": "Knock on {object}",
       "opposite": "leave_it",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "break_it",
@@ -4963,7 +5030,8 @@
       "text": "{actor} breaks {object}.",
       "label": "Break {object}",
       "opposite": "hold_on",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "fly",
@@ -4992,7 +5060,8 @@
       "text": "{actor} flies.",
       "label": "Fly",
       "opposite": "hold_back",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "carry",
@@ -5016,7 +5085,8 @@
       "text": "{actor} carries {object}.",
       "label": "Carry {object}",
       "opposite": "leave_it",
-      "decision": true
+      "decision": true,
+      "minor": true
     },
     {
       "id": "show",
@@ -5062,7 +5132,8 @@
       "text": "{actor} shows {target} {object}.",
       "label": "Show {target} {object}",
       "opposite": "keep",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "strike_down",
@@ -5106,7 +5177,8 @@
       "text": "{actor} strikes {target} down.",
       "label": "Strike {target} down",
       "opposite": "spare",
-      "decision": true
+      "decision": true,
+      "minor": false
     },
     {
       "id": "stop",
@@ -5130,7 +5202,8 @@
       "text": "{actor} stops.",
       "label": "Stop",
       "opposite": "hold_back",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "sigh",
@@ -5153,7 +5226,8 @@
       ],
       "text": "{actor} sighs.",
       "label": "Sigh",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "clap",
@@ -5174,7 +5248,8 @@
       "text": "{actor} claps.",
       "label": "Clap",
       "opposite": "frown",
-      "decision": false
+      "decision": false,
+      "minor": true
     },
     {
       "id": "wait",
@@ -5197,7 +5272,8 @@
       "text": "{actor} waits.",
       "label": "Wait",
       "opposite": "flee",
-      "decision": false
+      "decision": false,
+      "minor": true
     }
   ],
   "sounds": [
