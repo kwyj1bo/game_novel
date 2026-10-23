@@ -180,3 +180,48 @@ def test_actions_that_did_not_happen_are_ignored(hp_book):
     # "Harry did not run" must not become "Run" / "Stand still".
     forest = hp_book[2][1]
     assert not any(e.actor == "harry" and e.verb == "run" for ln in forest.lines for e in ln.events)
+
+
+# ---- the event chain: only the important events are shown
+
+
+def test_chain_links_each_event_to_the_next(halloween):
+    chain = halloween[4]
+    assert [n.next for n in chain] == [n.id for n in chain[1:]] + [None]
+    assert [n.para for n in chain] == sorted(n.para for n in chain)
+
+
+def test_chain_keeps_the_turning_points(halloween):
+    summaries = [n.summary for n in halloween[4]]
+    for must in [
+        "Then a high, terrified scream came from behind the door.",
+        "Harry unlocked the door and pulled it open.",
+        "Harry ran at the troll and jumped onto its back.",
+        "Ron raised his wand.",
+    ]:
+        assert must in summaries
+    assert [n.choice for n in halloween[4]].count(True) == 2
+
+
+def test_chain_drops_minor_paragraphs(halloween):
+    a = halloween[1]
+    total = len({ln.para for ln in a.lines})
+    assert len(halloween[4]) <= total * 0.55
+    summaries = " ".join(n.summary for n in halloween[4])
+    assert "A foul smell drifted" not in summaries
+
+
+def test_story_shows_only_chain_lines(halloween):
+    story = halloween[0]
+    shown = [b.get("narrate") or b.get("say") and b["text"] for s in story["scenes"].values() for b in s["beats"]]
+    shown = [t for t in shown if t]
+    chain_text = {ln.text for n in halloween[4] for ln in n.lines}
+    generated = {"Harry hesitates", "The moment slips away"}
+    assert all(t in chain_text or t.strip("“”") in chain_text or any(t.startswith(g) for g in generated) for t in shown)
+    assert len(shown) < len(halloween[1].lines)
+
+
+def test_each_event_shows_at_most_two_lines_of_dialogue(halloween):
+    for n in halloween[4]:
+        if not n.choice:
+            assert sum(1 for ln in n.lines if ln.kind == "say") <= 2

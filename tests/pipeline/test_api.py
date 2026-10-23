@@ -25,6 +25,9 @@ def test_upload_text_novel_returns_a_story_per_chapter():
     assert len(body["stories"]) == 1
     story = body["stories"][0]["story"]
     assert story["title"] == "The Keeper's Hall"
+    events = body["stories"][0]["events"]
+    assert events[0]["id"] == "e1" and events[-1]["next"] is None
+    assert any(e["choice"] for e in events)
     assert any("choice" in s for s in story["scenes"].values())
 
 
