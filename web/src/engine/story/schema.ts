@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PresetSchema } from "../assets/preset";
 
 // A "target" is either a named mark in the location, an actor id, or a raw [x, z] floor point.
 const Target = z.union([z.string(), z.tuple([z.number(), z.number()])]);
@@ -216,6 +217,8 @@ export const StorySchema = z
     start: z.string(),
     actors: z.record(z.string(), ActorSpecSchema),
     scenes: z.record(z.string(), SceneSchema),
+    // Places this story brings with it (made for its book), built from a preset.
+    sceneries: z.record(z.string(), z.object({ title: z.string(), preset: PresetSchema }).strict()).optional(),
   })
   .strict();
 

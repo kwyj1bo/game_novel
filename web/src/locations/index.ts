@@ -1,5 +1,6 @@
 import { ManifestSchema, type Manifest } from "../engine/assets/manifest";
 import type { ActionRegistry } from "../engine/story/actions";
+import type { Story } from "../engine/story/schema";
 import type { LocationRegistryInfo } from "../engine/story/validate";
 import type { LocationDef } from "../engine/world/Location";
 import manifestJson from "../../assets/manifest.json";
@@ -43,3 +44,8 @@ export const LOCATIONS: Record<string, LocationDef> = locationsFromManifest(MANI
 export const ACTIONS: ActionRegistry = Object.fromEntries(MANIFEST.actions.map((a) => [a.id, a]));
 
 export const LOCATION_INFO: LocationRegistryInfo = Object.fromEntries(Object.values(LOCATIONS).map((l) => [l.id, l.info]));
+
+// A story's own places, built from their presets.
+export function storyLocations(story: Story): Record<string, LocationDef> {
+  return Object.fromEntries(Object.entries(story.sceneries ?? {}).map(([id, s]) => [id, presetLocation({ id, title: s.title, keywords: [s.title], preset: s.preset })]));
+}
