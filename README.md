@@ -134,7 +134,10 @@ A scene that no manifest keyword places gets an AI-made place. The model reads t
 
 Each book makes one request for looks and one for places. The answers are checked against the engine's formats and saved in `looks.json` and `places.json` next to the book, so building the same book again gives the same game and costs nothing.
 
-To turn it on, set `ANTHROPIC_API_KEY` (or sign in with `ant auth login`) before you start the backend. Without credentials, or with `NOVEL_ASSET_AI=0`, characters keep their generated looks and scenes use the default scenery. `NOVEL_ASSET_MODEL` picks the model (default `claude-opus-5-5`).
+It reaches the model in one of two ways:
+
+- **Claude Code** on this computer, signed in with a Claude subscription (Pro or Max). This needs no API key. Requests count toward the subscription's usage limits. The pipeline finds `claude` on the PATH or the copy inside the VS Code extension; `NOVEL_CLAUDE_BIN` points it at another one. Sign in once with `claude auth login`.
+- **An API key:** set `ANTHROPIC_API_KEY` before you start the backend. API usage is billed separately, in the Claude Console. When a key is set, it is used instead of Claude Code. Without credentials, or with `NOVEL_ASSET_AI=0`, characters keep their generated looks and scenes use the default scenery. `NOVEL_ASSET_MODEL` picks the model (default `claude-opus-5-5`).
 
 `python -m pytest` runs the pipeline tests on original fixture texts in `tests/pipeline/fixtures/`: two single chapters and two whole books, one in the Harry Potter world and one with no known assets.
 
