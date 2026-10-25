@@ -176,3 +176,10 @@ def test_a_signed_out_claude_code_falls_back(voyage, tmp_path, monkeypatch):
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     monkeypatch.setenv("NOVEL_CLAUDE_BIN", str(fake))
     assert assetgen.add_looks(chapters, analyses, tmp_path / "looks.json") == 0
+
+
+def test_a_capitalised_common_noun_is_not_a_character(mill):
+    # "Flour dust hung in the air" starts a sentence with a common noun.
+    _, _, analyses = mill
+    assert "flour" not in analyses[0].characters
+    assert {"tom", "anna"} <= set(analyses[0].characters)
