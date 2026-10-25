@@ -35,6 +35,7 @@ export interface Speaker {
   name: string;
   color: string;
   voice: number;
+  gender?: "m" | "f";
 }
 
 export type EndingAction = "retry" | "restart" | "menu";

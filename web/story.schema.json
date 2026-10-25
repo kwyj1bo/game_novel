@@ -129,6 +129,13 @@
             "default": 1,
             "type": "number"
           },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "m",
+              "f"
+            ]
+          },
           "subtitleColor": {
             "default": "#ffffff",
             "type": "string"

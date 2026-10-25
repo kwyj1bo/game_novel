@@ -17,7 +17,8 @@
       "glasses": "round",
       "scar": true,
       "voice": 1.15,
-      "subtitleColor": "#f3d27a"
+      "subtitleColor": "#f3d27a",
+      "gender": "m"
     },
     "ron": {
       "name": "Ron",
@@ -29,7 +30,8 @@
       "hairStyle": "ginger_mop",
       "eyes": "#4a7ab0",
       "voice": 0.95,
-      "subtitleColor": "#ff9a6a"
+      "subtitleColor": "#ff9a6a",
+      "gender": "m"
     },
     "hermione": {
       "name": "Hermione",
@@ -41,7 +43,8 @@
       "hairStyle": "bushy",
       "eyes": "#6a4a2a",
       "voice": 1.4,
-      "subtitleColor": "#c9a8ff"
+      "subtitleColor": "#c9a8ff",
+      "gender": "f"
     },
     "fluffy": {
       "name": "Fluffy",
@@ -60,7 +63,8 @@
       "eyes": "#5a4a3a",
       "voice": 0.85,
       "subtitleColor": "#c8b8e8",
-      "outfit": "adult"
+      "outfit": "adult",
+      "gender": "m"
     }
   },
   "scenes": {
