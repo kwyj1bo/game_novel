@@ -58,6 +58,15 @@ STATE_WORDS = {
     "unconscious", "rigid", "stiff", "limp", "numb", "mad", "crazy", "faint", "dizzy",
 }
 
+# Months and weekdays: "September was coming" is not a person arriving.
+CALENDAR = {
+    "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november",
+    "december", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
+}
+# The ones that are also first names: a person if they speak or act, or if
+# spaCy reads them as a person at least as often as a date.
+CALENDAR_NAMES = {"april", "may", "june", "august"}
+
 # Honorifics that tell people apart ("Mr. Dursley" and "Mrs. Dursley" are two people).
 FAMILY_HONORIFICS = {"mr", "mrs", "miss", "ms"}
 

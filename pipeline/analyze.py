@@ -180,6 +180,8 @@ class _Detector:
         if word.lower() in self.place_tokens:
             return False  # part of a place name the manifest knows ("Hogwarts", "Drive")
         e = ev.get(word)
+        if word.lower() in L.CALENDAR and (word.lower() not in L.CALENDAR_NAMES or (e and not e["acts"] and e["other"] > e["person"])):
+            return False  # "September", or a "May" that never speaks or acts
         if not e:
             return True  # only seen inside an entity span; let the span decide
         if e["the"] * 2 >= e["n"] or e["plural"] * 2 > e["n"]:

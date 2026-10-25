@@ -203,3 +203,26 @@ def test_a_new_book_reuses_library_places(mill, tmp_path):
     store = json.loads((library / "places.json").read_text())
     assert list(store["places"]) == ["gen_the_old_windmill"] and len(store["scenes"]) == 2
     assert {p["id"] for p in places.values()} == {"gen_the_old_windmill"}
+
+
+def test_months_and_weekdays_are_not_characters(tmp_path):
+    text = """Chapter One
+Waiting
+
+September was coming, and Tom could hardly wait. "Only a week left," said Tom.
+
+Monday came and went. Anna laughed at him. "You count every day," said Anna.
+
+May walked into the kitchen and smiled at them both. "Breakfast is ready," said May.
+
+Tom grabbed a plate and sat down at the long wooden table by the window.
+
+Anna poured the tea while the rain tapped against the glass.
+
+"One more week," Tom said again, and May shook her head.
+"""
+    (tmp_path / "wait.txt").write_text(text)
+    catalog = load_catalog()
+    chars = analyze(load_chapters(tmp_path / "wait.txt")[0].paragraphs, catalog).characters
+    assert "september" not in chars and "monday" not in chars
+    assert {"tom", "anna", "may"} <= set(chars)
