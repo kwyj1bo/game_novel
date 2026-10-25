@@ -76,8 +76,9 @@ async def build(file: UploadFile = File(...)):
     chapters = chapters[:MAX_CHAPTERS]
     analyses = [analyze(ch.paragraphs, catalog) for ch in chapters]
     hero = book_hero(analyses)
-    add_looks(chapters, analyses, library_dir() / _slug(source) / "looks.json")
-    places = add_places(chapters, analyses, catalog, library_dir() / _slug(source) / "places.json")
+    # Generated assets are shared by every book in the library.
+    add_looks(chapters, analyses, library_dir() / "assets")
+    places = add_places(chapters, analyses, catalog, library_dir() / "assets")
     for ch, a in zip(chapters, analyses):
         try:
             story, _, _, _, chain = build_chapter(ch, catalog, source, hero, a, places)

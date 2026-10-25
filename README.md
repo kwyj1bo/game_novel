@@ -132,7 +132,9 @@ A character the manifest does not have gets a look made by Claude (`pipeline/ass
 
 A scene that no manifest keyword places gets an AI-made place. The model reads the scene and answers with a `preset`: the closest type (room, cellar, forest, shore...), the time of day, a wall colour, a floor and up to six kinds of props. The story file carries the place in its `sceneries`, and the engine builds it in 3D like a manifest scenery. Scenes in the same place share one design.
 
-Each book makes one request for looks and one for places. The answers are checked against the engine's formats and saved in `looks.json` and `places.json` next to the book, so building the same book again gives the same game and costs nothing.
+Generated assets go into one shared library, `library/assets/` (`looks.json` and `places.json`), that every book and every user of the server reuses. A character is asked for only if the library has no look for that name. For places, the model sees the library's places and reuses one when it fits a scene, so a second book set in a windmill gets the first book's windmill. The library grows with every book, and each new book needs fewer requests. A book makes at most one request for looks and one for places. Every answer is checked against the engine's formats, so building the same book again gives the same game and costs nothing.
+
+A name means one look across the whole library: two different books with a character called "Tom" share Tom's look.
 
 It reaches the model in one of two ways:
 

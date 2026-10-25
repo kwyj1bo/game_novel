@@ -109,8 +109,8 @@ def main(argv=None) -> int:
     hero = book_hero(analyses.values())
     from .assetgen import add_looks, add_places
 
-    add_looks(chapters, list(analyses.values()), args.out / "looks.json")
-    places = add_places(chapters, list(analyses.values()), catalog, args.out / "places.json")
+    add_looks(chapters, list(analyses.values()), args.out / "assets")
+    places = add_places(chapters, list(analyses.values()), catalog, args.out / "assets")
     for ch in picked:
         story, a, scenes, moments, chain = build_chapter(ch, catalog, source, hero, analyses[id(ch)], places)
         path = args.out / f"{story['id']}.story.json"

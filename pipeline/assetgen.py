@@ -9,12 +9,16 @@ The story is still found by rules; only the assets come from a model.
   and answers with a preset (type, time of day, colours, props), which the
   engine builds in 3D like a manifest scenery.
 
-Assets are asked for once per book, checked, and cached, so the same book
-always gives the same game. The model is reached through an API key
-(ANTHROPIC_API_KEY) or, without one, through Claude Code on this computer, which
-uses the Claude subscription it is signed in with. Without either, or with
-NOVEL_ASSET_AI=0, characters keep their generated looks and scenes the default
-scenery.
+Generated assets go into one shared library (a folder of JSON files) that
+every later book, and every user of the same server, reuses: a character is
+asked for only if the library has no look for that name, and a scene is
+matched to an existing generated place before a new one is designed. So the
+same book always gives the same game, and each new book needs fewer requests.
+
+The model is reached through an API key (ANTHROPIC_API_KEY) or, without one,
+through Claude Code on this computer, which uses the Claude subscription it is
+signed in with. Without either, or with NOVEL_ASSET_AI=0, characters keep their
+generated looks and scenes the default scenery.
 """
 
 import json
@@ -160,9 +164,19 @@ def ask(client, people: list[dict]) -> dict[str, dict]:
     return {x["id"]: spec for x in (data or {"looks": []})["looks"] if (spec := valid(x))}
 
 
-def add_looks(chapters, analyses, cache: Path, client=None) -> int:
-    """Gives characters without an asset an AI-made look (cached in `cache`).
-    Returns how many characters got one."""
+def _load(path: Path, empty):
+    return json.loads(path.read_text()) if path.exists() else empty
+
+
+def _save(path: Path, data) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, indent=1, ensure_ascii=False))
+
+
+def add_looks(chapters, analyses, library: Path, client=None) -> int:
+    """Gives characters without an asset an AI-made look. Looks are kept in the
+    shared library (`library/looks.json`, by character id), so a name already
+    seen in any book is not asked for again. Returns how many got one."""
     if os.environ.get("NOVEL_ASSET_AI", "1") == "0":
         return 0
     missing = {}
@@ -171,14 +185,14 @@ def add_looks(chapters, analyses, cache: Path, client=None) -> int:
             if c.kind == "human" and not c.asset and (c.id not in missing or c.mentions > missing[c.id].mentions):
                 missing[c.id] = c
     wanted = sorted(missing.values(), key=lambda c: -c.mentions)[:MAX_CHARACTERS]
-    looks = json.loads(cache.read_text()) if cache.exists() else {}
+    looks = _load(library / "looks.json", {})
     need = [c for c in wanted if c.id not in looks]
     if need:
         people = [{"id": c.id, "name": c.name, "gender": {"m": "male", "f": "female"}.get(c.gender, "unknown"), "book_says": descriptions(chapters, c)} for c in need]
         try:
-            looks.update(ask(client or default_client(), people))
-            cache.parent.mkdir(parents=True, exist_ok=True)
-            cache.write_text(json.dumps(looks, indent=1, ensure_ascii=False))
+            asked = {c.id for c in need}
+            looks.update({cid: look for cid, look in ask(client or default_client(), people).items() if cid in asked})
+            _save(library / "looks.json", looks)
         except Exception as e:  # no SDK, no credentials, network or API error
             log.warning("AI looks unavailable (%s); keeping generated looks", e)
     for a in analyses:
@@ -191,11 +205,13 @@ def add_looks(chapters, analyses, cache: Path, client=None) -> int:
 # ---- places ------------------------------------------------------------------
 
 PLACE_SYSTEM = (
-    "You design places for a 3D game made from a novel. Each scene below happens somewhere the game has no "
-    "place for. Read it and describe the place with the given fields: the closest type, the time of day, a "
-    "wall colour (#rrggbb), a floor material and up to 6 kinds of props. When several scenes happen in the "
-    "same place, give them the same title and the same design."
+    "You design places for a 3D game made from novels. Each scene below happens somewhere the game has no "
+    "place for. If one of the library places fits the scene well, answer with its id in 'reuse' and fill the "
+    "other fields with anything. Otherwise leave 'reuse' empty and describe a new place: the closest type, "
+    "the time of day, a wall colour (#rrggbb), a floor material and up to 6 kinds of props. When several "
+    "scenes happen in the same new place, give them the same title and the same design."
 )
+MAX_LIBRARY_HINTS = 80  # library places shown to the model for reuse
 
 
 def _place_schema() -> dict:
@@ -204,6 +220,7 @@ def _place_schema() -> dict:
         "type": "object",
         "properties": {
             "key": {"type": "string"},
+            "reuse": {"type": "string"},
             "title": {"type": "string"},
             "type": {"type": "string", "enum": PRESET["type"]["enum"]},
             "time": {"type": "string", "enum": PRESET["time"]["enum"]},
@@ -211,7 +228,7 @@ def _place_schema() -> dict:
             "floor": {"type": "string", "enum": PRESET["floor"]["anyOf"][0]["enum"]},
             "props": {"type": "array", "items": prop},
         },
-        "required": ["key", "title", "type", "time", "wall", "floor", "props"],
+        "required": ["key", "reuse", "title", "type", "time", "wall", "floor", "props"],
         "additionalProperties": False,
     }
     return {"type": "object", "properties": {"places": {"type": "array", "items": place}}, "required": ["places"], "additionalProperties": False}
@@ -232,26 +249,37 @@ def valid_place(p: dict) -> dict | None:
     return {"id": "gen_" + (re.sub(r"[^a-z0-9]+", "_", title.lower()).strip("_") or "place"), "title": title, "preset": preset}
 
 
-def add_places(chapters, analyses, catalog, cache: Path, client=None) -> dict[str, dict]:
-    """AI-made places for scenes no manifest keyword places (cached in
-    `cache`). Returns scene key -> place, for build_story."""
+def add_places(chapters, analyses, catalog, library: Path, client=None) -> dict[str, dict]:
+    """AI-made places for scenes no manifest keyword places. The shared
+    library (`library/places.json`) keeps every generated place and which
+    scene uses which; the model reuses a library place when one fits.
+    Returns scene key -> place, for build_story."""
     if os.environ.get("NOVEL_ASSET_AI", "1") == "0":
         return {}
     from .build import UNPLACED, place_key, segment
 
-    places = json.loads(cache.read_text()) if cache.exists() else {}
+    store = _load(library / "places.json", {"places": {}, "scenes": {}})
     need = []
     for ch, a in zip(chapters, analyses):
         for sc in segment(ch.paragraphs, a.lines, catalog):
             key = place_key(sc) if sc.lines else None
-            if sc.location == UNPLACED and key and key not in places and len(need) < MAX_PLACES:
+            if sc.location == UNPLACED and key and key not in store["scenes"] and len(need) < MAX_PLACES:
                 need.append({"key": key, "chapter": ch.title, "scene": " ".join(ln.text for ln in sc.lines[:8])[:900]})
     if need:
+        hints = [{"id": pid, "title": p["title"], "type": p["preset"]["type"]} for pid, p in list(store["places"].items())[:MAX_LIBRARY_HINTS]]
         try:
-            data = request(client or default_client(), PLACE_SYSTEM, "Scenes", need, _place_schema())
-            places.update({p["key"]: place for p in (data or {"places": []})["places"] if (place := valid_place(p))})
-            cache.parent.mkdir(parents=True, exist_ok=True)
-            cache.write_text(json.dumps(places, indent=1, ensure_ascii=False))
+            data = request(client or default_client(), PLACE_SYSTEM, "Library places and scenes", [{"library": hints}, *need], _place_schema())
+            asked = {n["key"] for n in need}
+            for p in (data or {"places": []})["places"]:
+                if p.get("key") not in asked:
+                    continue
+                if p.get("reuse") in store["places"]:
+                    store["scenes"][p["key"]] = p["reuse"]
+                elif place := valid_place(p):
+                    # Same title, same place: the first design stays.
+                    store["places"].setdefault(place["id"], {"title": place["title"], "preset": place["preset"]})
+                    store["scenes"][p["key"]] = place["id"]
+            _save(library / "places.json", store)
         except Exception as e:  # no SDK, no credentials, network or API error
             log.warning("AI places unavailable (%s); using the default scenery", e)
-    return places
+    return {key: {"id": pid, **store["places"][pid]} for key, pid in store["scenes"].items() if pid in store["places"]}
