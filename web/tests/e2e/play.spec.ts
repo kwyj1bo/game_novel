@@ -46,6 +46,12 @@ async function choose(page: Page, correct: boolean, nth = 0) {
   return scene;
 }
 
+// Saved books live in a folder: open it, then the book.
+async function openBook(page: Page, title: string) {
+  await page.locator(".chapter.folder").getByRole("button", { name: "Open" }).click();
+  await page.locator(".chapter.book", { hasText: title }).getByRole("button", { name: "Open" }).click();
+}
+
 async function beginChapter(page: Page, id: string, button = "Begin") {
   await page.locator(`.chapter[data-id="${id}"]`).getByRole("button", { name: button }).click();
 }
@@ -126,9 +132,11 @@ test("uploading a novel adds generated chapters that play to the end", async ({ 
   const errors = trackErrors(page);
   await page.goto("/?fast&mute");
   await page.locator(".chapter.upload input[type=file]").setInputFiles(new URL("../../../tests/pipeline/fixtures/lighthouse.txt", import.meta.url).pathname);
-  await expect(page.locator(".upload-status")).toHaveText("Added 1 chapter.", { timeout: 60_000 });
-  // The book is kept: after a reload it is still in the menu, once.
+  await expect(page.locator(".menu-status")).toHaveText("Added 1 chapter.", { timeout: 60_000 });
+  await expect(page.locator(".menu-path")).toHaveText("Lighthouse");
+  // The book is kept: after a reload it is in the Saved books folder, once.
   await page.reload();
+  await openBook(page, "Lighthouse");
   await expect(page.locator(".chapter", { hasText: "The Keeper's Hall" })).toHaveCount(1, { timeout: 15_000 });
   const card = page.locator(".chapter", { hasText: "The Keeper's Hall" });
   await card.getByRole("button", { name: "Begin" }).click();
@@ -143,7 +151,7 @@ test("a whole book uploads as one card per chapter, each staged from the manifes
   const errors = trackErrors(page);
   await page.goto("/?fast&mute");
   await page.locator(".chapter.upload input[type=file]").setInputFiles(new URL("../../../tests/pipeline/fixtures/hp_book.txt", import.meta.url).pathname);
-  await expect(page.locator(".upload-status")).toHaveText("Added 3 chapters.", { timeout: 90_000 });
+  await expect(page.locator(".menu-status")).toHaveText("Added 3 chapters.", { timeout: 90_000 });
   for (const title of ["The Letters", "The Alley", "The Forest"]) await expect(page.locator(".chapter", { hasText: title })).toHaveCount(1);
   await page.locator(".chapter", { hasText: "The Alley" }).getByRole("button", { name: "Begin" }).click();
   await choose(page, true, 0);
