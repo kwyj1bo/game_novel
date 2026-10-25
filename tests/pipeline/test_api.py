@@ -55,3 +55,34 @@ def test_built_books_are_kept_in_the_library():
 
 def test_library_files_cannot_escape_the_folder():
     assert client.get("/api/library/..%2F..%2Fapp/main.py").status_code == 404
+
+
+def test_a_chapter_can_be_played_as_another_character(tmp_path):
+    data = (FIX / "hp_book.txt").read_bytes()
+    client.post("/api/build", files={"file": ("philosophers_stone.txt", data, "text/plain")})
+    alley = client.get("/api/library").json()[0]["chapters"][1]
+    cast = [c["id"] for c in alley["cast"]]
+    assert cast[0] == "harry" and "hagrid" in cast
+    r = client.get(f"/api/library/{alley['file']}/as/hagrid")
+    assert r.status_code == 200
+    ending = next(s["ending"] for s in r.json()["scenes"].values() if "ending" in s)
+    assert "Hagrid" in ending["text"]
+    # Built once, then kept.
+    assert (tmp_path / "library" / alley["file"].replace("/", "/as/hagrid/")).is_file()
+
+
+def test_playing_as_someone_not_in_the_chapter_is_refused():
+    data = (FIX / "hp_book.txt").read_bytes()
+    client.post("/api/build", files={"file": ("philosophers_stone.txt", data, "text/plain")})
+    alley = client.get("/api/library").json()[0]["chapters"][1]["file"]
+    assert client.get(f"/api/library/{alley}/as/voldemort").status_code == 404
+    assert client.get(f"/api/library/{alley}/as/..%2F..").status_code == 404
+
+
+def test_uploading_a_book_again_drops_old_rebuilds(tmp_path):
+    data = (FIX / "hp_book.txt").read_bytes()
+    client.post("/api/build", files={"file": ("philosophers_stone.txt", data, "text/plain")})
+    alley = client.get("/api/library").json()[0]["chapters"][1]["file"]
+    client.get(f"/api/library/{alley}/as/hagrid")
+    client.post("/api/build", files={"file": ("philosophers_stone.txt", data, "text/plain")})
+    assert not (tmp_path / "library" / "philosophers-stone" / "as").exists()
