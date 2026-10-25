@@ -9,7 +9,7 @@ from fastapi.responses import FileResponse
 
 from pipeline.__main__ import book_hero, build_chapter, chain_json, load_catalog
 from pipeline.analyze import analyze
-from pipeline.assetgen import add_looks
+from pipeline.assetgen import add_looks, add_places
 from pipeline.text import load_chapters
 
 router = APIRouter()
@@ -77,9 +77,10 @@ async def build(file: UploadFile = File(...)):
     analyses = [analyze(ch.paragraphs, catalog) for ch in chapters]
     hero = book_hero(analyses)
     add_looks(chapters, analyses, library_dir() / _slug(source) / "looks.json")
+    places = add_places(chapters, analyses, catalog, library_dir() / _slug(source) / "places.json")
     for ch, a in zip(chapters, analyses):
         try:
-            story, _, _, _, chain = build_chapter(ch, catalog, source, hero, a)
+            story, _, _, _, chain = build_chapter(ch, catalog, source, hero, a, places)
             stories.append({"heading": ch.heading, "story": story, "events": chain_json(chain)})
         except Exception as e:  # one bad chapter should not sink the book
             skipped.append({"heading": ch.heading, "error": str(e)})
