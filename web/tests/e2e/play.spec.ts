@@ -163,3 +163,18 @@ test("a whole book uploads as one card per chapter, each staged from the manifes
   expect(events.filter((e) => e.type === "ending").at(-1).ending.kind).toBe("victory");
   expect(errors).toEqual([]);
 });
+
+test("a chapter can be played as another character", async ({ page }) => {
+  const errors = trackErrors(page);
+  await page.goto("/?fast&mute");
+  await page.locator(".chapter.upload input[type=file]").setInputFiles(new URL("../../../tests/pipeline/fixtures/hp_book.txt", import.meta.url).pathname);
+  await expect(page.locator(".menu-status")).toHaveText("Added 3 chapters.", { timeout: 90_000 });
+  const card = page.locator(".chapter", { hasText: "The Alley" });
+  await expect(card.locator(".play-as option")).toContainText(["Harry", "Hagrid"]);
+  await card.locator(".play-as select").selectOption("hagrid");
+  await card.getByRole("button", { name: "Begin" }).click();
+  await waitForHud(page, "ending", 90_000);
+  const { events } = await engine(page);
+  expect(events.filter((e) => e.type === "ending").at(-1).ending.text).toContain("Hagrid");
+  expect(errors).toEqual([]);
+});

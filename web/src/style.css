@@ -371,6 +371,21 @@ canvas.view {
   margin: 8px 0 18px;
   color: var(--gold-soft);
 }
+.play-as {
+  display: block;
+  margin: -8px 0 14px;
+  font-size: 15px;
+  color: rgba(239, 231, 214, 0.65);
+}
+.play-as select {
+  margin-left: 6px;
+  padding: 4px 8px;
+  font: inherit;
+  color: var(--gold-soft);
+  background: rgba(10, 8, 5, 0.9);
+  border: 1px solid rgba(217, 180, 90, 0.4);
+  border-radius: 4px;
+}
 .chapter .actions {
   justify-content: flex-start;
   gap: 10px;
