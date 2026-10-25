@@ -10,14 +10,20 @@ The story is still found by rules; only the assets come from a model.
   engine builds in 3D like a manifest scenery.
 
 Assets are asked for once per book, checked, and cached, so the same book
-always gives the same game. Without credentials or with NOVEL_ASSET_AI=0,
-characters keep their generated looks and scenes the default scenery.
+always gives the same game. The model is reached through an API key
+(ANTHROPIC_API_KEY) or, without one, through Claude Code on this computer, which
+uses the Claude subscription it is signed in with. Without either, or with
+NOVEL_ASSET_AI=0, characters keep their generated looks and scenes the default
+scenery.
 """
 
 import json
 import logging
 import os
 import re
+import shutil
+import subprocess
+import tempfile
 from pathlib import Path
 
 log = logging.getLogger(__name__)
@@ -91,8 +97,48 @@ def valid(look: dict) -> dict | None:
     return spec
 
 
+def claude_code() -> str | None:
+    """A Claude Code executable: NOVEL_CLAUDE_BIN, `claude` on the PATH, or the
+    one inside the VS Code extension."""
+    if os.environ.get("NOVEL_CLAUDE_BIN"):
+        return os.environ["NOVEL_CLAUDE_BIN"]
+    if found := shutil.which("claude"):
+        return found
+    bundled = list(Path.home().glob(".vscode/extensions/anthropic.claude-code-*/resources/native-binary/claude"))
+    return str(max(bundled, key=os.path.getmtime)) if bundled else None
+
+
+class ClaudeCode:
+    """Asks Claude Code instead of the API, so requests use the Claude
+    subscription it is signed in with. No tools, no MCP servers, no session."""
+
+    def __init__(self, path: str):
+        self.path = path
+
+    def request(self, system: str, prompt: str, schema: dict) -> dict | None:
+        args = [self.path, "-p", "--output-format", "json", "--json-schema", json.dumps(schema), "--system-prompt", system,
+                "--tools", "", "--no-session-persistence", "--strict-mcp-config", "--disable-slash-commands", "--effort", "low"]
+        with tempfile.TemporaryDirectory() as cwd:
+            r = subprocess.run(args, input=prompt, capture_output=True, text=True, timeout=900, cwd=cwd)
+        out = json.loads(r.stdout or "{}")
+        if out.get("is_error") or r.returncode:
+            raise RuntimeError(f"Claude Code: {out.get('result') or r.stderr.strip()[-300:]}")
+        return out.get("structured_output")
+
+
+def default_client():
+    """The API with a key, else Claude Code, else the API (an `ant` sign-in)."""
+    import anthropic
+
+    if not os.environ.get("ANTHROPIC_API_KEY") and (path := claude_code()):
+        return ClaudeCode(path)
+    return anthropic.Anthropic()
+
+
 def request(client, system: str, label: str, items: list[dict], schema: dict) -> dict | None:
     """One structured request; the parsed JSON, or None if the model stopped early."""
+    if isinstance(client, ClaudeCode):
+        return client.request(system, f"{label}:\n" + json.dumps(items, indent=1, ensure_ascii=False), schema)
     response = client.beta.messages.create(
         model=MODEL,
         max_tokens=16000,
@@ -130,9 +176,7 @@ def add_looks(chapters, analyses, cache: Path, client=None) -> int:
     if need:
         people = [{"id": c.id, "name": c.name, "gender": {"m": "male", "f": "female"}.get(c.gender, "unknown"), "book_says": descriptions(chapters, c)} for c in need]
         try:
-            import anthropic
-
-            looks.update(ask(client or anthropic.Anthropic(), people))
+            looks.update(ask(client or default_client(), people))
             cache.parent.mkdir(parents=True, exist_ok=True)
             cache.write_text(json.dumps(looks, indent=1, ensure_ascii=False))
         except Exception as e:  # no SDK, no credentials, network or API error
@@ -204,9 +248,7 @@ def add_places(chapters, analyses, catalog, cache: Path, client=None) -> dict[st
                 need.append({"key": key, "chapter": ch.title, "scene": " ".join(ln.text for ln in sc.lines[:8])[:900]})
     if need:
         try:
-            import anthropic
-
-            data = request(client or anthropic.Anthropic(), PLACE_SYSTEM, "Scenes", need, _place_schema())
+            data = request(client or default_client(), PLACE_SYSTEM, "Scenes", need, _place_schema())
             places.update({p["key"]: place for p in (data or {"places": []})["places"] if (place := valid_place(p))})
             cache.parent.mkdir(parents=True, exist_ok=True)
             cache.write_text(json.dumps(places, indent=1, ensure_ascii=False))

@@ -141,3 +141,38 @@ def test_places_are_cached_and_skipped_without_a_model(mill, tmp_path):
     assert assetgen.add_places(chapters, analyses, catalog, cache, again) and again.calls == []
     story = build_chapter(chapters[0], catalog, "Fixture", analysis=analyses[0])[0]
     assert "sceneries" not in story and {s["location"] for s in story["scenes"].values()} == {catalog["defaultScenery"]}
+
+
+# ---- Claude Code instead of an API key
+
+FAKE_CLAUDE = """#!/usr/bin/env python3
+import json, sys
+args = sys.argv[1:]
+assert "-p" in args and args[args.index("--tools") + 1] == ""
+schema = json.loads(args[args.index("--json-schema") + 1])
+people = json.loads(sys.stdin.read().split("\\n", 1)[1])
+look = json.loads(%r)
+print(json.dumps({"type": "result", "is_error": False, "result": "", "structured_output": {"looks": [{"id": p["id"], **look} for p in people]}}))
+""" % json.dumps(LOOK)
+
+
+def test_looks_can_come_from_claude_code(voyage, tmp_path, monkeypatch):
+    _, chapters, analyses = voyage
+    fake = tmp_path / "claude"
+    fake.write_text(FAKE_CLAUDE)
+    fake.chmod(0o755)
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.setenv("NOVEL_CLAUDE_BIN", str(fake))
+    assert isinstance(assetgen.default_client(), assetgen.ClaudeCode)
+    assert assetgen.add_looks(chapters, analyses, tmp_path / "looks.json") >= 2
+    assert next(c for a in analyses for c in a.characters.values() if c.id == "rourke").look["beard"] == "long"
+
+
+def test_a_signed_out_claude_code_falls_back(voyage, tmp_path, monkeypatch):
+    _, chapters, analyses = voyage
+    fake = tmp_path / "claude"
+    fake.write_text('#!/bin/sh\necho \'{"is_error": true, "result": "Failed to authenticate"}\'\n')
+    fake.chmod(0o755)
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.setenv("NOVEL_CLAUDE_BIN", str(fake))
+    assert assetgen.add_looks(chapters, analyses, tmp_path / "looks.json") == 0
