@@ -57,6 +57,16 @@ def _location_hits(text: str, catalog) -> dict[str, int]:
     return hits
 
 
+# A scene whose place no manifest keyword names. It gets an AI-made place
+# when there is one, otherwise the default scenery.
+UNPLACED = "?"
+
+
+def place_key(sc: "Scene") -> str:
+    """Identifies an unplaced scene across builds (by its first line)."""
+    return hashlib.sha1(sc.lines[0].text.encode()).hexdigest()[:12]
+
+
 MIN_SCENE = 6  # paragraphs; shorter detours merge into their neighbours
 ARRIVAL_RE = r"\b(into|entered|enter|reached|arrived (?:at|in)|inside|back to|out (?:of|into))\b[\w' ,-]{0,40}?\b"
 
@@ -66,7 +76,7 @@ def segment(paragraphs: list[str], lines: list[Line], catalog) -> list[Scene]:
     in passing ("a lesson", "the kitchen"), so a move needs evidence: a scene
     break or time jump, an arrival phrase ("into the Great Hall"), or the new
     place staying in the narration for the next few paragraphs."""
-    fallback = catalog.get("defaultScenery") or next(iter(catalog["locations"]))
+    fallback = UNPLACED
     hits = [_location_hits(p, catalog) for p in paragraphs]
     order = {lid: i for i, lid in enumerate(catalog["locations"])}
 
@@ -319,6 +329,7 @@ class _Assembler:
         self.hero = a.protagonist
         self._last_speaker: str | None = None
         self._last_narration = ""
+        self.places: dict[str, dict] = {}  # AI-made places this story uses
         self.actions = {x["id"]: x for x in catalog["actions"]}
 
     def name(self, cid: str | None) -> str:
@@ -539,7 +550,7 @@ class _Assembler:
                 body = [{"camera": "wide", "ms": 0}]
             scene: dict = {"location": sc.location, "cast": cast, "beats": body}
             if new_loc:
-                scene["title"] = self.cat["locations"][sc.location]["title"]
+                scene["title"] = (self.cat["locations"].get(sc.location) or self.places[sc.location])["title"]
             on_stage = stage
             prev_loc = sc.location
             if moment:
@@ -572,6 +583,7 @@ class _Assembler:
             "start": ids[0],
             "actors": actors,
             "scenes": story_scenes,
+            **({"sceneries": self.places} if self.places else {}),
         }
 
     def wrong_scene(self, location: str, m: Moment, stage: set[str], slots: dict) -> dict:
@@ -623,16 +635,26 @@ def _trim(text: str, limit: int = 240) -> str:
     return cut.rstrip(" ,;") + "…"
 
 
-def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str, source: str):
+def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str, source: str, places: dict | None = None):
     """Scenes and choices come from the whole chapter; what the game shows is
-    only the event chain (the important events, in order)."""
+    only the event chain (the important events, in order). `places` maps an
+    unplaced scene's key to an AI-made place."""
     from .events import build_chain
 
     scenes = segment(paragraphs, a.lines, catalog)
+    used_places: dict[str, dict] = {}
+    for sc in scenes:
+        if sc.location == UNPLACED:
+            p = (places or {}).get(place_key(sc))
+            sc.location = p["id"] if p else catalog["defaultScenery"]
+            if p:
+                used_places[p["id"]] = {"title": p["title"], "preset": p["preset"]}
     moments = find_moments(a, scenes, catalog)
     chain = build_chain(a, scenes, moments, catalog)
     shown = {id(ln) for node in chain for ln in node.lines}
     condensed = [Scene(location=sc.location, lines=[ln for ln in sc.lines if id(ln) in shown]) for sc in scenes]
     condensed = [sc for sc in condensed if sc.lines]
-    story = _Assembler(a, catalog, chapter_title, source).build(condensed, moments)
+    assembler = _Assembler(a, catalog, chapter_title, source)
+    assembler.places = used_places
+    story = assembler.build(condensed, moments)
     return story, condensed, moments, chain

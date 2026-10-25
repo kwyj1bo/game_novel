@@ -1,11 +1,17 @@
-"""AI-made looks for characters the asset library doesn't have.
+"""AI-made assets for what the asset library doesn't have.
 
-The story is still found by rules; only the look comes from a model. The
-model reads what the book says about each missing character and answers with
-an actor spec (hair, robe, height, glasses...), the same data the engine
-draws a manifest character from. Looks are asked for once per book, checked,
-and cached, so the same book always gives the same game. Without credentials
-or with NOVEL_ASSET_AI=0, characters keep their generated looks.
+The story is still found by rules; only the assets come from a model.
+
+- Looks: the model reads what the book says about each missing character and
+  answers with an actor spec (hair, robe, height, glasses...), the same data
+  the engine draws a manifest character from.
+- Places: for a scene no manifest keyword places, the model reads the scene
+  and answers with a preset (type, time of day, colours, props), which the
+  engine builds in 3D like a manifest scenery.
+
+Assets are asked for once per book, checked, and cached, so the same book
+always gives the same game. Without credentials or with NOVEL_ASSET_AI=0,
+characters keep their generated looks and scenes the default scenery.
 """
 
 import json
@@ -20,6 +26,9 @@ MODEL = os.environ.get("NOVEL_ASSET_MODEL", "claude-opus-5-5")
 MAX_CHARACTERS = 40  # most-mentioned first; the rest keep generated looks
 MAX_DESCRIPTIONS = 6
 
+MAX_PLACES = 30
+WEB = Path(__file__).resolve().parent.parent / "web"
+PRESET = json.loads((WEB / "assets" / "manifest.schema.json").read_text())["properties"]["sceneries"]["items"]["properties"]["preset"]["properties"]
 SPEC = json.loads((Path(__file__).resolve().parent.parent / "web" / "story.schema.json").read_text())["properties"]["actors"]["additionalProperties"]["properties"]
 # The parts of the engine's actor spec a look sets, with the engine's own enums.
 FIELDS = ["height", "robe", "skin", "hair", "hairStyle", "eyes", "glasses", "beard", "outfit", "hat", "scar", "voice"]
@@ -82,22 +91,27 @@ def valid(look: dict) -> dict | None:
     return spec
 
 
-def ask(client, people: list[dict]) -> dict[str, dict]:
-    """One request for every missing character. Returns id -> checked look."""
+def request(client, system: str, label: str, items: list[dict], schema: dict) -> dict | None:
+    """One structured request; the parsed JSON, or None if the model stopped early."""
     response = client.beta.messages.create(
         model=MODEL,
         max_tokens=16000,
         betas=["server-side-fallback-2026-07-01"],
         fallbacks="default",
-        output_config={"effort": "low", "format": {"type": "json_schema", "schema": _schema()}},
-        system=SYSTEM,
-        messages=[{"role": "user", "content": "Characters:\n" + json.dumps(people, indent=1, ensure_ascii=False)}],
+        output_config={"effort": "low", "format": {"type": "json_schema", "schema": schema}},
+        system=system,
+        messages=[{"role": "user", "content": f"{label}:\n" + json.dumps(items, indent=1, ensure_ascii=False)}],
     )
     if response.stop_reason != "end_turn":
-        log.warning("asset model stopped early (%s); keeping generated looks", response.stop_reason)
-        return {}
-    data = json.loads(next(b.text for b in response.content if b.type == "text"))
-    return {x["id"]: spec for x in data["looks"] if (spec := valid(x))}
+        log.warning("asset model stopped early (%s)", response.stop_reason)
+        return None
+    return json.loads(next(b.text for b in response.content if b.type == "text"))
+
+
+def ask(client, people: list[dict]) -> dict[str, dict]:
+    """One request for every missing character. Returns id -> checked look."""
+    data = request(client, SYSTEM, "Characters", people, _schema())
+    return {x["id"]: spec for x in (data or {"looks": []})["looks"] if (spec := valid(x))}
 
 
 def add_looks(chapters, analyses, cache: Path, client=None) -> int:
@@ -128,3 +142,74 @@ def add_looks(chapters, analyses, cache: Path, client=None) -> int:
             if c.id in looks and not c.asset:
                 c.look = looks[c.id]
     return sum(1 for c in wanted if c.id in looks)
+
+
+# ---- places ------------------------------------------------------------------
+
+PLACE_SYSTEM = (
+    "You design places for a 3D game made from a novel. Each scene below happens somewhere the game has no "
+    "place for. Read it and describe the place with the given fields: the closest type, the time of day, a "
+    "wall colour (#rrggbb), a floor material and up to 6 kinds of props. When several scenes happen in the "
+    "same place, give them the same title and the same design."
+)
+
+
+def _place_schema() -> dict:
+    prop = {"type": "object", "properties": {"kind": {"type": "string", "enum": PRESET["props"]["items"]["properties"]["kind"]["enum"]}, "count": {"type": "integer"}}, "required": ["kind", "count"], "additionalProperties": False}
+    place = {
+        "type": "object",
+        "properties": {
+            "key": {"type": "string"},
+            "title": {"type": "string"},
+            "type": {"type": "string", "enum": PRESET["type"]["enum"]},
+            "time": {"type": "string", "enum": PRESET["time"]["enum"]},
+            "wall": {"type": "string"},
+            "floor": {"type": "string", "enum": PRESET["floor"]["anyOf"][0]["enum"]},
+            "props": {"type": "array", "items": prop},
+        },
+        "required": ["key", "title", "type", "time", "wall", "floor", "props"],
+        "additionalProperties": False,
+    }
+    return {"type": "object", "properties": {"places": {"type": "array", "items": place}}, "required": ["places"], "additionalProperties": False}
+
+
+def valid_place(p: dict) -> dict | None:
+    """A place the engine can build, or None."""
+    if p.get("type") not in PRESET["type"]["enum"] or p.get("time") not in PRESET["time"]["enum"] or not str(p.get("title", "")).strip():
+        return None
+    kinds = PRESET["props"]["items"]["properties"]["kind"]["enum"]
+    props = [{"kind": x["kind"], "count": min(6, max(1, int(x.get("count", 1))))} for x in p.get("props", []) if x.get("kind") in kinds][:6]
+    preset = {"type": p["type"], "time": p["time"], "props": props}
+    if isinstance(p.get("wall"), str) and COLOR.match(p["wall"]):
+        preset["wall"] = p["wall"]
+    if p.get("floor") in PRESET["floor"]["anyOf"][0]["enum"]:
+        preset["floor"] = p["floor"]
+    title = p["title"].strip()[:60]
+    return {"id": "gen_" + (re.sub(r"[^a-z0-9]+", "_", title.lower()).strip("_") or "place"), "title": title, "preset": preset}
+
+
+def add_places(chapters, analyses, catalog, cache: Path, client=None) -> dict[str, dict]:
+    """AI-made places for scenes no manifest keyword places (cached in
+    `cache`). Returns scene key -> place, for build_story."""
+    if os.environ.get("NOVEL_ASSET_AI", "1") == "0":
+        return {}
+    from .build import UNPLACED, place_key, segment
+
+    places = json.loads(cache.read_text()) if cache.exists() else {}
+    need = []
+    for ch, a in zip(chapters, analyses):
+        for sc in segment(ch.paragraphs, a.lines, catalog):
+            key = place_key(sc) if sc.lines else None
+            if sc.location == UNPLACED and key and key not in places and len(need) < MAX_PLACES:
+                need.append({"key": key, "chapter": ch.title, "scene": " ".join(ln.text for ln in sc.lines[:8])[:900]})
+    if need:
+        try:
+            import anthropic
+
+            data = request(client or anthropic.Anthropic(), PLACE_SYSTEM, "Scenes", need, _place_schema())
+            places.update({p["key"]: place for p in (data or {"places": []})["places"] if (place := valid_place(p))})
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            cache.write_text(json.dumps(places, indent=1, ensure_ascii=False))
+        except Exception as e:  # no SDK, no credentials, network or API error
+            log.warning("AI places unavailable (%s); using the default scenery", e)
+    return places
