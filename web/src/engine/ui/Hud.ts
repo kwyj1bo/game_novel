@@ -8,6 +8,8 @@ export interface MenuChapter {
   title: string;
   // Set when there is saved progress to resume.
   resumeLabel?: string;
+  // The saved book this chapter belongs to (its cards sit in that book's folder).
+  book?: string;
 }
 
 export interface HudOptions {
@@ -126,8 +128,10 @@ export class DomHud implements Hud {
     const screen = el("div", "screen title-screen", this.root);
     el("div", "eyebrow", screen, "An interactive novel");
     el("h1", "title", screen, heading);
+    const crumbs = el("div", "menu-crumbs", screen);
     const list = el("div", "chapters", screen);
     el("div", "hint", screen, "Click or Space to advance · 1 / 2 to choose");
+    const all = [...chapters];
     return new Promise((resolve) => {
       const go = (id: string, resume: boolean) => {
         this.audio.unlock();
@@ -137,51 +141,89 @@ export class DomHud implements Hud {
         this.setLetterbox(true);
         resolve({ id, resume });
       };
-      const addCard = (c: MenuChapter, before?: HTMLElement) => {
-        const card = el("div", "chapter");
-        list.insertBefore(card, before ?? null);
-        card.dataset.id = c.id;
-        el("div", "chapter-number", card, c.number);
-        el("div", "chapter-title", card, c.title);
-        const row = el("div", "actions", card);
+      const card = (cls: string, number: string, title: string) => {
+        const c = el("div", `chapter ${cls}`.trim(), list);
+        el("div", "chapter-number", c, number);
+        el("div", "chapter-title", c, title);
+        return c;
+      };
+      const addCard = (c: MenuChapter) => {
+        const cardEl = card("", c.number, c.title);
+        cardEl.dataset.id = c.id;
+        const row = el("div", "actions", cardEl);
         el("button", "primary", row, "Begin").onclick = () => go(c.id, false);
         if (c.resumeLabel) el("button", "secondary", row, `Continue · ${c.resumeLabel}`).onclick = () => go(c.id, true);
       };
-      chapters.forEach((c) => addCard(c));
-      if (!upload) return;
-      // Upload card first, so a long library never buries it.
-      const card = el("div", "chapter upload");
-      list.prepend(card);
-      el("div", "chapter-number", card, "Your own book");
-      el("div", "chapter-title", card, "Upload a novel");
-      const input = el("input", "file-input", card) as HTMLInputElement;
-      input.type = "file";
-      input.accept = ".pdf,.txt";
-      const status = el("div", "upload-status", card, "PDF or plain text");
-      const row = el("div", "actions", card);
-      const pickBtn = el("button", "secondary", row, "Choose file");
-      pickBtn.onclick = () => input.click();
-      input.onchange = async () => {
-        const file = input.files?.[0];
-        if (!file) return;
-        pickBtn.disabled = true;
-        status.textContent = `Reading “${file.name}”…`;
-        try {
-          const added = await upload(file);
-          // A re-uploaded book replaces its old cards; new chapters go right
-          // after the upload card, in book order.
-          added.forEach((c) => list.querySelector(`.chapter[data-id="${CSS.escape(c.id)}"]`)?.remove());
-          const anchor = (card.nextSibling as HTMLElement | null) ?? undefined;
-          added.forEach((c) => addCard(c, anchor));
-          status.textContent = `Added ${added.length} chapter${added.length === 1 ? "" : "s"}.`;
-        } catch (e) {
-          status.textContent = e instanceof Error ? e.message : String(e);
-        } finally {
-          pickBtn.disabled = false;
-          input.value = "";
+      const books = () => [...new Set(all.flatMap((c) => (c.book ? [c.book] : [])))];
+      const uploadCard = upload ? this.uploadCard(upload, (added) => {
+        for (const c of added) {
+          const i = all.findIndex((x) => x.id === c.id);
+          if (i >= 0) all[i] = c;
+          else all.push(c);
+        }
+        const book = added.find((c) => c.book)?.book;
+        show(book ?? null, `Added ${added.length} chapter${added.length === 1 ? "" : "s"}.`);
+      }) : null;
+      // null: the home view; "": the saved books folder; otherwise one book.
+      const show = (view: string | null, message = "") => {
+        list.replaceChildren();
+        crumbs.replaceChildren();
+        if (view !== null) {
+          el("button", "secondary menu-back", crumbs, "← Back").onclick = () => show(view === "" ? null : "");
+          el("span", "menu-path", crumbs, view === "" ? "Saved books" : view);
+        }
+        if (message) el("span", "menu-status", crumbs, message);
+        if (view === null) {
+          if (uploadCard) list.append(uploadCard);
+          const n = books().length;
+          if (n) {
+            const folder = card("folder", "Library", "Saved books");
+            el("div", "upload-status", folder, `${n} book${n === 1 ? "" : "s"} you have made`);
+            el("button", "secondary", el("div", "actions", folder), "Open").onclick = () => show("");
+          }
+          all.filter((c) => !c.book).forEach(addCard);
+        } else if (view === "") {
+          for (const b of books()) {
+            const count = all.filter((c) => c.book === b).length;
+            const bookCard = card("book", `${count} chapter${count === 1 ? "" : "s"}`, b);
+            el("button", "secondary", el("div", "actions", bookCard), "Open").onclick = () => show(b);
+          }
+        } else {
+          all.filter((c) => c.book === view).forEach(addCard);
         }
       };
+      show(null);
     });
+  }
+
+  // The "Upload a novel" card. Calls `done` with the chapters a book added.
+  private uploadCard(upload: (file: File) => Promise<MenuChapter[]>, done: (added: MenuChapter[]) => void): HTMLElement {
+    const card = el("div", "chapter upload");
+    el("div", "chapter-number", card, "Your own book");
+    el("div", "chapter-title", card, "Upload a novel");
+    const input = el("input", "file-input", card) as HTMLInputElement;
+    input.type = "file";
+    input.accept = ".pdf,.txt";
+    const status = el("div", "upload-status", card, "PDF or plain text");
+    const row = el("div", "actions", card);
+    const pickBtn = el("button", "secondary", row, "Choose file");
+    pickBtn.onclick = () => input.click();
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      pickBtn.disabled = true;
+      status.textContent = `Reading “${file.name}”…`;
+      try {
+        done(await upload(file));
+        status.textContent = "PDF or plain text";
+      } catch (e) {
+        status.textContent = e instanceof Error ? e.message : String(e);
+      } finally {
+        pickBtn.disabled = false;
+        input.value = "";
+      }
+    };
+    return card;
   }
 
   sceneCard(title: string): Promise<void> {

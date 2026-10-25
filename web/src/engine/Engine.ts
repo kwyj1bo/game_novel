@@ -16,6 +16,8 @@ export interface Chapter {
   // Stable id for the menu and saved progress (defaults to the story id).
   key?: string;
   title?: string;
+  // The uploaded book it comes from (the menu groups these under Saved books).
+  book?: string;
 }
 
 export interface EngineOptions {
@@ -153,10 +155,10 @@ export class Engine {
       // Same key as the library entry, so a reload doesn't list the chapter twice.
       const key = data.book?.chapters[i]?.file ?? story.id;
       const known = this.opts.chapters.findIndex((c) => keyOf(c) === key);
-      const chapter: Chapter = { key, number: `${data.source} · ${heading}`, title: story.title, story };
+      const chapter: Chapter = { key, number: heading, title: story.title, story, book: data.source };
       if (known >= 0) this.opts.chapters[known] = chapter;
       else this.opts.chapters.push(chapter);
-      added.push({ id: key, number: chapter.number, title: story.title });
+      added.push({ id: key, number: chapter.number, title: story.title, book: data.source });
     }
     if (!added.length) throw new Error("No playable chapters could be made from that file.");
     return added;
@@ -194,7 +196,7 @@ export class Engine {
       for (const b of books) {
         for (const c of b.chapters) {
           if (this.opts.chapters.some((x) => keyOf(x) === c.file)) continue;
-          this.opts.chapters.push({ key: c.file, number: `${b.source} · ${c.heading}`, title: c.title, url: `${this.opts.libraryUrl}/${c.file}` });
+          this.opts.chapters.push({ key: c.file, number: c.heading, title: c.title, url: `${this.opts.libraryUrl}/${c.file}`, book: b.source });
         }
       }
     } catch {
@@ -257,7 +259,7 @@ export class Engine {
       const progress = loadProgress();
       const pick = await this.hud.showMenu(
         this.opts.title,
-        this.opts.chapters.map((c) => ({ id: keyOf(c), number: c.number, title: c.title ?? c.story!.title, resumeLabel: progress[keyOf(c)]?.title })),
+        this.opts.chapters.map((c) => ({ id: keyOf(c), number: c.number, title: c.title ?? c.story!.title, resumeLabel: progress[keyOf(c)]?.title, book: c.book })),
         this.opts.uploadUrl ? (file) => this.upload(file) : undefined,
       );
       const chapter = this.opts.chapters.find((c) => keyOf(c) === pick.id)!;
