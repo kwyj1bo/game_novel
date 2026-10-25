@@ -9,6 +9,7 @@ from fastapi.responses import FileResponse
 
 from pipeline.__main__ import book_hero, build_chapter, chain_json, load_catalog
 from pipeline.analyze import analyze
+from pipeline.assetgen import add_looks
 from pipeline.text import load_chapters
 
 router = APIRouter()
@@ -75,6 +76,7 @@ async def build(file: UploadFile = File(...)):
     chapters = chapters[:MAX_CHAPTERS]
     analyses = [analyze(ch.paragraphs, catalog) for ch in chapters]
     hero = book_hero(analyses)
+    add_looks(chapters, analyses, library_dir() / _slug(source) / "looks.json")
     for ch, a in zip(chapters, analyses):
         try:
             story, _, _, _, chain = build_chapter(ch, catalog, source, hero, a)

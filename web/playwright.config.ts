@@ -27,7 +27,7 @@ export default defineConfig({
       command: "rm -rf web/test-results/library && venv/bin/uvicorn app.main:app --port 8001",
       cwd: "..",
       url: "http://localhost:8001/docs",
-      env: { NOVEL_LIBRARY: "web/test-results/library" },
+      env: { NOVEL_LIBRARY: "web/test-results/library", NOVEL_ASSET_AI: "0" },
       reuseExistingServer: false,
     },
   ],

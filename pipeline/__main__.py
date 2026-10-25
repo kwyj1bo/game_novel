@@ -107,6 +107,9 @@ def main(argv=None) -> int:
     # The hero is decided from the whole book, even when building one chapter.
     analyses = {id(ch): analyze(ch.paragraphs, catalog) for ch in chapters}
     hero = book_hero(analyses.values())
+    from .assetgen import add_looks
+
+    add_looks(chapters, list(analyses.values()), args.out / "looks.json")
     for ch in picked:
         story, a, scenes, moments, chain = build_chapter(ch, catalog, source, hero, analyses[id(ch)])
         path = args.out / f"{story['id']}.story.json"
