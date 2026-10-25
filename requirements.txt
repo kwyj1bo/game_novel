@@ -3,6 +3,8 @@ uvicorn[standard]
 python-multipart
 pymupdf
 spacy
+# preshed 3.0.14 breaks loading spaCy models (OverflowError in the tokenizer)
+preshed<3.0.14
 nltk
 pytest
 httpx
