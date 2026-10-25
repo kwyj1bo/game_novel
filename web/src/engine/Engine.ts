@@ -34,6 +34,8 @@ export interface EngineOptions {
   libraryUrl?: string;
   // Action assets ("act" beats expand from these).
   actions?: ActionRegistry;
+  // Builds the places a story brings with it (generated for its book).
+  storyLocations?: (story: Story) => Record<string, LocationDef>;
 }
 
 interface LibraryBook {
@@ -85,7 +87,7 @@ export class Engine {
   // The chapter being played (set once one starts).
   story!: Story;
   runtime!: StoryRuntime;
-  private readonly locationInfo: LocationRegistryInfo;
+  private readonly locationInfo: Record<string, LocationRegistryInfo[string]>;
   private last = performance.now();
   private fpsFrames = 0;
   private fpsTime = 0;
@@ -95,6 +97,7 @@ export class Engine {
     const info = (this.locationInfo = Object.fromEntries(Object.entries(opts.locations).map(([id, d]) => [id, d.info])));
     for (const { story } of opts.chapters) {
       if (!story) continue;
+      this.addLocations(story);
       const issues = validateStory(story, info, opts.actions);
       if (issues.length) {
         throw new Error(`story "${story.id}" is invalid:\n` + issues.map((i) => `  ${i.scene ?? "-"}: ${i.message}`).join("\n"));
@@ -159,10 +162,20 @@ export class Engine {
     return added;
   }
 
+  // Makes a story's own places known to the stage and the validator.
+  private addLocations(story: Story): void {
+    for (const [id, def] of Object.entries(this.opts.storyLocations?.(story) ?? {})) {
+      if (this.opts.locations[id]) continue;
+      this.opts.locations[id] = def;
+      this.locationInfo[id] = def.info;
+    }
+  }
+
   // Parses and validates a story from outside; null when it can't be played.
   private check(raw: unknown): Story | null {
     const parsed = StorySchema.safeParse(raw);
     if (!parsed.success) return null;
+    this.addLocations(parsed.data);
     const issues = validateStory(parsed.data, this.locationInfo, this.opts.actions);
     if (issues.length) {
       console.warn(`story ${parsed.data.id} skipped:`, issues);

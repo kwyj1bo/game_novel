@@ -1,7 +1,7 @@
 import "./style.css";
 import { Engine, type Chapter } from "./engine/Engine";
 import { parseStory } from "./engine/story/schema";
-import { ACTIONS, LOCATIONS } from "./locations";
+import { ACTIONS, LOCATIONS, storyLocations } from "./locations";
 import trollJson from "./content/hp/troll.story.json";
 import trapdoorJson from "./content/hp/trapdoor.story.json";
 
@@ -43,6 +43,7 @@ async function boot() {
     chapters,
     locations: LOCATIONS,
     actions: ACTIONS,
+    storyLocations,
     menuScenery: "great_hall",
     uploadUrl: "/api/build",
     libraryUrl: "/api/library",
