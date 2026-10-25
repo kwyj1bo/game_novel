@@ -126,6 +126,14 @@ To upload from the browser, start the backend with `uvicorn app.main:app --port 
 
 `python -m pipeline inventory book.pdf` reports what a book needs that the manifest lacks: every character (with mentions, and whether a manifest character covers them) and every on-screen verb (with counts, and whether an action asset covers it). Use it to decide which assets to add next.
 
+### AI looks for new characters
+
+A character the manifest does not have gets a look made by Claude (`pipeline/assetgen.py`). The pipeline collects what the book says about the character ("a tall man with a grey beard") and asks the model for an actor spec: height, robe, skin, hair, hair style, glasses, beard and voice. The engine draws it like any manifest character. Only the look comes from the model. The story is still found by the rules above.
+
+Each book makes one request. The looks are checked against the engine's actor format and saved in `looks.json` next to the book, so building the same book again gives the same game and costs nothing.
+
+To turn it on, set `ANTHROPIC_API_KEY` (or sign in with `ant auth login`) before you start the backend. Without credentials, or with `NOVEL_ASSET_AI=0`, characters keep their generated looks. `NOVEL_ASSET_MODEL` picks the model (default `claude-opus-5-5`).
+
 `python -m pytest` runs the pipeline tests on original fixture texts in `tests/pipeline/fixtures/`: two single chapters and two whole books, one in the Harry Potter world and one with no known assets.
 
 ## Earlier prototype

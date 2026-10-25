@@ -291,8 +291,8 @@ def actor_spec(c: Character, catalog) -> dict:
         base = dict(catalog["creatures"][c.asset]["spec"]) if c.asset in catalog["creatures"] else {"kind": c.kind, "height": 3}
         base["name"] = c.name
         return base
-    if c.asset in catalog["characters"]:
-        return dict(catalog["characters"][c.asset]["spec"])
+    if c.look:
+        return {**c.look, "name": c.name}
     h = _h(c.id)
     female = c.gender == "f"
     styles = ["bushy", "long", "bun"] if female else ["short", "messy", "ginger_mop"]

@@ -45,6 +45,7 @@ class Character:
     spoken: int = 0
     targeted: int = 0
     first_seen: int = 10**9  # index of the first line they appear in
+    look: dict | None = None  # an AI-made look, for characters without an asset
 
 
 def asset_tables(catalog) -> tuple[dict, dict, dict]:
