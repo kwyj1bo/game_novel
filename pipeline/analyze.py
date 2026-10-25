@@ -227,6 +227,8 @@ class _Detector:
             for ent in doc.ents:
                 if ent.label_ != "PERSON" or _in_quotes(ent[0], spans):
                     continue
+                if ent[0].is_sent_start and all(t.pos_ != "PROPN" for t in ent):
+                    continue  # a common noun capitalised by the sentence ("Flour dust hung")
                 words, honor = _strip_name([t.text for t in ent])
                 if words:
                     names[tuple(words)] += 1
