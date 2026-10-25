@@ -19,14 +19,15 @@ export default defineConfig({
     {
       command: "npx vite --port 5174 --strictPort",
       url: "http://localhost:5174",
-      env: { API_TARGET: "http://localhost:8001" },
+      env: { API_TARGET: "http://localhost:8019" },
       reuseExistingServer: false,
     },
     {
       // The novel pipeline behind the upload button, with a throwaway library.
-      command: "rm -rf web/test-results/library && venv/bin/uvicorn app.main:app --port 8001",
+      // Port 8019: 8000-8005 are common Frappe bench ports on dev machines.
+      command: "rm -rf web/test-results/library && venv/bin/uvicorn app.main:app --port 8019",
       cwd: "..",
-      url: "http://localhost:8001/docs",
+      url: "http://localhost:8019/docs",
       env: { NOVEL_LIBRARY: "web/test-results/library", NOVEL_ASSET_AI: "0" },
       reuseExistingServer: false,
     },
