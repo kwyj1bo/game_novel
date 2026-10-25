@@ -81,6 +81,10 @@ The `Director` talks to the 3D world and the UI only through two interfaces (`St
 
 A retry rebuilds the room without delay: the runtime replays the scenes since the last location change in instant mode, then asks the choice again.
 
+### Voices
+
+Lines are read aloud with the browser's built-in speech (the Web Speech API), so no recorded audio or voice model is needed (`web/src/engine/audio/Voices.ts`). Each character keeps the same system voice. It is picked from the natural English voices of their gender, which the pipeline writes into the story, and joke voices are left out. The character's `voice` value sets the pitch, and the line's mood sets the speed and volume: whispers are slow and quiet, urgent lines fast. A narrator reads the narration. With Auto on, a line waits until it has been said. The **Voices** button turns speech off. Speech is off in testing mode (`?fast`).
+
 ## Assets
 
 `web/assets/manifest.json` lists every asset. The engine and the pipeline both read it, so adding an asset is an edit to this file, not to code. `web/assets/manifest.schema.json` gives your editor autocomplete for it.

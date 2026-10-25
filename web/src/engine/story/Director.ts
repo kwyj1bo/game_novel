@@ -74,7 +74,7 @@ export class Director {
       s.setSpeaking(beat.say, true);
       try {
         await this.hud.showLine(
-          { id: beat.say, name: beat.as ?? spec.name, color: beat.color ?? spec.subtitleColor, voice: spec.voice },
+          { id: beat.say, name: beat.as ?? spec.name, color: beat.color ?? spec.subtitleColor, voice: spec.voice, gender: spec.gender },
           beat.text,
           beat.mood,
         );

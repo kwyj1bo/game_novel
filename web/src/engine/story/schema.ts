@@ -203,6 +203,8 @@ export const ActorSpecSchema = z
     hat: z.enum(["none", "witch"]).default("none"),
     scar: z.boolean().default(false),
     voice: z.number().default(1),
+    // Picks a matching spoken voice; without it the pitch decides.
+    gender: z.enum(["m", "f"]).optional(),
     subtitleColor: z.string().default("#ffffff"),
   })
   .strict();

@@ -575,6 +575,9 @@ class _Assembler:
             story_scenes[sid] = scene
 
         actors = {c: actor_spec(self.chars[c], self.cat) for c in used}
+        for c, spec in actors.items():
+            if self.chars[c].gender in ("m", "f"):
+                spec["gender"] = self.chars[c].gender  # picks a matching spoken voice
         return {
             "$schema": "../../../story.schema.json",
             "id": _slug(f"{self.source}-{self.title}"),

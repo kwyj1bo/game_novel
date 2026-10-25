@@ -1,4 +1,5 @@
 import type { AudioEngine } from "../audio/AudioEngine";
+import { Voices } from "../audio/Voices";
 import type { EndingAction, Hud, Speaker } from "../story/ports";
 import type { Choice, Ending, Story } from "../story/schema";
 
@@ -40,6 +41,8 @@ export class DomHud implements Hud {
   private advanceFn: (() => void) | null = null;
   private pickFn: ((i: number) => void) | null = null;
   auto = true;
+  // Lines read aloud with the browser's speech; off in testing mode.
+  readonly voices = new Voices();
   // Exposed for tests and debugging.
   state: "idle" | "title" | "line" | "choice" | "ending" = "idle";
   lastLine = "";
@@ -56,6 +59,7 @@ export class DomHud implements Hud {
     this.speakerEl = el("div", "speaker", this.subtitle);
     this.textEl = el("div", "line", this.subtitle);
     this.choiceEl = el("div", "choice", this.root);
+    this.voices.enabled = !opts.fast;
     this.buildToolbar();
 
     host.addEventListener("pointerdown", (e) => {
@@ -92,6 +96,15 @@ export class DomHud implements Hud {
       this.audio.enabled = !this.audio.enabled;
       this.audio.setMuted(!this.audio.enabled);
       sndBtn.textContent = this.audio.enabled ? "Sound ●" : "Sound ○";
+      if (!this.audio.enabled) this.voices.stop();
+    };
+    if (!this.voices.available) return;
+    const voiceBtn = el("button", "tool", bar, "Voices ●");
+    voiceBtn.title = "Read lines aloud";
+    voiceBtn.onclick = () => {
+      this.voices.enabled = !this.voices.enabled;
+      if (!this.voices.enabled) this.voices.stop();
+      voiceBtn.textContent = this.voices.enabled ? "Voices ●" : "Voices ○";
     };
   }
 
@@ -244,19 +257,28 @@ export class DomHud implements Hud {
     this.speakerEl.style.color = speaker?.color ?? "";
     this.textEl.textContent = "";
     const cps = this.opts.fast ? 10000 : speaker ? 42 : 34;
+    // A spoken line holds until it has been said, instead of for a reading time.
+    const voiced = this.audio.enabled && this.voices.available;
+    const spoken = voiced ? this.voices.speak(text, speaker, mood) : null;
 
     return new Promise((resolve) => {
       let shown = 0;
       let typing = true;
+      let finished = false;
       let holdTimer = 0;
       const start = performance.now();
       const finishTyping = () => {
         typing = false;
         this.textEl.textContent = text;
         const hold = this.opts.fast ? 60 : 1100 + text.length * 32;
-        if (this.auto || this.opts.fast) holdTimer = window.setTimeout(done, hold);
+        if (!this.auto && !this.opts.fast) return;
+        if (spoken) void spoken.then(() => !finished && (holdTimer = window.setTimeout(done, 500)));
+        else holdTimer = window.setTimeout(done, hold);
       };
       const done = () => {
+        if (finished) return;
+        finished = true;
+        if (spoken) this.voices.stop();
         clearTimeout(holdTimer);
         this.advanceFn = null;
         this.state = "idle";
@@ -268,7 +290,7 @@ export class DomHud implements Hud {
         if (!typing) return;
         const n = Math.min(text.length, Math.floor(((performance.now() - start) / 1000) * cps));
         if (n > shown) {
-          if (speaker && Math.floor(n / 3) > Math.floor(shown / 3) && text[n - 1] !== " ") this.audio.blip(speaker.voice);
+          if (speaker && !spoken && Math.floor(n / 3) > Math.floor(shown / 3) && text[n - 1] !== " ") this.audio.blip(speaker.voice);
           shown = n;
           this.textEl.textContent = text.slice(0, n);
         }
