@@ -11,6 +11,8 @@ export interface MenuChapter {
   resumeLabel?: string;
   // The saved book this chapter belongs to (its cards sit in that book's folder).
   book?: string;
+  // Who it can be played as, the book's hero first.
+  cast?: { id: string; name: string }[];
 }
 
 export interface HudOptions {
@@ -135,7 +137,8 @@ export class DomHud implements Hud {
   }
 
   // Chapter select. Resolves with the chosen chapter and whether to resume it.
-  showMenu(heading: string, chapters: MenuChapter[], upload?: (file: File) => Promise<MenuChapter[]>): Promise<{ id: string; resume: boolean }> {
+  // `hero` is set when the player picked someone other than the book's hero.
+  showMenu(heading: string, chapters: MenuChapter[], upload?: (file: File) => Promise<MenuChapter[]>): Promise<{ id: string; resume: boolean; hero?: string }> {
     this.state = "title";
     this.setLetterbox(false);
     const screen = el("div", "screen title-screen", this.root);
@@ -146,13 +149,13 @@ export class DomHud implements Hud {
     el("div", "hint", screen, "Click or Space to advance · 1 / 2 to choose");
     const all = [...chapters];
     return new Promise((resolve) => {
-      const go = (id: string, resume: boolean) => {
+      const go = (id: string, resume: boolean, hero?: string) => {
         this.audio.unlock();
         screen.classList.add("leaving");
         setTimeout(() => screen.remove(), 900);
         this.state = "idle";
         this.setLetterbox(true);
-        resolve({ id, resume });
+        resolve({ id, resume, hero });
       };
       const card = (cls: string, number: string, title: string) => {
         const c = el("div", `chapter ${cls}`.trim(), list);
@@ -163,8 +166,17 @@ export class DomHud implements Hud {
       const addCard = (c: MenuChapter) => {
         const cardEl = card("", c.number, c.title);
         cardEl.dataset.id = c.id;
+        let picker: HTMLSelectElement | null = null;
+        if (c.cast && c.cast.length > 1) {
+          const label = el("label", "play-as", cardEl, "Play as ");
+          picker = el("select", "", label);
+          for (const p of c.cast) el("option", "", picker, p.name).value = p.id;
+        }
         const row = el("div", "actions", cardEl);
-        el("button", "primary", row, "Begin").onclick = () => go(c.id, false);
+        el("button", "primary", row, "Begin").onclick = () => {
+          const hero = picker && picker.selectedIndex > 0 ? picker.value : undefined;
+          go(c.id, false, hero);
+        };
         if (c.resumeLabel) el("button", "secondary", row, `Continue · ${c.resumeLabel}`).onclick = () => go(c.id, true);
       };
       const books = () => [...new Set(all.flatMap((c) => (c.book ? [c.book] : [])))];

@@ -18,6 +18,8 @@ export interface Chapter {
   title?: string;
   // The uploaded book it comes from (the menu groups these under Saved books).
   book?: string;
+  // Who it can be played as (the book's hero first); see playAs().
+  cast?: { id: string; name: string }[];
 }
 
 export interface EngineOptions {
@@ -43,7 +45,7 @@ export interface EngineOptions {
 interface LibraryBook {
   id: string;
   source: string;
-  chapters: { heading: string; title: string; file: string }[];
+  chapters: { heading: string; title: string; file: string; cast?: { id: string; name: string }[] }[];
 }
 
 interface UploadResponse {
@@ -54,6 +56,13 @@ interface UploadResponse {
 }
 
 const keyOf = (c: Chapter) => c.key ?? c.story!.id;
+
+// The chapter rebuilt around another character by the library backend.
+// Its own key keeps its saved progress apart from the book's hero.
+export function playAs(c: Chapter, hero: string): Chapter {
+  if (!c.url) return c;
+  return { ...c, key: `${keyOf(c)}#as=${hero}`, story: undefined, url: `${c.url}/as/${encodeURIComponent(hero)}` };
+}
 
 const PROGRESS_KEY = "novel-engine:progress";
 
@@ -153,12 +162,14 @@ export class Engine {
       const story = this.check(raw);
       if (!story) continue;
       // Same key as the library entry, so a reload doesn't list the chapter twice.
-      const key = data.book?.chapters[i]?.file ?? story.id;
+      const saved = data.book?.chapters[i];
+      const key = saved?.file ?? story.id;
       const known = this.opts.chapters.findIndex((c) => keyOf(c) === key);
-      const chapter: Chapter = { key, number: heading, title: story.title, story, book: data.source };
+      const url = saved && this.opts.libraryUrl ? `${this.opts.libraryUrl}/${saved.file}` : undefined;
+      const chapter: Chapter = { key, number: heading, title: story.title, story, book: data.source, url, cast: saved?.cast };
       if (known >= 0) this.opts.chapters[known] = chapter;
       else this.opts.chapters.push(chapter);
-      added.push({ id: key, number: chapter.number, title: story.title, book: data.source });
+      added.push({ id: key, number: chapter.number, title: story.title, book: data.source, cast: chapter.cast });
     }
     if (!added.length) throw new Error("No playable chapters could be made from that file.");
     return added;
@@ -196,7 +207,7 @@ export class Engine {
       for (const b of books) {
         for (const c of b.chapters) {
           if (this.opts.chapters.some((x) => keyOf(x) === c.file)) continue;
-          this.opts.chapters.push({ key: c.file, number: c.heading, title: c.title, url: `${this.opts.libraryUrl}/${c.file}`, book: b.source });
+          this.opts.chapters.push({ key: c.file, number: c.heading, title: c.title, url: `${this.opts.libraryUrl}/${c.file}`, book: b.source, cast: c.cast });
         }
       }
     } catch {
@@ -259,10 +270,11 @@ export class Engine {
       const progress = loadProgress();
       const pick = await this.hud.showMenu(
         this.opts.title,
-        this.opts.chapters.map((c) => ({ id: keyOf(c), number: c.number, title: c.title ?? c.story!.title, resumeLabel: progress[keyOf(c)]?.title, book: c.book })),
+        this.opts.chapters.map((c) => ({ id: keyOf(c), number: c.number, title: c.title ?? c.story!.title, resumeLabel: progress[keyOf(c)]?.title, book: c.book, cast: c.cast })),
         this.opts.uploadUrl ? (file) => this.upload(file) : undefined,
       );
-      const chapter = this.opts.chapters.find((c) => keyOf(c) === pick.id)!;
+      const listed = this.opts.chapters.find((c) => keyOf(c) === pick.id)!;
+      const chapter = pick.hero ? playAs(listed, pick.hero) : listed;
       let story: Story;
       try {
         story = await this.load(chapter);

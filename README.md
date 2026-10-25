@@ -81,6 +81,10 @@ The `Director` talks to the 3D world and the UI only through two interfaces (`St
 
 A retry rebuilds the room without delay: the runtime replays the scenes since the last location change in instant mode, then asks the choice again.
 
+### Play as any character
+
+Each chapter card of a saved book has a **Play as** list: up to six people who act or speak in the chapter, the book's hero first. Pick someone else and the backend rebuilds the chapter around them (`GET /api/library/{book}/{chapter}/as/{hero}`). Their decisions become the choices, and the ending follows them. The narration is still the book's. A rebuild is made once and kept, and progress is saved per character.
+
 ### Voices
 
 Lines are read aloud with the browser's built-in speech (the Web Speech API), so no recorded audio or voice model is needed (`web/src/engine/audio/Voices.ts`). Each character keeps the same system voice. It is picked from the natural English voices of their gender, which the pipeline writes into the story, and joke voices are left out. The character's `voice` value sets the pitch, and the line's mood sets the speed and volume: whispers are slow and quiet, urgent lines fast. A narrator reads the narration. With Auto on, a line waits until it has been said. The **Voices** button turns speech off. Speech is off in testing mode (`?fast`).
