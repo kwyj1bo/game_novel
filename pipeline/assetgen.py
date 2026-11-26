@@ -30,7 +30,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from .rag.retrievers import Retriever
+from .rag.retrievers import Retriever, mode
 
 log = logging.getLogger(__name__)
 
@@ -197,7 +197,7 @@ def add_looks(chapters, analyses, library: Path, client=None, retriever=None) ->
     if need:
         try:
             client = client or default_client()
-            says = (retriever or Retriever(chapters, analyses, ask=asker(client))).looks(need)
+            says = (retriever or Retriever(chapters, analyses, mode("looks"), ask=asker(client))).looks(need)
             people = [{"id": c.id, "name": c.name, "gender": {"m": "male", "f": "female"}.get(c.gender, "unknown"), "book_says": says[c.id]} for c in need]
             asked = {c.id for c in need}
             looks.update({cid: look for cid, look in ask(client, people).items() if cid in asked})
@@ -278,7 +278,7 @@ def add_places(chapters, analyses, catalog, library: Path, client=None, retrieve
     if scenes:
         try:
             client = client or default_client()
-            retriever = retriever or Retriever(chapters, analyses, ask=asker(client), catalog=catalog)
+            retriever = retriever or Retriever(chapters, analyses, mode("places"), ask=asker(client), catalog=catalog)
             texts = retriever.places(scenes)
             need = [{"key": s["key"], "chapter": s["title"], "scene": texts[s["key"]] or s["start"]} for s in scenes]
             ids = retriever.library_hints(store["places"], [n["scene"] for n in need])[:MAX_LIBRARY_HINTS]

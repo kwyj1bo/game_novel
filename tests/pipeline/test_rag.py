@@ -112,3 +112,14 @@ def test_library_hints_rank_similar_places(voyage):
     r = Retriever(chapters, analyses, "hybrid", catalog=catalog, encoder=WordEncoder())
     assert r.library_hints(library, ["waves crashed in the storm"], k=1) == ["gen_deck"]
     assert Retriever(chapters, analyses, "keyword").library_hints(library, ["x"]) == ["gen_inn", "gen_deck"]
+
+
+def test_a_failed_tree_navigation_falls_back_to_hybrid(voyage):
+    catalog, chapters, analyses = voyage
+    rourke = next(c for a in analyses for c in a.characters.values() if c.id == "rourke")
+
+    def broken(*_):
+        raise RuntimeError("model unavailable")
+
+    says = Retriever(chapters, analyses, "tree", ask=broken, catalog=catalog, encoder=None).looks([rourke])["rourke"]
+    assert any("grey beard" in s for s in says)

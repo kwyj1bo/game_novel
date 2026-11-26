@@ -687,7 +687,7 @@ def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str,
                 used_places[p["id"]] = {"title": p["title"], "preset": p["preset"]}
     moments = find_moments(a, scenes, catalog)
     picks = None
-    if director is not None:
+    if director is not None and director.pick_beats:
         picks = director.beats(chapter_title, paragraphs, scenes, catalog, used_places, target_events(len({ln.para for ln in a.lines})))
     chain = build_chain(a, scenes, moments, catalog, picks)
     shown = {id(ln) for node in chain for ln in node.lines}

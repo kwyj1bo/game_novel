@@ -4,3 +4,5 @@ import os
 os.environ.setdefault("NOVEL_ASSET_AI", "0")
 # Search runs BM25 only in tests: no embedding model download, same result everywhere.
 os.environ.setdefault("NOVEL_EMBEDDINGS", "0")
+# Retrieval needs no model in tests (the tree mode asks the model to navigate).
+os.environ.setdefault("NOVEL_RETRIEVAL", "hybrid")

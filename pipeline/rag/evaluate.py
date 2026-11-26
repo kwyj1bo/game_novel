@@ -219,9 +219,12 @@ def main(argv=None) -> int:
     if args.task in ("places", "all"):
         result["places"] = ev.places(modes)
     result["minutes"] = round((time.time() - started) / 60, 1)
+    # Raw answers quote the book, so they go to a separate file that git ignores.
+    raw = {t: {m: v.pop("raw") for m, v in result[t]["modes"].items()} for t in ("looks", "places") if t in result}
     args.json.parent.mkdir(parents=True, exist_ok=True)
     old = json.loads(args.json.read_text()) if args.json.exists() else {}
     args.json.write_text(json.dumps({**old, **result}, indent=1) + "\n")
+    args.json.with_suffix(".raw.json").write_text(json.dumps(raw, indent=1, ensure_ascii=False))
     print(json.dumps(result, indent=1))
     return 0
 

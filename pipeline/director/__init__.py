@@ -19,8 +19,11 @@ log = logging.getLogger(__name__)
 
 
 class Director:
-    def __init__(self, ask, cache: Path | None = None):
+    def __init__(self, ask, cache: Path | None = None, beats: bool = True):
         self._ask = ask
+        # Picking beats did not beat the rules in docs/evaluation.md, so the
+        # pipeline turns it on only with NOVEL_DIRECTOR_BEATS=1.
+        self.pick_beats = beats
         self.cache_path = cache
         self.cache: dict = json.loads(cache.read_text()) if cache and cache.exists() else {}
         self.dropped = 0  # staging suggestions that failed the engine checks
@@ -97,7 +100,7 @@ def default_director(library: Path) -> Director | None:
     from ..assetgen import asker, default_client
 
     try:
-        return Director(asker(default_client()), library / "director.json")
+        return Director(asker(default_client()), library / "director.json", beats=os.environ.get("NOVEL_DIRECTOR_BEATS") == "1")
     except Exception as e:  # SDK missing
         log.warning("story director unavailable (%s)", e)
         return None

@@ -1,0 +1,161 @@
+{
+ "book": "Harry Potter and the Philosopher's Stone",
+ "beats": {
+  "Halloween": {
+   "reference_paragraphs": 11,
+   "rules": {
+    "events": 14,
+    "recall": 0.455,
+    "paragraphs": [
+     0,
+     25,
+     26,
+     29,
+     77,
+     104,
+     116,
+     117,
+     122,
+     123,
+     131,
+     139,
+     140,
+     156
+    ]
+   },
+   "director": {
+    "events": 14,
+    "recall": 0.455,
+    "paragraphs": [
+     25,
+     26,
+     79,
+     88,
+     103,
+     112,
+     116,
+     117,
+     120,
+     123,
+     136,
+     139,
+     140,
+     156
+    ]
+   },
+   "reference": [
+    64,
+    90,
+    100,
+    103,
+    118,
+    123,
+    127,
+    133,
+    139,
+    144,
+    156
+   ]
+  },
+  "Through The Trapdoor": {
+   "reference_paragraphs": 28,
+   "rules": {
+    "events": 14,
+    "recall": 0.107,
+    "paragraphs": [
+     0,
+     3,
+     76,
+     83,
+     94,
+     95,
+     150,
+     158,
+     181,
+     182,
+     245,
+     294,
+     295,
+     298
+    ]
+   },
+   "director": {
+    "events": 14,
+    "recall": 0.036,
+    "paragraphs": [
+     25,
+     32,
+     45,
+     60,
+     80,
+     89,
+     94,
+     95,
+     118,
+     132,
+     181,
+     182,
+     294,
+     295
+    ]
+   },
+   "reference": [
+    39,
+    55,
+    65,
+    136,
+    139,
+    150,
+    155,
+    164,
+    174,
+    179,
+    181,
+    186,
+    190,
+    199,
+    202,
+    209,
+    212,
+    226,
+    233,
+    238,
+    247,
+    257,
+    259,
+    267,
+    268,
+    274,
+    276,
+    298
+   ]
+  }
+ },
+ "staging": {
+  "chapters": 17,
+  "valid_stories": {
+   "rules": 17,
+   "director": 17
+  },
+  "counts": {
+   "rules": {
+    "people_placed": 442,
+    "on_named_spots": 0,
+    "entrances": 18,
+    "lines": 395,
+    "actions": 65
+   },
+   "director": {
+    "people_placed": 268,
+    "on_named_spots": 72,
+    "entrances": 12,
+    "lines": 406,
+    "actions": 159
+   }
+  },
+  "suggestions": {
+   "kept": 439,
+   "dropped": 44
+  }
+ }
+}
