@@ -3,7 +3,7 @@
 import json
 
 from pipeline.__main__ import validate
-from studio.assemble import Assembler, clip_names
+from studio.assemble import Assembler
 from studio.director import Director, staging_errors
 from studio.llm import Model
 from studio.screenplay import Screenplay
@@ -59,18 +59,24 @@ def test_the_director_lays_out_and_stages_with_repairs():
 
 
 def test_the_assembled_story_is_valid_and_hands_over_the_coins(tmp_path):
+    from studio.modeler import built_model, to_clip
+
+    from .test_modeler import BODY, CLIPS, PROP, action_clip
+
     staging = {s["scene"]: {"start": {x["who"]: [x["x"], x["z"]] for x in s["start"]}, "beats": {b["beat"]: b for b in s["beats"]}} for s in STAGING["scenes"]}
-    assets = {"characters": {"elena": {"rig": {"rigged": "rig-1/rigged.glb"}, "clips": {"clips_0": "clips-1/clips_0.glb"}, "height_m": 1.65}},
-              "props": {"coins": {"model": {"model": "model-1/model.glb"}, "size_m": 0.15, "held": True},
-                        "harbour_inn.bar": {"model": {"model": "model-2/model.glb"}, "size_m": 4}}}  # fmt: skip
-    designs = {"characters": [{"id": "elena", "voice": "young female"}], "objects": [{"id": "coins"}],
-               "places": [{"id": "harbour_inn", "indoor": True, "size_m": [10, 8], "floor_color": "#5a4030", "wall_color": "#7a6a5a", "light": "night"}]}  # fmt: skip
-    uses = clip_names({"elena": {"idle": 0, "talk": 2, "hands Rourke a purse of silver": 40}}, [{"action_id": 0, "name": "Idle"}, {"action_id": 2, "name": "Talking"}, {"action_id": 40, "name": "Hand_Over"}])
-    story = Assembler({"elena": "Elena", "rourke": "Rourke"}, designs, assets, uses, {"harbour_inn": SETS["harbour_inn"]["pieces"]}).story(SP, staging, "inn", "Fixture")
+    base = {c["name"]: to_clip(c) for c in CLIPS["clips"]}
+    production = {
+        "characters": [{"id": "elena", "voice": "young female"}],
+        "places": [{"id": "harbour_inn", "indoor": True, "size_m": [10, 8], "floor_color": "#5a4030", "wall_color": "#7a6a5a", "light": "night"}],
+        "built": {"elena": built_model(BODY, base, {"hands Rourke a purse of silver": to_clip(action_clip("x"))})},
+        "props": {"coins": {**PROP, "size": 0.15, "held": True}},
+        "pieces": {"harbour_inn.bar": {**PROP, "size": 4}},
+    }  # fmt: skip
+    story = Assembler({"elena": "Elena", "rourke": "Rourke"}, production, {"harbour_inn": SETS["harbour_inn"]["pieces"]}).story(SP, staging, "inn", "Fixture")
     beats = story["scenes"]["scene_2"]["beats"]
     assert {"take": "coins", "actor": "elena"} in beats and {"give": "coins", "from": "elena", "to": "rourke"} in beats
     assert beats.index({"perform": "elena", "use": "hands Rourke a purse of silver"}) < beats.index({"give": "coins", "from": "elena", "to": "rourke"})
-    assert story["actors"]["elena"]["model"]["uses"]["talk"] == "Talking" and "model" not in story["actors"]["rourke"]
+    assert story["actors"]["elena"]["built"]["uses"]["talk"] == "talk" and "built" not in story["actors"]["rourke"]
     assert story["sceneries"]["set_harbour_inn"]["set"]["pieces"][0]["at"] == [0, -3.5]
     path = tmp_path / "s.story.json"
     path.write_text(json.dumps(story))

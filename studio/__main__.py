@@ -3,9 +3,9 @@
 index       build the book index (PageIndex tree + cast) into <book>/studio/index.json
 screenplay  write chapter N's screenplay (<book>/studio/cN.screenplay.json) and a
             playable preview (<book>/studio-cN.story.json)
-build       the whole chain for chapter N: screenplay, designs, (with --generate:
-            Meshy models, rigs, clips and props), set layout, staging, and the
-            story (<book>/studio-cN.story.json)
+build       the whole chain for chapter N: screenplay, designs, models and clips
+            built by the model, set layout, staging, and the story
+            (<book>/studio-cN.story.json)
 """
 
 import argparse
@@ -36,7 +36,6 @@ def main(argv=None) -> int:
     ap.add_argument("command", choices=["index", "screenplay", "build"])
     ap.add_argument("book", type=Path)
     ap.add_argument("--chapter", type=int, action="append", help="chapter number (repeatable)")
-    ap.add_argument("--generate", action="store_true", help="call Meshy (paid) for 3D models; without it, placeholders")
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     m = model()
@@ -66,7 +65,7 @@ def main(argv=None) -> int:
         from .build import build_chapter
 
         for n in args.chapter or [1]:
-            print(build_chapter(m, args.book, chapters, n, args.generate, LIBRARY / "studio-assets"))
+            print(build_chapter(m, args.book, chapters, n))
     print(json.dumps(m.ledger.totals()))
     return 0
 

@@ -1,26 +1,24 @@
-"""Assembly: screenplay + staging + generated assets -> a story the engine plays.
+"""Assembly: screenplay + staging + built models -> a story the engine plays.
 
 No decisions are made here: every position, clip, prop move and shot comes
-from the director; every model from production. This only translates them
-into engine beats and splits scenes at the player's choices. A character or
-object without a generated model yet is drawn as a plain placeholder.
+from the director; every model and clip from production. This only translates
+them into engine beats and splits scenes at the player's choices.
 """
 
 import re
 
 from .preview import _figure, _parts
 
-ASSETS_URL = "/api/studio-assets"
-
-
 class Assembler:
-    def __init__(self, names: dict[str, str], designs: dict, assets: dict, uses: dict[str, dict[str, str]], layout: dict):
-        """`designs`: production plan (characters, places, objects); `assets`: production files;
-        `uses`: actor -> use -> clip name; `layout`: place -> placed pieces."""
-        self.names, self.assets, self.uses, self.layout = names, assets, uses, layout
-        self.characters = {c["id"]: c for c in designs.get("characters", [])}
-        self.places = {p["id"]: p for p in designs.get("places", [])}
-        self.objects = {o["id"]: o for o in designs.get("objects", [])}
+    def __init__(self, names: dict[str, str], production: dict, layout: dict):
+        """`production`: designs and built models (production.py); `layout`: place -> placed pieces."""
+        self.names, self.layout = names, layout
+        self.built: dict = production.get("built", {})
+        self.props: dict = production.get("props", {})
+        self.pieces: dict = production.get("pieces", {})
+        self.uses = {who: b["uses"] for who, b in self.built.items()}
+        self.characters = {c["id"]: c for c in production.get("characters", [])}
+        self.places = {p["id"]: p for p in production.get("places", [])}
 
     def story(self, sp, staging: dict, story_id: str, source: str) -> dict:
         scenes, actors, places = {}, {}, {}
@@ -52,7 +50,7 @@ class Assembler:
             else:
                 scene["ending"] = {"kind": "victory", "title": sp.title, "text": f"You played “{sp.title}” the way the book tells it."}
             scenes[sid] = scene
-        props = {o: self.prop(o) for o in self.objects if self.prop(o)}
+        props = {o: {"parts": p["parts"], "size": p["size"], "held": p.get("held", False)} for o, p in self.props.items()}
         return {"id": story_id, "title": sp.title, "subtitle": source, "start": "scene_1", "actors": actors, "scenes": scenes,
                 "sceneries": places, **({"props": props} if props else {})}  # fmt: skip
 
@@ -103,20 +101,16 @@ class Assembler:
 
     def actor(self, who: str) -> dict:
         name = self.names.get(who, who)
-        a, c = self.assets.get("characters", {}).get(who), self.characters.get(who)
+        c = self.characters.get(who)
         spec = _figure(who, name)
         if c and "female" in c["voice"]:
             spec["gender"] = "f"
         elif c and "male" in c["voice"]:
             spec["gender"] = "m"
-        if a:
-            spec["model"] = {"url": url(a["rig"]["rigged"]), "clips": [url(p) for p in a["clips"].values()],
-                             "uses": self.uses.get(who, {}), "height": a["height_m"]}  # fmt: skip
+        if who in self.built:
+            spec["built"] = self.built[who]
+            spec["height"] = self.built[who]["rig"]["height"]
         return spec
-
-    def prop(self, oid: str) -> dict | None:
-        a = self.assets.get("props", {}).get(oid)
-        return {"url": url(a["model"]["model"]), "size": a["size_m"], "held": a["held"]} if a else None
 
     def scenery(self, s: dict) -> dict:
         p = self.places.get(s["place"])
@@ -125,9 +119,9 @@ class Assembler:
             return {"title": title, "preset": {"type": "room", "time": "day", "props": []}}
         pieces = []
         for x in self.layout.get(s["place"], []):
-            a = self.assets.get("props", {}).get(f"{p['id']}.{x['piece']}")
-            if a:
-                pieces.append({"url": url(a["model"]["model"]), "at": [x["x"], x["z"]], "yaw": x["yaw"], "size": a["size_m"]})
+            made = self.pieces.get(f"{p['id']}.{x['piece']}")
+            if made:
+                pieces.append({"parts": made["parts"], "at": [x["x"], x["z"]], "yaw": x["yaw"], "size": made["size"]})
         return {"title": title, "set": {"indoor": p["indoor"], "size": p["size_m"], "floor": p["floor_color"], "wall": p["wall_color"], "light": p["light"], "pieces": pieces}}
 
     @staticmethod
@@ -139,16 +133,6 @@ class Assembler:
             if b["kind"] == "exit" and b["who"] in here:
                 here.remove(b["who"])
         return here
-
-
-def url(rel: str) -> str:
-    return f"{ASSETS_URL}/{rel}"
-
-
-def clip_names(clips: dict[str, dict[str, int]], library: list[dict]) -> dict[str, dict[str, str]]:
-    """Casting (use -> library id) to engine uses (use -> clip name in the GLB)."""
-    names = {a["action_id"]: a["name"] for a in library}
-    return {who: {use: names[i] for use, i in m.items() if i in names} for who, m in clips.items()}
 
 
 def story_id(source: str, title: str) -> str:
