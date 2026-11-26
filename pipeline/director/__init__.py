@@ -28,6 +28,7 @@ class Director:
         self.cache: dict = json.loads(cache.read_text()) if cache and cache.exists() else {}
         self.dropped = 0  # staging suggestions that failed the engine checks
         self.kept = 0
+        self.why: list[str] = []
 
     def ask(self, system: str, label: str, items: list, schema: dict):
         key = hashlib.sha1(json.dumps([system, label, items, schema], sort_keys=True).encode()).hexdigest()[:20]
@@ -57,7 +58,7 @@ class Director:
         """Part index -> checked staging plan, for the parts the model staged.
         `asm` is the story assembler (cast, places, catalog); `parts` its
         (scene, moment) pairs."""
-        items, checkers = [{"actions": _staging.actions_menu(asm.cat)}], {}
+        items, checkers = [{"you_can_use": _staging.actions_menu(asm.cat)}], {}
         prev_loc, prev_people = None, []
         for i, (sc, _) in enumerate(parts):
             if not sc.lines:
@@ -70,9 +71,10 @@ class Director:
             items.append({
                 "part": i, "place": title, "spots": [_staging.describe(s) for s in spots],
                 "people": [{"id": c, "name": asm.name(c), "kind": asm.chars[c].kind} for c in people],
-                "lines": [{"line": j, "who": asm.name(ln.speaker) if ln.kind == "say" else "narrator", "text": ln.text[:300]} for j, ln in enumerate(sc.lines)],
+                "lines": [{"line": j, "speaker": ln.speaker if ln.kind == "say" and ln.speaker in people else "narrator", "text": ln.text[:300]} for j, ln in enumerate(sc.lines)],
             })
-            checkers[i] = _staging.Checker(asm.cat, {c: asm.chars[c].kind for c in people}, spots, len(sc.lines))
+            speakers = {j: ln.speaker if ln.kind == "say" and ln.speaker in people else None for j, ln in enumerate(sc.lines)}
+            checkers[i] = _staging.Checker(asm.cat, {c: asm.chars[c].kind for c in people}, spots, speakers)
             prev_loc, prev_people = sc.location, people
         if len(items) == 1:
             return {}
@@ -82,6 +84,7 @@ class Director:
             if part.get("part") in checkers:
                 plan = checkers[part["part"]].plan(part)
                 self.dropped += plan.dropped
+                self.why += plan.why
                 self.kept += plan.kept
                 if plan.cast:
                     plans[part["part"]] = plan

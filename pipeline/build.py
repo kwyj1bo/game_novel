@@ -393,9 +393,12 @@ class _Assembler:
         cast = {c: m for c, m in slots.items() if c not in entering}
         return cast, slots
 
-    def beats(self, lines: list[Line], slots: dict, on_stage: set[str], first_beats: list, planned: list | None = None) -> list:
-        """Beats for these lines. `planned` (from the director's staging plan)
-        replaces the actions the rules read from the verbs."""
+    def beats(self, lines: list[Line], slots: dict, on_stage: set[str], first_beats: list, staged: dict | None = None) -> list:
+        """Beats for these lines. `staged` (one line of the director's plan:
+        beats "before" the text, "say" fields, beats "after" it) replaces the
+        actions the rules read from the verbs, and its shot replaces theirs."""
+        planned = staged["before"] if staged is not None else None
+        framed = bool(planned) and any("camera" in b for b in planned)
         out = list(first_beats)
         last_cam = None
         last_speaker = self._last_speaker
@@ -408,7 +411,9 @@ class _Assembler:
             if planned is not None:
                 actions.extend(planned)
             if ln.kind == "say" and ln.speaker in on_stage:
-                if ln.speaker != last_cam:
+                if framed:
+                    last_cam = ln.speaker
+                elif ln.speaker != last_cam:
                     # Turn to whoever they're talking to first, so the close-up sees their face.
                     listener = last_speaker if last_speaker in on_stage and last_speaker != ln.speaker else next((c for c in on_stage if c != ln.speaker and self.chars[c].kind == "human"), None)
                     if listener:
@@ -420,7 +425,9 @@ class _Assembler:
                 beat = {"say": ln.speaker, "text": ln.text}
                 if ln.mood:
                     beat["mood"] = ln.mood
+                beat.update(staged["say"] if staged else {})
                 out.append(beat)
+                out.extend(staged["after"] if staged else [])
                 continue
             if ln.kind == "say":
                 out.extend(actions)
@@ -429,7 +436,9 @@ class _Assembler:
             focus = next((e.actor for e in ln.events if e.actor in on_stage and e.kind == "action"), None)
             if planned is not None:
                 focus = next((b.get("actor") or b.get("move") for b in planned), None)
-            if focus and focus != last_cam:
+            if framed:
+                last_cam = focus
+            elif focus and focus != last_cam:
                 out.append({"camera": "medium", "on": focus, "ms": 700})
                 last_cam = focus
             elif not focus and last_cam is not None:
@@ -445,6 +454,7 @@ class _Assembler:
                 out.append({"narrate": text})
                 self._last_narration = text
                 narrations += 1
+            out.extend(staged["after"] if staged else [])
         self._last_speaker = last_speaker
         return out
 
@@ -576,7 +586,10 @@ class _Assembler:
                         lines_out += [{"spawn": actor, "at": "auto_entry"}, {"move": actor, "to": slots[actor], "async": True}]
                     pending_entries.discard(actor)
                     stage.add(actor)
-                lines_out += self.beats([ln], slots, stage, [], plan.lines.get(li, []) if plan else None)
+                staged = {"before": plan.lines.get(li, []), "say": plan.say.get(li, {}), "after": plan.after.get(li, [])} if plan else None
+                lines_out += self.beats([ln], slots, stage, [], staged)
+                if plan:
+                    stage -= {who for who, at in plan.exits.items() if at == li}
             body = first + lines_out
             if not body:
                 body = [{"camera": "wide", "ms": 0}]
