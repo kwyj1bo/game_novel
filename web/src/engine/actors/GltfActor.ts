@@ -1,8 +1,9 @@
 import * as THREE from "three";
 import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { clone as cloneSkinned } from "three/examples/jsm/utils/SkeletonUtils.js";
-import type { ActorSpec, AnimClip, GeneratedModel } from "../story/schema";
+import type { ActorSpec, AnimClip } from "../story/schema";
 import { Actor } from "./Actor";
+import { buildClip, buildRig } from "./procedural";
 
 const loader = new GLTFLoader();
 const files = new Map<string, Promise<GLTF>>();
@@ -24,11 +25,13 @@ interface Performance {
   resolve: () => void;
 }
 
-// A generated, rigged character. Locomotion and talking pick their own clip
-// (idle, walk, talk); `perform` plays the clip the story names for a use.
-export class GltfActor extends Actor {
+// A character with a skeleton and named clips. Locomotion and talking pick
+// their own clip (idle, walk, talk); `perform` plays the clip the story names
+// for a use. Subclasses supply the body and the clips.
+export abstract class ClipActor extends Actor {
   readonly ready: Promise<void>;
-  private readonly model: GeneratedModel;
+  protected readonly uses: Record<string, string>;
+  private readonly h: number;
   private mixer: THREE.AnimationMixer | null = null;
   private readonly clips = new Map<string, THREE.AnimationClip>();
   private readonly bones = new Map<string, THREE.Object3D>();
@@ -36,14 +39,18 @@ export class GltfActor extends Actor {
   private performance: Performance | null = null;
   private heldAction: THREE.AnimationAction | null = null;
 
-  constructor(id: string, spec: ActorSpec) {
+  constructor(id: string, spec: ActorSpec, uses: Record<string, string>, height: number) {
     super(id, spec);
-    this.model = spec.model!;
-    this.ready = this.load().catch((e) => console.error(`could not load ${id}:`, e));
+    this.uses = uses;
+    this.h = height;
+    this.ready = Promise.resolve().then(() => this.load()).catch((e) => console.error(`could not load ${id}:`, e));
   }
 
+  // The body (feet at y = 0 when `scaled` is false) and its clips.
+  protected abstract body(): Promise<{ body: THREE.Object3D; clips: THREE.AnimationClip[]; scaled: boolean }>;
+
   get height(): number {
-    return this.model.height;
+    return this.h;
   }
 
   // Procedural clip names ("nod", "point") play the generated clip for that use, if any.
@@ -52,7 +59,7 @@ export class GltfActor extends Actor {
   }
 
   override play(name: AnimClip, hold: boolean, instant: boolean): Promise<void> {
-    return this.model.uses[name] ? this.perform(name, hold, instant) : Promise.resolve();
+    return this.uses[name] ? this.perform(name, hold, instant) : Promise.resolve();
   }
 
   perform(use: string, hold: boolean, instant: boolean): Promise<void> {
@@ -75,12 +82,13 @@ export class GltfActor extends Actor {
   }
 
   private async load(): Promise<void> {
-    const gltf = await loadGltf(this.model.url);
-    const body = cloneSkinned(gltf.scene);
-    const box = new THREE.Box3().setFromObject(body);
-    const scale = this.model.height / Math.max(0.01, box.max.y - box.min.y);
-    body.scale.setScalar(scale);
-    body.position.y = -box.min.y * scale;
+    const { body, clips, scaled } = await this.body();
+    if (!scaled) {
+      const box = new THREE.Box3().setFromObject(body);
+      const scale = this.h / Math.max(0.01, box.max.y - box.min.y);
+      body.scale.setScalar(scale);
+      body.position.y = -box.min.y * scale;
+    }
     body.traverse((o) => {
       if ((o as THREE.Mesh).isMesh) {
         o.castShadow = true;
@@ -91,13 +99,11 @@ export class GltfActor extends Actor {
     this.root.add(body);
     this.mixer = new THREE.AnimationMixer(body);
     this.mixer.addEventListener("finished", (e) => this.onFinished(e.action as THREE.AnimationAction));
-    for (const c of gltf.animations) this.clips.set(c.name, c);
-    const clipFiles = await Promise.all(this.model.clips.map(loadGltf));
-    for (const f of clipFiles) for (const c of f.animations) this.clips.set(c.name, c);
+    for (const c of clips) this.clips.set(c.name, c);
   }
 
   private clipFor(use: string): THREE.AnimationClip | undefined {
-    const name = this.model.uses[use];
+    const name = this.uses[use];
     if (!name) return undefined;
     // Exported clip names sometimes carry a prefix ("Armature|Walking").
     return this.clips.get(name) ?? [...this.clips.values()].find((c) => c.name.endsWith(name));
@@ -139,7 +145,7 @@ export class GltfActor extends Actor {
   // Walking, talking or standing: the base clip under any performance.
   protected pose(dt: number): void {
     if (!this.mixer) return;
-    const use = this.speed > 0.25 ? "walk" : this.speaking && this.model.uses.talk ? "talk" : "idle";
+    const use = this.speed > 0.25 ? "walk" : this.speaking && this.uses.talk ? "talk" : "idle";
     if (!this.performance && !this.heldAction && this.base?.use !== use) {
       const clip = this.clipFor(use) ?? this.clipFor("idle");
       if (clip) {
@@ -171,5 +177,33 @@ export class GltfActor extends Actor {
     this.endPerformance();
     this.mixer?.stopAllAction();
     this.root.removeFromParent();
+  }
+}
+
+// A generated, rigged GLB and the GLB files holding its clips.
+export class GltfActor extends ClipActor {
+  constructor(id: string, spec: ActorSpec) {
+    super(id, spec, spec.model!.uses, spec.model!.height);
+  }
+
+  protected async body() {
+    const m = this.spec.model!;
+    const gltf = await loadGltf(m.url);
+    const files = await Promise.all(m.clips.map(loadGltf));
+    return { body: cloneSkinned(gltf.scene), clips: [...gltf.animations, ...files.flatMap((f) => f.animations)], scaled: false };
+  }
+}
+
+// A character the studio's model built: shapes on a skeleton, keyframe clips.
+export class BuiltActor extends ClipActor {
+  constructor(id: string, spec: ActorSpec) {
+    super(id, spec, spec.built!.uses, spec.built!.rig.height);
+  }
+
+  protected async body() {
+    const b = this.spec.built!;
+    const { root, bones } = buildRig(b.rig, b.parts);
+    const hipsY = bones.get("hips")!.position.y;
+    return { body: root, clips: Object.entries(b.clips).map(([name, c]) => buildClip(name, c, hipsY)), scaled: true };
   }
 }

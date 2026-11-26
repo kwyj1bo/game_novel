@@ -209,8 +209,70 @@ export const GeneratedModelSchema = z
   .strict();
 export type GeneratedModel = z.infer<typeof GeneratedModelSchema>;
 
-// A generated object: scaled so its longest side is `size` metres.
-export const PropModelSchema = z.object({ url: z.string(), size: z.number().positive(), held: z.boolean().default(false) }).strict();
+// Models the studio's model builds from shapes: a part sits on a joint (or the
+// root), in metres, turned in degrees.
+const Vec3 = z.tuple([z.number(), z.number(), z.number()]);
+export const ModelPartSchema = z
+  .object({
+    joint: z.string(),
+    shape: z.enum(["box", "sphere", "capsule", "cylinder", "cone", "torus"]),
+    size: Vec3,
+    offset: Vec3,
+    rotation: Vec3,
+    color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
+    roughness: z.number().min(0).max(1).optional(),
+    metal: z.number().min(0).max(1).optional(),
+    glow: z.boolean().optional(),
+  })
+  .strict();
+export type ModelPart = z.infer<typeof ModelPartSchema>;
+export const PartsModelSchema = z.object({ parts: z.array(ModelPartSchema).min(1) }).strict();
+export type PartsModel = z.infer<typeof PartsModelSchema>;
+
+// Joint controls in degrees (which ones apply depends on the joint).
+const JointPoseSchema = z
+  .object({
+    raise: z.number(), spread: z.number(), twist: z.number(), bend: z.number(), lift: z.number(),
+    nod: z.number(), turn: z.number(), tilt: z.number(), lean: z.number(),
+  })
+  .partial()
+  .strict(); // fmt: skip
+export type JointPose = z.infer<typeof JointPoseSchema>;
+export const RigSchema = z
+  .object({
+    height: z.number().positive(),
+    shoulders: z.number().positive().default(1),
+    hips: z.number().positive().default(1),
+    arms: z.number().positive().default(1),
+    legs: z.number().positive().default(1),
+  })
+  .strict();
+export type Rig = z.infer<typeof RigSchema>;
+// A character the studio built: skeleton, parts, keyframe clips, and which clip plays for each use.
+export const BuiltModelSchema = z
+  .object({
+    rig: RigSchema,
+    parts: z.array(ModelPartSchema).min(1),
+    clips: z.record(
+      z.string(),
+      z
+        .object({
+          duration: z.number().positive(),
+          loop: z.boolean().default(false),
+          keys: z.array(z.object({ t: z.number().nonnegative(), joints: z.record(z.string(), JointPoseSchema), drop: z.number().optional() }).strict()).min(1),
+        })
+        .strict(),
+    ),
+    uses: z.record(z.string(), z.string()).default({}),
+  })
+  .strict();
+export type BuiltModel = z.infer<typeof BuiltModelSchema>;
+
+// A generated object: a GLB scaled so its longest side is `size` metres, or shapes built to scale.
+export const PropModelSchema = z
+  .object({ url: z.string().optional(), parts: z.array(ModelPartSchema).optional(), size: z.number().positive(), held: z.boolean().default(false) })
+  .strict()
+  .refine((p) => !!p.url !== !!p.parts, { message: "a prop has a url or parts" });
 export type PropModel = z.infer<typeof PropModelSchema>;
 
 // A set built from generated pieces: a floor, walls or sky, light, and models placed at [x, z].
@@ -222,7 +284,11 @@ export const SetSchema = z
     wall: z.string().regex(/^#[0-9a-fA-F]{6}$/),
     light: z.enum(["day", "dusk", "night"]),
     pieces: z
-      .array(z.object({ url: z.string(), at: z.tuple([z.number(), z.number()]), yaw: z.number().default(0), size: z.number().positive() }).strict())
+      .array(
+        z
+          .object({ url: z.string().optional(), parts: z.array(ModelPartSchema).optional(), at: z.tuple([z.number(), z.number()]), yaw: z.number().default(0), size: z.number().positive() })
+          .strict(),
+      )
       .default([]),
   })
   .strict();
@@ -251,8 +317,9 @@ export const ActorSpecSchema = z
     // Picks a matching spoken voice; without it the pitch decides.
     gender: z.enum(["m", "f"]).optional(),
     subtitleColor: z.string().default("#ffffff"),
-    // A generated, rigged model: drawn instead of the procedural figure.
+    // A generated, rigged model (a GLB) or one built from shapes: drawn instead of the procedural figure.
     model: GeneratedModelSchema.optional(),
+    built: BuiltModelSchema.optional(),
   })
   .strict();
 

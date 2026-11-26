@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { loadGltf } from "../engine/actors/GltfActor";
+import { buildParts } from "../engine/actors/procedural";
 import type { GeneratedSet } from "../engine/story/schema";
 import type { LocationDef } from "../engine/world/Location";
 import { AUTO_MARKS, autoMarks, v3 } from "./kit";
@@ -76,10 +77,12 @@ function walls(w: number, d: number, color: string): THREE.Group {
 }
 
 async function addPiece(root: THREE.Object3D, piece: GeneratedSet["pieces"][number]): Promise<void> {
-  const gltf = await loadGltf(piece.url);
-  const body = gltf.scene.clone(true);
-  const size = new THREE.Box3().setFromObject(body).getSize(new THREE.Vector3());
-  body.scale.setScalar(piece.size / Math.max(0.001, size.x, size.y, size.z));
+  // Built pieces are already in metres; generated GLBs are scaled to their size.
+  const body = piece.parts ? buildParts({ parts: piece.parts }) : (await loadGltf(piece.url!)).scene.clone(true);
+  if (!piece.parts) {
+    const size = new THREE.Box3().setFromObject(body).getSize(new THREE.Vector3());
+    body.scale.setScalar(piece.size / Math.max(0.001, size.x, size.y, size.z));
+  }
   body.position.set(piece.at[0], 0, piece.at[1]);
   body.rotation.y = piece.yaw;
   body.userData.shared = true;

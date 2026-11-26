@@ -135,9 +135,11 @@ function checkScene(
     }
     if ("perform" in beat) {
       checkActor(beat.perform, path);
-      const model = story.actors[beat.perform]?.model;
-      if (!model) err(`${path}: "${beat.perform}" has no generated model to perform with`);
-      else if (!model.uses[beat.use]) err(`${path}: "${beat.perform}" has no clip for "${beat.use}"`);
+      const spec = story.actors[beat.perform];
+      const uses = spec?.model?.uses ?? spec?.built?.uses;
+      if (!uses) err(`${path}: "${beat.perform}" has no generated model to perform with`);
+      else if (!uses[beat.use]) err(`${path}: "${beat.perform}" has no clip for "${beat.use}"`);
+      else if (spec.built && !spec.built.clips[uses[beat.use]]) err(`${path}: "${beat.perform}" has no clip named "${uses[beat.use]}"`);
     }
     const checkProp = (prop: string) => {
       if (!story.props?.[prop]) err(`${path}: unknown prop "${prop}"`);

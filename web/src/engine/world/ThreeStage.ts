@@ -9,7 +9,8 @@ import { Particles } from "../fx/Particles";
 import { CameraRig, type ShotSubject } from "../render/CameraRig";
 import type { FxOptions, Stage } from "../story/ports";
 import type { ActorSpec, AnimClip, CameraShot, FxKind, PropModel, Target } from "../story/schema";
-import { GltfActor, loadGltf } from "../actors/GltfActor";
+import { ClipActor, loadGltf } from "../actors/GltfActor";
+import { buildParts } from "../actors/procedural";
 import type { LocationContext, LocationDef, LocationInstance } from "./Location";
 
 const FOCUS_LIFT = 1.3;
@@ -162,7 +163,7 @@ export class ThreeStage implements Stage {
 
   perform(id: string, use: string, hold: boolean, instant: boolean): Promise<void> {
     const a = this.need(id);
-    return a instanceof GltfActor ? a.perform(use, hold, instant) : Promise.resolve();
+    return a instanceof ClipActor ? a.perform(use, hold, instant) : Promise.resolve();
   }
 
   useProps(models: Record<string, PropModel>): void {
@@ -212,7 +213,11 @@ export class ThreeStage implements Stage {
     p.userData.shared = true;
     this.props.set(id, p);
     const holder = p;
-    void loadGltf(model.url).then((g) => {
+    if (model.parts) {
+      p.add(buildParts({ parts: model.parts }));
+      return p;
+    }
+    void loadGltf(model.url!).then((g) => {
       const body = g.scene.clone(true);
       const size = new THREE.Box3().setFromObject(body).getSize(new THREE.Vector3());
       body.scale.setScalar(model.size / Math.max(0.001, size.x, size.y, size.z));
