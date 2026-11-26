@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { pickVoice, voicePool, voiceSettings } from "../../src/engine/audio/Voices";
+import { narratorVoice, pickVoice, voicePool, voiceSettings } from "../../src/engine/audio/Voices";
 
 describe("character voices", () => {
   it("takes the pitch from the character's voice value", () => {
@@ -38,5 +38,13 @@ describe("character voices", () => {
     const system = [v("Grandma"), v("Grandpa"), v("Daniel"), v("Moira")];
     expect(voicePool(system, 1.15, "m").map((x) => x.name)).toEqual(["Daniel"]);
     expect(voicePool(system, 0.9, "f").map((x) => x.name)).toEqual(["Grandma", "Moira"]);
+  });
+
+  it("never uses Google's voices, for the narrator or anyone else", () => {
+    const v = (name: string) => ({ name, lang: "en-US" });
+    const chrome = [v("Google US English"), v("Google UK English Male"), v("Samantha"), v("Daniel")];
+    expect(narratorVoice(chrome)?.name).toBe("Daniel");
+    expect(voicePool(chrome, 1.35).map((x) => x.name)).toEqual(["Samantha"]);
+    expect(narratorVoice([v("Google US English")])).toBeUndefined();
   });
 });

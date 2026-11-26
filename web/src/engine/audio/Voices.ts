@@ -29,11 +29,26 @@ const NOVELTY = /^(Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Fred|Good New
 const FEMALE = /^(Samantha|Flo|Karen|Moira|Sandy|Shelley|Tessa|Grandma|Victoria|Allison|Ava|Susan|Zira|Google UK English Female|Google US English)\b/;
 
 const ELDERLY = /^(Grandma|Grandpa)\b/;
+// Chrome's online Google voices: never used, for anyone.
+const GOOGLE = /^Google\b/;
+// The narrator's voice, in order of preference (macOS natural voices).
+const NARRATORS = ["Daniel", "Samantha", "Karen", "Moira", "Serena", "Arthur", "Tessa"];
+
+// The narrator's voice: a preferred system voice, any other natural English
+// one, or none (narration is then shown but not read aloud).
+export function narratorVoice<T extends { name: string; lang: string }>(voices: T[]): T | undefined {
+  const english = voices.filter((v) => v.lang.startsWith("en") && !GOOGLE.test(v.name) && !NOVELTY.test(v.name) && !ELDERLY.test(v.name));
+  for (const name of NARRATORS) {
+    const v = english.find((x) => x.name.startsWith(name));
+    if (v) return v;
+  }
+  return english[0];
+}
 
 // The voices a speaker can get: natural English voices of their gender (or,
 // without one, female for higher pitches), old-sounding ones only for deep voices.
 export function voicePool<T extends { name: string; lang: string }>(voices: T[], voice: number, gender?: "m" | "f"): T[] {
-  const natural = voices.filter((v) => v.lang.startsWith("en") && !NOVELTY.test(v.name) && (voice <= 0.9 || !ELDERLY.test(v.name)));
+  const natural = voices.filter((v) => v.lang.startsWith("en") && !GOOGLE.test(v.name) && !NOVELTY.test(v.name) && (voice <= 0.9 || !ELDERLY.test(v.name)));
   const female = gender ? gender === "f" : voice >= 1.15;
   const pool = natural.filter((v) => FEMALE.test(v.name) === female);
   return pool.length ? pool : natural;
@@ -61,8 +76,9 @@ export class Voices {
     synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
     const all = synth.getVoices();
-    const voice = speaker ? pickVoice(voicePool(all, speaker.voice, speaker.gender), speaker.id) : all.find((v) => v.default) ?? voicePool(all, 1)[0];
-    if (voice) u.voice = voice;
+    const voice = speaker ? pickVoice(voicePool(all, speaker.voice, speaker.gender), speaker.id) : narratorVoice(all);
+    if (!voice) return Promise.resolve(); // only Google voices: stay silent rather than use them
+    u.voice = voice;
     Object.assign(u, voiceSettings(speaker ? speaker.voice : null, mood));
     return new Promise((resolve) => {
       // Some browsers never fire "end" (no voices installed, background tab):
