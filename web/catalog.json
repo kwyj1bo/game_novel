@@ -380,7 +380,12 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_table",
+        "at_chair",
+        "at_rug",
+        "at_bookshelf",
+        "at_candle"
       ],
       "props": {}
     },
@@ -398,7 +403,9 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_crate",
+        "at_candle"
       ],
       "props": {}
     },
@@ -419,7 +426,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_crate",
+        "at_rock",
+        "at_bush"
       ],
       "props": {}
     },
@@ -439,7 +449,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_rock",
+        "at_house",
+        "at_boat"
       ],
       "props": {}
     },
@@ -459,7 +472,12 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_house",
+        "at_stall",
+        "at_lamp_post",
+        "at_barrel",
+        "at_cart"
       ],
       "props": {}
     },
@@ -480,7 +498,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_pillar",
+        "at_desk",
+        "at_candle"
       ],
       "props": {}
     },
@@ -499,7 +520,11 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_bookshelf",
+        "at_desk",
+        "at_crate",
+        "at_candle"
       ],
       "props": {}
     },
@@ -518,7 +543,11 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_stall",
+        "at_rug",
+        "at_chair",
+        "at_candle"
       ],
       "props": {}
     },
@@ -539,7 +568,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_pillar",
+        "at_cart",
+        "at_crate"
       ],
       "props": {}
     },
@@ -559,7 +591,9 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_chair",
+        "at_crate"
       ],
       "props": {}
     },
@@ -579,7 +613,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_boat",
+        "at_rock",
+        "at_pine"
       ],
       "props": {}
     },
@@ -601,7 +638,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_table",
+        "at_candle",
+        "at_pillar"
       ],
       "props": {}
     },
@@ -622,7 +662,12 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_fireplace",
+        "at_chair",
+        "at_rug",
+        "at_table",
+        "at_candle"
       ],
       "props": {}
     },
@@ -642,7 +687,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_bed",
+        "at_candle",
+        "at_rug"
       ],
       "props": {}
     },
@@ -663,7 +711,11 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_desk",
+        "at_bookshelf",
+        "at_barrel",
+        "at_candle"
       ],
       "props": {}
     },
@@ -684,7 +736,11 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_desk",
+        "at_chair",
+        "at_bookshelf",
+        "at_candle"
       ],
       "props": {}
     },
@@ -703,7 +759,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_bush",
+        "at_fence",
+        "at_table"
       ],
       "props": {}
     },
@@ -722,7 +781,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_bed",
+        "at_chair",
+        "at_candle"
       ],
       "props": {}
     },
@@ -742,7 +804,11 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_bookshelf",
+        "at_desk",
+        "at_candle",
+        "at_rug"
       ],
       "props": {}
     },
@@ -764,7 +830,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_pillar",
+        "at_fence",
+        "at_bush"
       ],
       "props": {}
     },
@@ -785,7 +854,11 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_pine",
+        "at_tree",
+        "at_bush",
+        "at_rock"
       ],
       "props": {}
     },
@@ -805,7 +878,12 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_fireplace",
+        "at_table",
+        "at_chair",
+        "at_bed",
+        "at_barrel"
       ],
       "props": {}
     },
@@ -824,7 +902,8 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_crate"
       ],
       "props": {}
     },
@@ -843,7 +922,12 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_table",
+        "at_chair",
+        "at_rug",
+        "at_candle",
+        "at_bookshelf"
       ],
       "props": {}
     },
@@ -863,7 +947,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_pillar",
+        "at_table",
+        "at_candle"
       ],
       "props": {}
     },
@@ -883,7 +970,12 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_table",
+        "at_chair",
+        "at_barrel",
+        "at_fireplace",
+        "at_candle"
       ],
       "props": {}
     },
@@ -901,7 +993,11 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_bookshelf",
+        "at_desk",
+        "at_candle",
+        "at_rug"
       ],
       "props": {}
     },
@@ -920,7 +1016,12 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_table",
+        "at_fireplace",
+        "at_barrel",
+        "at_crate",
+        "at_chair"
       ],
       "props": {}
     },
@@ -939,7 +1040,12 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_bed",
+        "at_rug",
+        "at_chair",
+        "at_candle",
+        "at_desk"
       ],
       "props": {}
     },
@@ -958,7 +1064,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_barrel",
+        "at_crate",
+        "at_candle"
       ],
       "props": {}
     },
@@ -977,7 +1086,11 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_desk",
+        "at_chair",
+        "at_bookshelf",
+        "at_candle"
       ],
       "props": {}
     },
@@ -996,7 +1109,12 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_stall",
+        "at_bookshelf",
+        "at_crate",
+        "at_barrel",
+        "at_candle"
       ],
       "props": {}
     },
@@ -1015,7 +1133,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_pew",
+        "at_candle",
+        "at_pillar"
       ],
       "props": {}
     },
@@ -1034,7 +1155,9 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_rock",
+        "at_candle"
       ],
       "props": {}
     },
@@ -1054,7 +1177,11 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_pine",
+        "at_tree",
+        "at_bush",
+        "at_rock"
       ],
       "props": {}
     },
@@ -1075,7 +1202,11 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_bush",
+        "at_fence",
+        "at_tree",
+        "at_rock"
       ],
       "props": {}
     },
@@ -1095,7 +1226,11 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_house",
+        "at_lamp_post",
+        "at_cart",
+        "at_barrel"
       ],
       "props": {}
     },
@@ -1114,7 +1249,12 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_house",
+        "at_fence",
+        "at_well",
+        "at_tree",
+        "at_cart"
       ],
       "props": {}
     },
@@ -1136,7 +1276,9 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_rock",
+        "at_boat"
       ],
       "props": {}
     },
@@ -1155,7 +1297,11 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_tree",
+        "at_rock",
+        "at_boat",
+        "at_bush"
       ],
       "props": {}
     },
@@ -1176,7 +1322,9 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_rock",
+        "at_pine"
       ],
       "props": {}
     },
@@ -1196,7 +1344,11 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_bush",
+        "at_tree",
+        "at_fence",
+        "at_well"
       ],
       "props": {}
     },
@@ -1217,7 +1369,10 @@
         "auto_4",
         "auto_5",
         "auto_threat",
-        "auto_entry"
+        "auto_entry",
+        "at_mast",
+        "at_barrel",
+        "at_crate"
       ],
       "props": {}
     }

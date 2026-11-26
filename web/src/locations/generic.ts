@@ -159,6 +159,25 @@ function scatter(props: Prop[], type: PresetType, size: [number, number], seed: 
   }
 }
 
+// A spot beside the first placed prop of each kind ("at_fireplace"), on the
+// side facing the middle of the room, so a story can stage someone by it.
+export function propMarkNames(kinds: string[]): string[] {
+  return [...new Set(kinds)].map((k) => `at_${k}`);
+}
+
+function propMarks(props: Prop[], kinds: string[], fallback: THREE.Vector3): Record<string, THREE.Vector3> {
+  const out: Record<string, THREE.Vector3> = {};
+  props.forEach((p, i) => {
+    const name = `at_${kinds[i]}`;
+    if (out[name] || !p.group.visible) return;
+    const pos = p.group.position.clone().setY(0);
+    const inward = pos.clone().negate().normalize();
+    out[name] = pos.length() > 0.01 ? pos.addScaledVector(inward, p.radius + 0.6) : pos;
+  });
+  for (const name of propMarkNames(kinds)) out[name] ??= fallback.clone();
+  return out;
+}
+
 export function presetLocation(s: Scenery): LocationDef {
   const preset = s.preset as Preset;
   const base = LAYOUTS[preset.type];
@@ -169,10 +188,11 @@ export function presetLocation(s: Scenery): LocationDef {
   const wide = outdoor ? { pos: v3(3.5, 2.8, 9.5), look: v3(-0.3, 1.2, -1) } : { pos: v3(w * 0.28, Math.min(height - 0.4, 2.6), d / 2 - 0.6), look: v3(-0.3, 1.1, -d * 0.12) };
   const entry = outdoor ? v3(1.5, 0, 8) : v3(w / 2 - 1, 0, d / 2 - 1.2);
   const marks = autoMarks(v3(0, 0, 0), wide.pos, entry, Math.min(1.8, Math.min(w, d) * 0.2));
+  const list = preset.props.length ? preset.props.map((p) => [p.kind, p.count] as [string, number]) : base.props;
   return {
     id: s.id,
     title: s.title,
-    info: { marks: [...AUTO_MARKS], props: {}, keywords: s.keywords },
+    info: { marks: [...AUTO_MARKS, ...propMarkNames(list.map(([k]) => k))], props: {}, keywords: s.keywords },
     build(ctx: LocationContext): LocationInstance {
       const root = new THREE.Group();
       const time = outdoor ? preset.time : preset.time;
@@ -225,11 +245,16 @@ export function presetLocation(s: Scenery): LocationDef {
       }
 
       const props: Prop[] = [];
-      const list = preset.props.length ? preset.props.map((p) => [p.kind, p.count] as [string, number]) : base.props;
+      const kinds: string[] = [];
       let n = 0;
-      for (const [kind, count] of list) for (let i = 0; i < count; i++) props.push(buildProp(kind, ctx.particles, night, preset.seed * 1000 + n++));
+      for (const [kind, count] of list)
+        for (let i = 0; i < count; i++) {
+          props.push(buildProp(kind, ctx.particles, night, preset.seed * 1000 + n++));
+          kinds.push(kind);
+        }
       if (preset.type === "hall" || preset.type === "chapel") props.filter((p) => p.radius === 0.6).forEach((p, i) => (p.group.userData.row = i));
       scatter(props, preset.type, size, preset.seed, wide.pos);
+      const placedMarks = { ...marks, ...propMarks(props, kinds, marks.auto_1) };
       let lights = 0;
       for (const p of props) {
         root.add(p.group);
@@ -240,7 +265,7 @@ export function presetLocation(s: Scenery): LocationDef {
       const span = outdoor ? 30 : 0;
       return {
         root,
-        marks,
+        marks: placedMarks,
         wide,
         bounds: outdoor ? new THREE.Box3(v3(-span, 0.3, -span), v3(span, 30, span)) : new THREE.Box3(v3(-w / 2 + 0.3, 0.3, -d / 2 + 0.3), v3(w / 2 - 0.3, height - 0.2, d / 2 - 0.3)),
         background: new THREE.Color(outdoor ? sky.bottom : "#050505"),
