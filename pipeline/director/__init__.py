@@ -24,6 +24,7 @@ class Director:
         self.cache_path = cache
         self.cache: dict = json.loads(cache.read_text()) if cache and cache.exists() else {}
         self.dropped = 0  # staging suggestions that failed the engine checks
+        self.kept = 0
 
     def ask(self, system: str, label: str, items: list, schema: dict):
         key = hashlib.sha1(json.dumps([system, label, items, schema], sort_keys=True).encode()).hexdigest()[:20]
@@ -78,6 +79,7 @@ class Director:
             if part.get("part") in checkers:
                 plan = checkers[part["part"]].plan(part)
                 self.dropped += plan.dropped
+                self.kept += plan.kept
                 if plan.cast:
                     plans[part["part"]] = plan
         return plans

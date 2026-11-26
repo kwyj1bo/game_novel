@@ -41,6 +41,10 @@ class Plan:
     def cast(self) -> list[str]:
         return [*self.start, *self.enter]
 
+    @property
+    def kept(self) -> int:
+        return len(self.start) + len(self.enter) + sum(len(b) for b in self.lines.values())
+
 
 def spots_of(location: str, catalog, places: dict) -> list[str]:
     if location in catalog["locations"]:
