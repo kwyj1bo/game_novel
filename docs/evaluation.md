@@ -66,23 +66,28 @@ The director did not beat the rules. On the trapdoor chapter it spent its events
 
 ## Staging
 
-All 17 chapters were built twice, with rule staging and with the director, with the full manifest.
+The director now runs on Opus at high effort. It reads each scene part's own book text to decide who is really present, acts every line (camera shot, looks, the speaker's gesture and mood, listeners' reactions, walks, runs and exits), and adds a background crowd where the book implies one. Six chapters (1, 5, 7, 10, 12 and 16, 60 scene parts) were built twice: with the rules and with the director.
 
 | | Rules | Director |
 | --- | ---: | ---: |
-| Stories that pass the engine's validator | 17 of 17 | 17 of 17 |
-| People placed on stage | 442 | 268 |
-| Of those, on named spots (not `auto_1` to `auto_5`) | 0 | 72 |
-| Entrances | 18 | 12 |
-| Lines shown | 395 | 406 |
-| Actions played | 65 | 159 |
+| Stories that pass the engine's validator | 6 of 6 | 6 of 6 |
+| Named people placed | 154 | 169 |
+| Of those, on named spots (not `auto_1` to `auto_5`) | 0 | 69 |
+| Scene parts with a background crowd | 0 | 28 of 60 (195 extras) |
+| Entrances | 10 | 18 |
+| Story actions played | 26 | 113 |
+| Speaker gestures | 0 | 23 |
+| Animations (gestures and reactions) | 0 | 105 |
 
-The director put 40% fewer people on stage: the rules place everyone named in the narration, including people only mentioned. It used named spots (hand-made marks and the new `at_<prop>` spots) 72 times, and played more than twice as many actions. 439 of its 483 suggestions (91%) passed the checks; the other 44 named a spot, person or action that does not exist, and the rules filled the gap.
+872 of the director's 877 suggestions (99.4%) passed the checks. Only six chapters were rebuilt because a chapter takes about 15 minutes at high effort.
 
-These counts show that the director uses the stage; they do not show that the result reads better. That needs people to play both versions.
+The first version of the director (default model, low effort, only the shown lines, no crowds) was run on all 17 chapters: 17 of 17 stories validated, it placed 268 people against the rules' 442, used named spots 72 times and played 159 actions, and 91% of its suggestions passed the checks. Most of the 9% that failed were not mistakes: an entrance through the door spot was rejected, and every later beat of that person went with it. The checks now send such a person to the next free spot.
+
+These counts show that the director uses the stage. They do not show that the result reads better; that needs people to play both versions.
 
 ## Limits
 
 - One book, 2 runs per mode. 49 characters, 30 scenes and 2 reference chapters are small samples: differences of a few points can be noise.
 - Invented names hide the book's names, not its plot. A model could still recognise a famous scene from its events.
 - Places are scored on type alone, against hand-made labels that are one person's choice.
+- Crowds are generic extras on fixed spots behind the group. They stand rather than sit at tables.

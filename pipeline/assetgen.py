@@ -121,9 +121,10 @@ class ClaudeCode:
     def __init__(self, path: str):
         self.path = path
 
-    def request(self, system: str, prompt: str, schema: dict) -> dict | None:
+    def request(self, system: str, prompt: str, schema: dict, effort: str = "low") -> dict | None:
         args = [self.path, "-p", "--output-format", "json", "--json-schema", json.dumps(schema), "--system-prompt", system,
-                "--tools", "", "--no-session-persistence", "--strict-mcp-config", "--disable-slash-commands", "--effort", "low"]
+                "--tools", "", "--no-session-persistence", "--strict-mcp-config", "--disable-slash-commands",
+                "--model", MODEL, "--effort", effort]
         with tempfile.TemporaryDirectory() as cwd:
             r = subprocess.run(args, input=prompt, capture_output=True, text=True, timeout=900, cwd=cwd)
         out = json.loads(r.stdout or "{}")
@@ -141,16 +142,17 @@ def default_client():
     return anthropic.Anthropic()
 
 
-def request(client, system: str, label: str, items: list[dict], schema: dict) -> dict | None:
-    """One structured request; the parsed JSON, or None if the model stopped early."""
+def request(client, system: str, label: str, items: list[dict], schema: dict, effort: str = "low") -> dict | None:
+    """One structured request; the parsed JSON, or None if the model stopped early.
+    Assets need little thought ("low"); the story director asks for "high"."""
     if isinstance(client, ClaudeCode):
-        return client.request(system, f"{label}:\n" + json.dumps(items, indent=1, ensure_ascii=False), schema)
+        return client.request(system, f"{label}:\n" + json.dumps(items, indent=1, ensure_ascii=False), schema, effort)
     response = client.beta.messages.create(
         model=MODEL,
-        max_tokens=16000,
+        max_tokens=32000 if effort == "high" else 16000,
         betas=["server-side-fallback-2026-07-01"],
         fallbacks="default",
-        output_config={"effort": "low", "format": {"type": "json_schema", "schema": schema}},
+        output_config={"effort": effort, "format": {"type": "json_schema", "schema": schema}},
         system=system,
         messages=[{"role": "user", "content": f"{label}:\n" + json.dumps(items, indent=1, ensure_ascii=False)}],
     )
@@ -160,9 +162,9 @@ def request(client, system: str, label: str, items: list[dict], schema: dict) ->
     return json.loads(next(b.text for b in response.content if b.type == "text"))
 
 
-def asker(client):
-    """`request` bound to a client, for the retrieval steps that ask the model."""
-    return lambda system, label, items, schema: request(client, system, label, items, schema)
+def asker(client, effort: str = "low"):
+    """`request` bound to a client and an effort level."""
+    return lambda system, label, items, schema: request(client, system, label, items, schema, effort)
 
 
 def ask(client, people: list[dict]) -> dict[str, dict]:

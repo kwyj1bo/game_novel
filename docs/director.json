@@ -131,7 +131,7 @@
    ]
   }
  },
- "staging": {
+ "staging_first_version": {
   "chapters": 17,
   "valid_stories": {
    "rules": 17,
@@ -156,6 +156,50 @@
   "suggestions": {
    "kept": 439,
    "dropped": 44
+  }
+ },
+ "staging": {
+  "chapters": [
+   1,
+   5,
+   7,
+   10,
+   12,
+   16
+  ],
+  "valid_stories": {
+   "rules": 6,
+   "director": 6
+  },
+  "counts": {
+   "rules": {
+    "people_placed": 154,
+    "crowd_extras": 0,
+    "scenes_with_crowd": 0,
+    "scenes": 60,
+    "on_named_spots": 0,
+    "gestures": 0,
+    "reactions": 0,
+    "entrances": 10,
+    "lines": 145,
+    "actions": 26
+   },
+   "director": {
+    "people_placed": 169,
+    "crowd_extras": 195,
+    "scenes_with_crowd": 28,
+    "scenes": 60,
+    "on_named_spots": 69,
+    "gestures": 23,
+    "reactions": 105,
+    "entrances": 18,
+    "lines": 144,
+    "actions": 113
+   }
+  },
+  "suggestions": {
+   "kept": 872,
+   "dropped": 5
   }
  }
 }

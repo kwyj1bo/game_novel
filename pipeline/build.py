@@ -319,6 +319,23 @@ def actor_spec(c: Character, catalog) -> dict:
     }
 
 
+def extra_spec(xid: str, kind: str) -> dict:
+    """A plain background look: students in school robes, adults in colours."""
+    h = _h(xid)
+    student = kind == "student"
+    return {
+        "name": "Student" if student else "Passer-by",
+        "height": round((1.35 if student else 1.62) + (h % 18) / 100, 2),
+        "robe": "#18181f" if student else ROBES[h % len(ROBES)],
+        "skin": SKINS[(h >> 3) % len(SKINS)],
+        "hair": HAIRS[(h >> 6) % len(HAIRS)],
+        "hairStyle": ["short", "messy", "long", "bun", "bushy"][(h >> 9) % 5],
+        "outfit": "student" if student else "adult",
+        "voice": 1.0,
+        "subtitleColor": "#cccccc",
+    }
+
+
 class _Assembler:
     def __init__(self, a: Analysis, catalog, chapter_title: str, source: str):
         self.a = a
@@ -332,6 +349,19 @@ class _Assembler:
         self.places: dict[str, dict] = {}  # AI-made places this story uses
         self.actions = {x["id"]: x for x in catalog["actions"]}
         self.director = None  # stages scenes when set
+        self.paragraphs: list[str] = []  # the chapter's text, for the director's context
+        self.extras: dict[str, dict] = {}  # background crowd: actor id -> spec
+
+    def crowd(self, count: int, kind: str) -> dict[str, str]:
+        """Background extras on the crowd spots. A mixed crowd alternates
+        students and adults; the same extra keeps one look all chapter."""
+        out = {}
+        for k in range(count):
+            who = kind if kind != "mixed" else ("student" if k % 2 == 0 else "adult")
+            xid = f"extra_{who}_{k + 1}"
+            self.extras.setdefault(xid, extra_spec(xid, who))
+            out[xid] = f"crowd_{k + 1}"
+        return out
 
     def planned_cast(self, plan) -> tuple[dict, dict, set, dict]:
         """Cast, slots and entrances from a staging plan. The hero is always
@@ -393,9 +423,12 @@ class _Assembler:
         cast = {c: m for c, m in slots.items() if c not in entering}
         return cast, slots
 
-    def beats(self, lines: list[Line], slots: dict, on_stage: set[str], first_beats: list, planned: list | None = None) -> list:
-        """Beats for these lines. `planned` (from the director's staging plan)
-        replaces the actions the rules read from the verbs."""
+    def beats(self, lines: list[Line], slots: dict, on_stage: set[str], first_beats: list, staged: dict | None = None) -> list:
+        """Beats for these lines. `staged` (one line of the director's plan:
+        beats "before" the text, "say" fields, beats "after" it) replaces the
+        actions the rules read from the verbs, and its shot replaces theirs."""
+        planned = staged["before"] if staged is not None else None
+        framed = bool(planned) and any("camera" in b for b in planned)
         out = list(first_beats)
         last_cam = None
         last_speaker = self._last_speaker
@@ -408,7 +441,9 @@ class _Assembler:
             if planned is not None:
                 actions.extend(planned)
             if ln.kind == "say" and ln.speaker in on_stage:
-                if ln.speaker != last_cam:
+                if framed:
+                    last_cam = ln.speaker
+                elif ln.speaker != last_cam:
                     # Turn to whoever they're talking to first, so the close-up sees their face.
                     listener = last_speaker if last_speaker in on_stage and last_speaker != ln.speaker else next((c for c in on_stage if c != ln.speaker and self.chars[c].kind == "human"), None)
                     if listener:
@@ -420,7 +455,9 @@ class _Assembler:
                 beat = {"say": ln.speaker, "text": ln.text}
                 if ln.mood:
                     beat["mood"] = ln.mood
+                beat.update(staged["say"] if staged else {})
                 out.append(beat)
+                out.extend(staged["after"] if staged else [])
                 continue
             if ln.kind == "say":
                 out.extend(actions)
@@ -429,7 +466,9 @@ class _Assembler:
             focus = next((e.actor for e in ln.events if e.actor in on_stage and e.kind == "action"), None)
             if planned is not None:
                 focus = next((b.get("actor") or b.get("move") for b in planned), None)
-            if focus and focus != last_cam:
+            if framed:
+                last_cam = focus
+            elif focus and focus != last_cam:
                 out.append({"camera": "medium", "on": focus, "ms": 700})
                 last_cam = focus
             elif not focus and last_cam is not None:
@@ -445,6 +484,7 @@ class _Assembler:
                 out.append({"narrate": text})
                 self._last_narration = text
                 narrations += 1
+            out.extend(staged["after"] if staged else [])
         self._last_speaker = last_speaker
         return out
 
@@ -550,8 +590,10 @@ class _Assembler:
             plan = plans.get(pi)
             if plan:
                 cast, slots, entering, first_seen = self.planned_cast(plan)
+            if plan and plan.crowd[0]:
+                cast = {**cast, **self.crowd(*plan.crowd)}
             used.update(slots)
-            stage = set(cast)
+            stage = {c for c in cast if c in self.chars}  # extras never act
             first: list = []
             if new_loc:
                 danger = sum(ln.danger for ln in sc.lines) / max(1, len(sc.lines))
@@ -576,7 +618,10 @@ class _Assembler:
                         lines_out += [{"spawn": actor, "at": "auto_entry"}, {"move": actor, "to": slots[actor], "async": True}]
                     pending_entries.discard(actor)
                     stage.add(actor)
-                lines_out += self.beats([ln], slots, stage, [], plan.lines.get(li, []) if plan else None)
+                staged = {"before": plan.lines.get(li, []), "say": plan.say.get(li, {}), "after": plan.after.get(li, [])} if plan else None
+                lines_out += self.beats([ln], slots, stage, [], staged)
+                if plan:
+                    stage -= {who for who, at in plan.exits.items() if at == li}
             body = first + lines_out
             if not body:
                 body = [{"camera": "wide", "ms": 0}]
@@ -606,10 +651,11 @@ class _Assembler:
                 }
             story_scenes[sid] = scene
 
-        actors = {c: actor_spec(self.chars[c], self.cat) for c in used}
+        actors = {c: actor_spec(self.chars[c], self.cat) for c in used if c in self.chars}
         for c, spec in actors.items():
             if self.chars[c].gender in ("m", "f"):
                 spec["gender"] = self.chars[c].gender  # picks a matching spoken voice
+        actors.update(self.extras)
         return {
             "$schema": "../../../story.schema.json",
             "id": _slug(f"{self.source}-{self.title}"),
@@ -696,5 +742,6 @@ def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str,
     assembler = _Assembler(a, catalog, chapter_title, source)
     assembler.places = used_places
     assembler.director = director
+    assembler.paragraphs = paragraphs
     story = assembler.build(condensed, moments)
     return story, condensed, moments, chain

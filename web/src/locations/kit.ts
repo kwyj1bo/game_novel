@@ -361,7 +361,10 @@ export const v3 = (x: number, y: number, z: number) => new THREE.Vector3(x, y, z
 // Generic marks every location provides, so generated stories can stage any
 // cast without knowing the room: auto_1..auto_5 on an arc facing the wide
 // camera, auto_threat across from them, auto_entry where people come in.
-export const AUTO_MARKS = ["auto_1", "auto_2", "auto_3", "auto_4", "auto_5", "auto_threat", "auto_entry"] as const;
+// Background spots for extras (students at a feast, people in a street),
+// behind and around the group so they never block the camera.
+export const CROWD_MARKS = Array.from({ length: 10 }, (_, i) => `crowd_${i + 1}`);
+export const AUTO_MARKS = ["auto_1", "auto_2", "auto_3", "auto_4", "auto_5", "auto_threat", "auto_entry", ...CROWD_MARKS] as const;
 
 export function autoMarks(center: THREE.Vector3, camera: THREE.Vector3, entry: THREE.Vector3, radius = 1.8): Record<string, THREE.Vector3> {
   const dir = camera.clone().sub(center).setY(0).normalize();
@@ -373,5 +376,14 @@ export function autoMarks(center: THREE.Vector3, camera: THREE.Vector3, entry: T
   });
   out.auto_threat = center.clone().addScaledVector(dir, -radius * 1.5).setY(0);
   out.auto_entry = entry.clone().setY(0);
+  // Two rows behind the group: six spots near, four further back.
+  const back = dir.clone().negate();
+  const rows: [number, number[]][] = [[1.6, [-75, -45, -15, 15, 45, 75]], [2.2, [-55, -20, 20, 55]]];
+  let k = 1;
+  for (const [reach, degs] of rows)
+    for (const deg of degs) {
+      const d = back.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.degToRad(deg));
+      out[`crowd_${k++}`] = center.clone().addScaledVector(d, radius * reach).setY(0);
+    }
   return out;
 }

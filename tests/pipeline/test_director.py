@@ -94,8 +94,9 @@ def test_a_staging_plan_places_people_and_picks_actions(halloween):
     first = story["scenes"][story["start"]]
     assert first["cast"] == {"harry": "hide_harry", "ron": "hide_ron"}
     assert {"act": "drag", "actor": "harry", "target": "ron"} in first["beats"]
-    # Not in the scene, no such spot, no such action, no such line.
-    assert director.dropped == 4
+    # Not in the scene, no such action, no such line. An unknown spot becomes a free one.
+    assert director.dropped == 3
+    assert {"spawn": "troll", "at": "auto_1"} in first["beats"] or any(b.get("spawn") == "troll" for b in first["beats"])
     narrated = [b["narrate"] for b in first["beats"] if "narrate" in b]
     assert any(t.startswith("Harry grabbed Ron's sleeve") for t in narrated)  # the book's sentence
 
@@ -106,3 +107,73 @@ def test_parts_without_a_plan_keep_the_rules(halloween):
     rules = build_chapter(ch, catalog, "Fixture")[0]
     last = f"scene_{len([k for k in rules['scenes'] if not k.endswith('_wrong')])}"
     assert staged["scenes"][last]["cast"] == rules["scenes"][last]["cast"]
+
+
+class ActingModel:
+    """Acts the first part: a shot, a gesture and mood, a reaction and an exit."""
+
+    def __call__(self, system, label, items, schema):
+        if "beats" in schema["properties"]:
+            return None
+        none = {"type": "", "on": "", "with": ""}
+        return {"parts": [{
+            "part": 0,
+            "start": [{"who": "harry", "spot": "start_harry"}, {"who": "ron", "spot": "start_ron"}],
+            "enter": [],
+            "lines": [
+                {"line": 4, "shot": {"type": "close", "on": "harry", "with": ""}, "look": [{"who": "harry", "at": "ron"}], "move": [], "do": [],
+                 "gesture": "point", "mood": "urgent", "react": [{"who": "ron", "clip": "cower"}, {"who": "ron", "clip": "moonwalk"}], "exit": []},
+                {"line": 5, "shot": none, "look": [], "move": [], "do": [], "gesture": "", "mood": "", "react": [], "exit": ["ron"]},
+                {"line": 6, "shot": none, "look": [{"who": "harry", "at": "ron"}], "move": [], "do": [], "gesture": "wave", "mood": "scared", "react": [], "exit": []},
+            ],
+        }]}  # fmt: skip
+
+
+def test_lines_are_acted_with_shots_gestures_reactions_and_exits(halloween):
+    catalog, ch = halloween
+    director = Director(ActingModel(), beats=False)
+    beats = build_chapter(ch, catalog, "Fixture", director=director)[0]["scenes"]["scene_1"]["beats"]
+    said = [b for b in beats if b.get("say") == "harry"]
+    assert said[0]["anim"] == "point" and said[0]["mood"] == "urgent"
+    assert {"camera": "close", "on": "harry", "ms": 600} in beats
+    assert {"anim": "ron", "clip": "cower", "async": True} in beats
+    assert {"despawn": "ron"} in beats
+    # After Ron leaves, Harry cannot look at him; an unknown clip is dropped too.
+    assert beats.index({"despawn": "ron"}) > beats.index(said[0])
+    assert said[1]["anim"] == "wave" and director.dropped == 2
+
+
+def test_two_people_never_walk_to_the_same_spot():
+    from pipeline.director.staging import Checker
+
+    catalog = {"actions": []}
+    checker = Checker(catalog, {"harry": "human", "ron": "human"}, ["auto_1", "auto_2", "at_table"], {0: None})
+    plan = checker.plan({"start": [{"who": "harry", "spot": "auto_1"}, {"who": "ron", "spot": "auto_2"}], "enter": [], "lines": [
+        {"line": 0, "shot": {}, "look": [], "do": [], "gesture": "", "mood": "", "react": [], "exit": [],
+         "move": [{"who": "harry", "to": "at_table", "run": False}, {"who": "ron", "to": "at_table", "run": False}, {"who": "harry", "to": "at_table", "run": False}]}]})  # fmt: skip
+    assert plan.lines[0] == [{"move": "harry", "to": "at_table"}, {"move": "ron", "to": "harry"}]
+
+
+class CrowdModel:
+    """Asks for a mixed crowd of three in the first part, and keeps the request."""
+
+    def __init__(self):
+        self.items = None
+
+    def __call__(self, system, label, items, schema):
+        if "beats" in schema["properties"]:
+            return None
+        self.items = items
+        return {"parts": [{"part": 0, "crowd": {"count": 3, "kind": "mixed"}, "start": [{"who": "harry", "spot": "start_harry"}], "enter": [], "lines": []}]}
+
+
+def test_a_crowd_fills_the_background_and_the_model_sees_the_book(halloween):
+    catalog, ch = halloween
+    model = CrowdModel()
+    story = build_chapter(ch, catalog, "Fixture", director=Director(model, beats=False))[0]
+    cast = story["scenes"]["scene_1"]["cast"]
+    assert cast["extra_student_1"] == "crowd_1" and cast["extra_adult_2"] == "crowd_2" and cast["extra_student_3"] == "crowd_3"
+    assert story["actors"]["extra_student_1"]["outfit"] == "student"
+    assert not any(b.get("say", "").startswith("extra_") for s in story["scenes"].values() for b in s["beats"])
+    part = model.items[1]
+    assert "Torches flickered" in part["context"] and not any(s.startswith("crowd_") for s in part["spots"])
