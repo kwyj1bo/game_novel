@@ -1,6 +1,8 @@
 """python -m studio <command> <book folder>
 
-index    build the book index (PageIndex tree + cast) into <book>/studio/index.json
+index       build the book index (PageIndex tree + cast) into <book>/studio/index.json
+screenplay  write chapter N's screenplay (<book>/studio/cN.screenplay.json) and a
+            playable preview (<book>/studio-cN.story.json)
 """
 
 import argparse
@@ -28,8 +30,9 @@ def model() -> Model:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="studio", description=__doc__.split("\n\n")[0])
-    ap.add_argument("command", choices=["index"])
+    ap.add_argument("command", choices=["index", "screenplay"])
     ap.add_argument("book", type=Path)
+    ap.add_argument("--chapter", type=int, action="append", help="chapter number (repeatable)")
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     m = model()
@@ -40,6 +43,21 @@ def main(argv=None) -> int:
         index.save(out)
         BookIndex.load(out)  # round-trips
         print(f"{out}: {len(index.chapters)} chapters, {sum(len(c.scenes) for c in index.chapters)} scenes, {len(index.cast)} people")
+    if args.command == "screenplay":
+        from dataclasses import asdict
+
+        from .preview import to_story
+        from .screenplay import ScreenplayWriter
+
+        index = BookIndex.load(args.book / "studio" / "index.json")
+        names = {p.id: p.name for p in index.cast}
+        for n in args.chapter or range(1, len(chapters) + 1):
+            sp = ScreenplayWriter(m, index).write(n - 1, chapters[n - 1])
+            (args.book / "studio" / f"c{n}.screenplay.json").write_text(json.dumps(asdict(sp), indent=1, ensure_ascii=False))
+            story = to_story(sp, names, args.book.name)
+            (args.book / f"studio-c{n}.story.json").write_text(json.dumps(story, ensure_ascii=False))
+            beats = sum(len(s["beats"]) for s in sp.scenes)
+            print(f"chapter {n}: {len(sp.scenes)} scenes, {beats} beats, {sum(len(s['choices']) for s in sp.scenes)} choices, {len(sp.objects)} objects")
     print(json.dumps(m.ledger.totals()))
     return 0
 
