@@ -203,8 +203,16 @@ def _main_weight(ln: Line) -> int:
     return best
 
 
-def build_chain(a: Analysis, scenes, moments, catalog=None) -> list[EventNode]:
-    """Picks the important paragraphs and links them into a chain."""
+def target_events(n_paragraphs: int) -> int:
+    """How many events a chapter of this length keeps."""
+    share = SHORT_SHARE if n_paragraphs <= SHORT_CHAPTER else SHARE
+    return max(MIN_EVENTS, min(MAX_EVENTS, math.ceil(n_paragraphs * share)))
+
+
+def build_chain(a: Analysis, scenes, moments, catalog=None, picks: dict[int, str] | None = None) -> list[EventNode]:
+    """Picks the important paragraphs and links them into a chain. `picks`
+    (paragraph -> reason), from the story director, replaces the scores as the
+    choice of what to keep; choices and their setup are kept either way."""
     if catalog is not None:
         MINOR.clear()
         MINOR.update(x["id"] for x in catalog["actions"] if x.get("minor"))
@@ -237,18 +245,24 @@ def build_chain(a: Analysis, scenes, moments, catalog=None) -> list[EventNode]:
         if any(q in moment_paras for q, _, _ in ahead) or (ahead and "turning point" in ahead[0][2]):
             scored[i] = (p, s + 1.0, [*why, "leads to a turn"])
 
-    share = SHORT_SHARE if len(paras) <= SHORT_CHAPTER else SHARE
-    k = max(MIN_EVENTS, min(MAX_EVENTS, math.ceil(len(paras) * share)))
-    # Choices, their setup and the ending always stay; scene openings stay
-    # while there is room (best first), so the cap holds even in long chapters.
-    forced = moment_paras | setup_paras | {paras[-1]}
-    score_of = {p: s for p, s, _ in scored}
-    for p in sorted(scene_openers, key=lambda q: -score_of.get(q, 0)):
-        if len(forced) < MAX_EVENTS:
-            forced.add(p)
-    chosen = set(forced)
+    k = target_events(len(paras))
+    picked = {p: why for p, why in (picks or {}).items() if p in by_para}
+    if picked:
+        # The director decided what matters; choices and their setup still stay.
+        forced = moment_paras | setup_paras
+        chosen = forced | set(picked)
+        scored = [(p, s, [*why, f"director: {picked[p]}"] if p in picked else why) for p, s, why in scored]
+    else:
+        # Choices, their setup and the ending always stay; scene openings stay
+        # while there is room (best first), so the cap holds even in long chapters.
+        forced = moment_paras | setup_paras | {paras[-1]}
+        score_of = {p: s for p, s, _ in scored}
+        for p in sorted(scene_openers, key=lambda q: -score_of.get(q, 0)):
+            if len(forced) < MAX_EVENTS:
+                forced.add(p)
+        chosen = set(forced)
     for p, s, _ in sorted(scored, key=lambda x: -x[1]):
-        if len(chosen) >= min(MAX_EVENTS, max(k, len(forced))):
+        if len(chosen) >= (MIN_EVENTS if picked else min(MAX_EVENTS, max(k, len(forced)))):
             break
         chosen.add(p)
 

@@ -638,11 +638,12 @@ def _trim(text: str, limit: int = 240) -> str:
     return cut.rstrip(" ,;") + "…"
 
 
-def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str, source: str, places: dict | None = None):
+def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str, source: str, places: dict | None = None, director=None):
     """Scenes and choices come from the whole chapter; what the game shows is
     only the event chain (the important events, in order). `places` maps an
-    unplaced scene's key to an AI-made place."""
-    from .events import build_chain
+    unplaced scene's key to an AI-made place. A `director` (the story model)
+    picks the chain's events; without one the rules do."""
+    from .events import build_chain, target_events
 
     scenes = segment(paragraphs, a.lines, catalog)
     used_places: dict[str, dict] = {}
@@ -653,7 +654,10 @@ def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str,
             if p:
                 used_places[p["id"]] = {"title": p["title"], "preset": p["preset"]}
     moments = find_moments(a, scenes, catalog)
-    chain = build_chain(a, scenes, moments, catalog)
+    picks = None
+    if director is not None:
+        picks = director.beats(chapter_title, paragraphs, scenes, catalog, used_places, target_events(len({ln.para for ln in a.lines})))
+    chain = build_chain(a, scenes, moments, catalog, picks)
     shown = {id(ln) for node in chain for ln in node.lines}
     condensed = [Scene(location=sc.location, lines=[ln for ln in sc.lines if id(ln) in shown]) for sc in scenes]
     condensed = [sc for sc in condensed if sc.lines]

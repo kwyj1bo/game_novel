@@ -26,11 +26,11 @@ def load_catalog(path: Path = CATALOG) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def build_chapter(chapter, catalog, source: str, hero: str | None = None, analysis=None, places=None):
+def build_chapter(chapter, catalog, source: str, hero: str | None = None, analysis=None, places=None, director=None):
     a = analysis or analyze(chapter.paragraphs, catalog)
     if hero and hero in a.characters:
         a.protagonist = hero
-    story, scenes, moments, chain = build_story(chapter.paragraphs, a, catalog, chapter.title, source, places)
+    story, scenes, moments, chain = build_story(chapter.paragraphs, a, catalog, chapter.title, source, places, director)
     return story, a, scenes, moments, chain
 
 
@@ -108,11 +108,13 @@ def main(argv=None) -> int:
     analyses = {id(ch): analyze(ch.paragraphs, catalog) for ch in chapters}
     hero = book_hero(analyses.values())
     from .assetgen import add_looks, add_places
+    from .director import default_director
 
     add_looks(chapters, list(analyses.values()), args.out / "assets")
     places = add_places(chapters, list(analyses.values()), catalog, args.out / "assets")
+    director = default_director(args.out / "assets")
     for ch in picked:
-        story, a, scenes, moments, chain = build_chapter(ch, catalog, source, hero, analyses[id(ch)], places)
+        story, a, scenes, moments, chain = build_chapter(ch, catalog, source, hero, analyses[id(ch)], places, director)
         path = args.out / f"{story['id']}.story.json"
         path.write_text(json.dumps(story, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         total = len({ln.para for ln in a.lines})

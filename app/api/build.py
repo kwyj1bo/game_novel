@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse
 from pipeline.__main__ import book_hero, build_chapter, chain_json, load_catalog
 from pipeline.analyze import analyze, hero_score
 from pipeline.assetgen import add_looks, add_places
+from pipeline.director import default_director
 from pipeline.text import Chapter, load_chapters
 
 router = APIRouter()
@@ -95,9 +96,10 @@ async def build(file: UploadFile = File(...)):
     # Generated assets are shared by every book in the library.
     add_looks(chapters, analyses, library_dir() / "assets")
     places = add_places(chapters, analyses, catalog, library_dir() / "assets")
+    director = default_director(library_dir() / "assets")
     for ch, a in zip(chapters, analyses):
         try:
-            story, _, _, _, chain = build_chapter(ch, catalog, source, hero, a, places)
+            story, _, _, _, chain = build_chapter(ch, catalog, source, hero, a, places, director)
             stories.append({"heading": ch.heading, "story": story, "events": chain_json(chain), "paragraphs": ch.paragraphs, "cast": cast_of(a, hero)})
         except Exception as e:  # one bad chapter should not sink the book
             skipped.append({"heading": ch.heading, "error": str(e)})
@@ -141,7 +143,7 @@ def play_as(book: str, name: str, hero: str):
         add_looks([chapter], [a], library_dir() / "assets")
         places = add_places([chapter], [a], catalog, library_dir() / "assets")
         source = next((b["source"] for b in read_index() if b["id"] == book), book)
-        story = build_chapter(chapter, catalog, source, hero, a, places)[0]
+        story = build_chapter(chapter, catalog, source, hero, a, places, default_director(library_dir() / "assets"))[0]
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps(story, ensure_ascii=False))
     return FileResponse(out, media_type="application/json")
