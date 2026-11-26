@@ -14,7 +14,8 @@ SYSTEM = (
     "its scenes, and under each scene its numbered paragraphs (the start of each). Choose the paragraphs a "
     "player must see to follow the plot: what changes the situation, decisions, danger, discoveries and "
     "reveals, the arrival of an important character, and how the chapter ends. Leave out description, small "
-    "talk, repetition and anything the player could miss without losing the thread. Give a short reason for each."
+    "talk, repetition and anything the player could miss without losing the thread. List the most important "
+    "first, and give a short reason for each."
 )
 OPENING = 170  # characters of each paragraph shown in the outline
 SCHEMA = {
@@ -42,10 +43,10 @@ def outline(paragraphs: list[str], scenes, place_title) -> str:
 
 
 def pick(ask, title: str, toc: str, k: int, valid: set[int]) -> dict[int, str]:
-    """Paragraph -> reason, at most k, in story order."""
+    """Paragraph -> reason, at most k, most important first."""
     data = ask(SYSTEM, f"Chapter “{title}”: choose about {k} paragraphs", [{"table_of_contents": toc}], SCHEMA) or {"beats": []}
     out: dict[int, str] = {}
     for b in data["beats"]:
         if b.get("paragraph") in valid and len(out) < k:
             out[b["paragraph"]] = str(b.get("why", ""))[:120]
-    return dict(sorted(out.items()))
+    return out

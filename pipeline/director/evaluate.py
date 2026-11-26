@@ -64,7 +64,8 @@ def evaluate_beats(book, catalog, client) -> dict:
         for how, director in (("rules", None), ("director", Director(asker(client)))):
             chain = build_chapter(fch, hidden, "Book", analysis=analyze(fch.paragraphs, hidden), director=director)[4]
             kept = {n.para for n in chain}
-            row[how] = {"events": len(kept), "recall": round(recall(kept, ref), 3)}
+            row[how] = {"events": len(kept), "recall": round(recall(kept, ref), 3), "paragraphs": sorted(kept)}
+        row["reference"] = sorted(ref)
         out[title.title()] = row
         print(name, row, file=sys.stderr)
     return out

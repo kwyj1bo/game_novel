@@ -56,13 +56,14 @@ class Evaluation:
         truth = {c.id: self.catalog["characters"][c.id]["spec"] for c in cast}
         out = {"characters": len(cast), "modes": {}}
         for how in modes:
-            scores = []
+            scores, raw = [], []
             for _ in range(self.runs):
                 says = {c.id: [] for c in cast} if how == "none" else self._retriever(how).looks(cast)
                 people = [{"id": c.id, "name": c.name, "gender": "unknown", "book_says": says[c.id]} for c in cast]
                 answer = assetgen.ask(self.client, people)
                 scores.append(score_looks(answer, truth))
-            out["modes"][how] = summarize_runs(scores)
+                raw.append({"book_says": says, "answer": answer})
+            out["modes"][how] = {**summarize_runs(scores), "raw": raw}
             print(f"looks {how}: {out['modes'][how]['accuracy']}", file=sys.stderr)
         return out
 
@@ -85,13 +86,14 @@ class Evaluation:
         scenes, truth = self._scenes()
         out = {"scenes": len(scenes), "modes": {}}
         for how in modes:
-            scores = []
+            scores, raw = [], []
             for _ in range(self.runs):
                 texts = {s["key"]: "" for s in scenes} if how == "none" else self._retriever(how).places(scenes)
                 need = [{"key": s["key"], "chapter": s["title"], "scene": texts[s["key"]]} for s in scenes]
                 data = assetgen.request(self.client, assetgen.PLACE_SYSTEM, "Library places and scenes", [{"library": []}, *need], assetgen._place_schema())
                 scores.append(score_places(data or {"places": []}, truth))
-            out["modes"][how] = summarize_runs(scores)
+                raw.append({"scene_text": texts, "answer": data})
+            out["modes"][how] = {**summarize_runs(scores), "raw": raw}
             print(f"places {how}: {out['modes'][how]['accuracy']}", file=sys.stderr)
         return out
 
@@ -145,14 +147,29 @@ def look_fields(spec: dict) -> dict:
     }
 
 
+FEATURES = ["glasses", "beard", "hat", "scar"]
+
+
 def score_looks(answer: dict[str, dict], truth: dict[str, dict]) -> dict:
-    per = {f: 0 for f in LOOK_FIELDS}
-    for cid, spec in truth.items():
-        got, want = look_fields(answer.get(cid, {})), look_fields(spec)
-        for f in LOOK_FIELDS:
-            per[f] += got[f] == want[f] if cid in answer else 0
+    """Most of the cast has no glasses, beard, hat or scar, so a model that
+    always says "none" gets most fields right. The score is therefore the mean
+    of four parts that a default cannot win: hair colour (five colours),
+    distinctive features (F1 over glasses, beard, hat and scar), height
+    (child, adult or giant) and outfit (student or adult)."""
     n = len(truth) or 1
-    return {"accuracy": sum(per.values()) / (n * len(LOOK_FIELDS)), "fields": {f: v / n for f, v in per.items()}, "answered": len(answer)}
+    hits = {"hair": 0, "height": 0, "outfit": 0}
+    tp = fp = fn = 0
+    for cid, spec in truth.items():
+        want = look_fields(spec)
+        got = look_fields(answer[cid]) if cid in answer else None
+        for f in hits:
+            hits[f] += bool(got) and got[f] == want[f]
+        for f in FEATURES:
+            g, w = bool(got and got[f]), want[f]
+            tp, fp, fn = tp + (g and w), fp + (g and not w), fn + (w and not g)
+    f1 = 2 * tp / (2 * tp + fp + fn) if tp + fp + fn else 1.0
+    fields = {"hair": hits["hair"] / n, "features_f1": f1, "height": hits["height"] / n, "outfit": hits["outfit"] / n}
+    return {"accuracy": sum(fields.values()) / len(fields), "fields": fields, "features": {"found": tp, "invented": fp, "missed": fn}, "answered": len(answer)}
 
 
 def score_places(data: dict, truth: dict[str, dict]) -> dict:
@@ -166,7 +183,10 @@ def score_places(data: dict, truth: dict[str, dict]) -> dict:
 def summarize_runs(scores: list[dict]) -> dict:
     accs = [s["accuracy"] for s in scores]
     fields = {f: round(statistics.mean(s["fields"][f] for s in scores), 3) for f in scores[0]["fields"]}
-    return {"accuracy": round(statistics.mean(accs), 3), "runs": [round(a, 3) for a in accs], "fields": fields}
+    out = {"accuracy": round(statistics.mean(accs), 3), "runs": [round(a, 3) for a in accs], "fields": fields}
+    if "features" in scores[0]:
+        out["features"] = [s["features"] for s in scores]
+    return out
 
 
 def _strip_book_assets(catalog) -> dict:

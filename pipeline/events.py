@@ -248,10 +248,15 @@ def build_chain(a: Analysis, scenes, moments, catalog=None, picks: dict[int, str
     k = target_events(len(paras))
     picked = {p: why for p, why in (picks or {}).items() if p in by_para}
     if picked:
-        # The director decided what matters; choices and their setup still stay.
+        # The director decided what matters, most important first; choices and
+        # their setup still stay, and the chapter keeps the rules' budget.
         forced = moment_paras | setup_paras
-        chosen = forced | set(picked)
-        scored = [(p, s, [*why, f"director: {picked[p]}"] if p in picked else why) for p, s, why in scored]
+        chosen = set(forced)
+        for p in picked:
+            if len(chosen) >= max(k, len(forced)):
+                break
+            chosen.add(p)
+        scored = [(p, s, [*why, f"director: {picked[p]}"] if p in picked and p in chosen else why) for p, s, why in scored]
     else:
         # Choices, their setup and the ending always stay; scene openings stay
         # while there is room (best first), so the cap holds even in long chapters.
