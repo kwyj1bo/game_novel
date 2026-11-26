@@ -144,6 +144,22 @@ Generated assets go into one shared library, `library/assets/` (`looks.json` and
 
 A name means one look across the whole library: two different books with a character called "Tom" share Tom's look.
 
+#### What the model reads
+
+A book is too long to send whole, so a retrieval step (`pipeline/rag/`) picks the text for each request. `NOVEL_RETRIEVAL` chooses how:
+
+| Mode | How it finds text about a character's looks or a scene's place |
+| --- | --- |
+| `keyword` | Sentences that name the character and contain a look word ("hair", "tall"); the first lines of a scene. |
+| `hybrid` (default) | BM25 and a sentence-embedding model rank the sentences near the character, or inside the scene, and reciprocal rank fusion merges the two rankings. |
+| `tree` | PageIndex-style: the book becomes a table of contents (chapter, scene, section of a few paragraphs, each with a summary). The model reads it and chooses the sections to open, in two requests (scenes first, then sections). Hybrid search ranks the sentences inside them. |
+
+Every mode returns the same amount of text: six sentences for a character, 900 characters for a scene. The library places shown to the model for reuse are the five most similar to each scene, not the first 80.
+
+Embeddings need `pip install sentence-transformers` (the model, `all-MiniLM-L6-v2`, downloads on first use). Without the package, or with `NOVEL_EMBEDDINGS=0`, hybrid search is BM25 only. The tree needs no embeddings and no extra model calls to build: its scenes and summaries come from the rule pipeline and TextRank.
+
+`python -m pipeline.rag.evaluate --book <library folder>` compares the modes on a book with hand-made assets. It hides the book's cast and sceneries and replaces every name with an invented one, so the model cannot answer from memory of the novel. Then it scores the generated looks and places, field by field, against the hand-made ones.
+
 It reaches the model in one of two ways:
 
 - **Claude Code** on this computer, signed in with a Claude subscription (Pro or Max). This needs no API key. Requests count toward the subscription's usage limits. The pipeline finds `claude` on the PATH or the copy inside the VS Code extension; `NOVEL_CLAUDE_BIN` points it at another one. Sign in once with `claude auth login`.

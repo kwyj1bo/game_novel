@@ -30,6 +30,8 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from .rag.retrievers import Retriever
+
 log = logging.getLogger(__name__)
 
 MODEL = os.environ.get("NOVEL_ASSET_MODEL", "claude-opus-5-5")
@@ -158,6 +160,11 @@ def request(client, system: str, label: str, items: list[dict], schema: dict) ->
     return json.loads(next(b.text for b in response.content if b.type == "text"))
 
 
+def asker(client):
+    """`request` bound to a client, for the retrieval steps that ask the model."""
+    return lambda system, label, items, schema: request(client, system, label, items, schema)
+
+
 def ask(client, people: list[dict]) -> dict[str, dict]:
     """One request for every missing character. Returns id -> checked look."""
     data = request(client, SYSTEM, "Characters", people, _schema())
@@ -173,7 +180,7 @@ def _save(path: Path, data) -> None:
     path.write_text(json.dumps(data, indent=1, ensure_ascii=False))
 
 
-def add_looks(chapters, analyses, library: Path, client=None) -> int:
+def add_looks(chapters, analyses, library: Path, client=None, retriever=None) -> int:
     """Gives characters without an asset an AI-made look. Looks are kept in the
     shared library (`library/looks.json`, by character id), so a name already
     seen in any book is not asked for again. Returns how many got one."""
@@ -188,10 +195,12 @@ def add_looks(chapters, analyses, library: Path, client=None) -> int:
     looks = _load(library / "looks.json", {})
     need = [c for c in wanted if c.id not in looks]
     if need:
-        people = [{"id": c.id, "name": c.name, "gender": {"m": "male", "f": "female"}.get(c.gender, "unknown"), "book_says": descriptions(chapters, c)} for c in need]
         try:
+            client = client or default_client()
+            says = (retriever or Retriever(chapters, analyses, ask=asker(client))).looks(need)
+            people = [{"id": c.id, "name": c.name, "gender": {"m": "male", "f": "female"}.get(c.gender, "unknown"), "book_says": says[c.id]} for c in need]
             asked = {c.id for c in need}
-            looks.update({cid: look for cid, look in ask(client or default_client(), people).items() if cid in asked})
+            looks.update({cid: look for cid, look in ask(client, people).items() if cid in asked})
             _save(library / "looks.json", looks)
         except Exception as e:  # no SDK, no credentials, network or API error
             log.warning("AI looks unavailable (%s); keeping generated looks", e)
@@ -249,7 +258,7 @@ def valid_place(p: dict) -> dict | None:
     return {"id": "gen_" + (re.sub(r"[^a-z0-9]+", "_", title.lower()).strip("_") or "place"), "title": title, "preset": preset}
 
 
-def add_places(chapters, analyses, catalog, library: Path, client=None) -> dict[str, dict]:
+def add_places(chapters, analyses, catalog, library: Path, client=None, retriever=None) -> dict[str, dict]:
     """AI-made places for scenes no manifest keyword places. The shared
     library (`library/places.json`) keeps every generated place and which
     scene uses which; the model reuses a library place when one fits.
@@ -259,16 +268,22 @@ def add_places(chapters, analyses, catalog, library: Path, client=None) -> dict[
     from .build import UNPLACED, place_key, segment
 
     store = _load(library / "places.json", {"places": {}, "scenes": {}})
-    need = []
-    for ch, a in zip(chapters, analyses):
+    scenes = []
+    for c, (ch, a) in enumerate(zip(chapters, analyses)):
         for sc in segment(ch.paragraphs, a.lines, catalog):
             key = place_key(sc) if sc.lines else None
-            if sc.location == UNPLACED and key and key not in store["scenes"] and len(need) < MAX_PLACES:
-                need.append({"key": key, "chapter": ch.title, "scene": " ".join(ln.text for ln in sc.lines[:8])[:900]})
-    if need:
-        hints = [{"id": pid, "title": p["title"], "type": p["preset"]["type"]} for pid, p in list(store["places"].items())[:MAX_LIBRARY_HINTS]]
+            if sc.location == UNPLACED and key and key not in store["scenes"] and len(scenes) < MAX_PLACES:
+                scenes.append({"key": key, "chapter": c, "title": ch.title, "paras": sorted({ln.para for ln in sc.lines}),
+                               "start": " ".join(ln.text for ln in sc.lines[:8])[:900]})
+    if scenes:
         try:
-            data = request(client or default_client(), PLACE_SYSTEM, "Library places and scenes", [{"library": hints}, *need], _place_schema())
+            client = client or default_client()
+            retriever = retriever or Retriever(chapters, analyses, ask=asker(client), catalog=catalog)
+            texts = retriever.places(scenes)
+            need = [{"key": s["key"], "chapter": s["title"], "scene": texts[s["key"]] or s["start"]} for s in scenes]
+            ids = retriever.library_hints(store["places"], [n["scene"] for n in need])[:MAX_LIBRARY_HINTS]
+            hints = [{"id": pid, "title": store["places"][pid]["title"], "type": store["places"][pid]["preset"]["type"]} for pid in ids]
+            data = request(client, PLACE_SYSTEM, "Library places and scenes", [{"library": hints}, *need], _place_schema())
             asked = {n["key"] for n in need}
             for p in (data or {"places": []})["places"]:
                 if p.get("key") not in asked:
