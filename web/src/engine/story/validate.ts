@@ -133,6 +133,30 @@ function checkScene(
       if (!states) err(`${path}: unknown prop "${beat.prop}" in ${scene.location}`);
       else if (!states.includes(beat.state)) err(`${path}: prop "${beat.prop}" has no state "${beat.state}"`);
     }
+    if ("perform" in beat) {
+      checkActor(beat.perform, path);
+      const spec = story.actors[beat.perform];
+      const uses = spec?.model?.uses ?? spec?.built?.uses;
+      if (!uses) err(`${path}: "${beat.perform}" has no generated model to perform with`);
+      else if (!uses[beat.use]) err(`${path}: "${beat.perform}" has no clip for "${beat.use}"`);
+      else if (spec.built && !spec.built.clips[uses[beat.use]]) err(`${path}: "${beat.perform}" has no clip named "${uses[beat.use]}"`);
+    }
+    const checkProp = (prop: string) => {
+      if (!story.props?.[prop]) err(`${path}: unknown prop "${prop}"`);
+    };
+    if ("take" in beat) {
+      checkProp(beat.take);
+      checkActor(beat.actor, path);
+    }
+    if ("give" in beat) {
+      checkProp(beat.give);
+      checkActor(beat.from, path);
+      checkActor(beat.to, path);
+    }
+    if ("put" in beat) {
+      checkProp(beat.put);
+      checkTarget(beat.at, path);
+    }
     if ("spawn" in beat) {
       if (!story.actors[beat.spawn]) err(`${path}: unknown actor "${beat.spawn}"`);
       present.add(beat.spawn);

@@ -228,6 +228,7 @@ export class Engine {
   private makeRuntime(story: Story, key = story.id): StoryRuntime {
     this.story = story;
     this.events = [];
+    this.stage.useProps(story.props ?? {});
     const rt = new StoryRuntime(story, this.stage, this.hud, this.opts.actions);
     rt.on((e) => {
       this.events.push(e);

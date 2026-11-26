@@ -8,7 +8,9 @@ import { FxSystem } from "../fx/FxSystem";
 import { Particles } from "../fx/Particles";
 import { CameraRig, type ShotSubject } from "../render/CameraRig";
 import type { FxOptions, Stage } from "../story/ports";
-import type { ActorSpec, AnimClip, CameraShot, FxKind, Target } from "../story/schema";
+import type { ActorSpec, AnimClip, CameraShot, FxKind, PropModel, Target } from "../story/schema";
+import { ClipActor, loadGltf } from "../actors/GltfActor";
+import { buildParts } from "../actors/procedural";
 import type { LocationContext, LocationDef, LocationInstance } from "./Location";
 
 const FOCUS_LIFT = 1.3;
@@ -25,6 +27,9 @@ export class ThreeStage implements Stage {
   private locationId: string | null = null;
   private readonly actors = new Map<string, Actor>();
   private readonly explicitLook = new Set<string>();
+  // Generated props this story can use, and the ones made so far.
+  private propModels: Record<string, PropModel> = {};
+  private readonly props = new Map<string, THREE.Object3D>();
   private readonly ctx: LocationContext;
   private time = 0;
 
@@ -154,6 +159,72 @@ export class ThreeStage implements Stage {
 
   playAnim(id: string, clip: AnimClip, hold: boolean, instant: boolean): Promise<void> {
     return this.need(id).play(clip, hold, instant);
+  }
+
+  perform(id: string, use: string, hold: boolean, instant: boolean): Promise<void> {
+    const a = this.need(id);
+    return a instanceof ClipActor ? a.perform(use, hold, instant) : Promise.resolve();
+  }
+
+  useProps(models: Record<string, PropModel>): void {
+    for (const p of this.props.values()) p.removeFromParent();
+    this.props.clear();
+    this.propModels = models;
+  }
+
+  takeProp(prop: string, actor: string): void {
+    this.need(actor).socket("hand_r").add(this.prop(prop));
+  }
+
+  async giveProp(prop: string, from: string, to: string, instant: boolean): Promise<void> {
+    const p = this.prop(prop);
+    const hand = this.need(to).socket("hand_r");
+    if (!p.parent) this.need(from).socket("hand_r").add(p);
+    if (!instant) {
+      // Lift the prop out of the giver's hand and carry it across in world space.
+      const start = p.getWorldPosition(new THREE.Vector3());
+      this.scene.attach(p);
+      const end = new THREE.Vector3();
+      await this.timeline.tween(600, (u) => {
+        hand.getWorldPosition(end);
+        p.position.lerpVectors(start, end, u * u * (3 - 2 * u));
+      });
+    }
+    hand.attach(p);
+    p.position.set(0, 0, 0);
+  }
+
+  putProp(prop: string, at: Target): void {
+    const p = this.prop(prop);
+    this.scene.attach(p);
+    p.position.copy(this.floorPoint(at));
+    p.rotation.set(0, 0, 0);
+  }
+
+  // A generated prop, scaled so its longest side matches its size; the
+  // model drops in when its file has loaded.
+  private prop(id: string): THREE.Object3D {
+    let p = this.props.get(id);
+    if (p) return p;
+    const model = this.propModels[id];
+    if (!model) throw new Error(`unknown prop ${id}`);
+    p = new THREE.Group();
+    p.name = `prop:${id}`;
+    p.userData.shared = true;
+    this.props.set(id, p);
+    const holder = p;
+    if (model.parts) {
+      p.add(buildParts({ parts: model.parts }));
+      return p;
+    }
+    void loadGltf(model.url!).then((g) => {
+      const body = g.scene.clone(true);
+      const size = new THREE.Box3().setFromObject(body).getSize(new THREE.Vector3());
+      body.scale.setScalar(model.size / Math.max(0.001, size.x, size.y, size.z));
+      body.traverse((o) => (o.castShadow = true));
+      holder.add(body);
+    });
+    return p;
   }
 
   setSpeaking(id: string, speaking: boolean): void {
@@ -292,6 +363,8 @@ export class ThreeStage implements Stage {
 
 function disposeTree(root: THREE.Object3D): void {
   root.traverse((o) => {
+    // Generated models share geometry with a cache; they are not freed here.
+    if (o.userData.shared) return;
     if (o instanceof THREE.Mesh || o instanceof THREE.Points) {
       o.geometry.dispose();
       const mats = Array.isArray(o.material) ? o.material : [o.material];
