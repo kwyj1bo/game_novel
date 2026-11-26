@@ -8,6 +8,29 @@ The manifest has the cast and places of *Harry Potter and the Philosopher's Ston
 
 Two hand-made chapters from that book (the troll, and the trapdoor) are kept as reference demos. Open them with `?demos`.
 
+## AI studio (all-AI pipeline, in progress)
+
+`studio/` turns a novel into a game with models only; the rule pipeline in `pipeline/` is being replaced. Every agent's answer has a JSON schema, a checker whose errors go back to the model until the answer is clean, a cache, and a cost ledger (`studio/llm.py`).
+
+| Step | Module | What the model does |
+| --- | --- | --- |
+| Book index | `index.py` | Summarises each chapter, splits it into scenes (place, time, who is present), merges one cast for the book: a PageIndex-style tree. |
+| Retrieval | `rag.py` | Navigates the tree to the scenes that answer a question, then ranks sentences with hybrid search (BM25 + embeddings, RRF) and returns cited quotes. |
+| Screenplay | `screenplay.py` | Writes each chapter as scenes of beats (narration, dialogue, actions, entrances, exits), objects, and choices with a wrong path. |
+| Bibles | `bible.py` | Designs every character, place and object from quotes of the book, citing them. |
+| Production | `production.py`, `meshy.py` | Picks each character's animation clips from Meshy's library and generates models, rigs, clips and props with Meshy (text-to-3D, auto-rigging, animation). |
+| Director | `director.py` | Lays out each set and stages every beat: positions, walks, looks, clips, props passing from hand to hand, camera. |
+| Assembly | `assemble.py` | Turns all of it into a story the engine plays (`GltfActor` plays rigged GLB models). |
+| Evaluation | `evaluate.py` | Pairwise LLM judge (both orders) against the rule-built chapter; grounding of designs in the book. |
+
+```bash
+python -m studio index library/<book>                      # once per book
+python -m studio build library/<book> --chapter 10         # placeholders, no 3D cost
+python -m studio build library/<book> --chapter 10 --generate   # Meshy models (needs MESHY_API_KEY in .env, a paid plan)
+```
+
+First run on *Harry Potter and the Philosopher's Stone*: the index (17 chapters, 173 scenes, 106 people) took 18 requests, 11 minutes and $3.43; chapter 10 (12 scenes, 216 beats, 22 objects, staged and validated) took 11 requests with 4 self-repairs, 29 minutes and $9.32.
+
 ## Run the game
 
 You need Node.js 20 or later.
