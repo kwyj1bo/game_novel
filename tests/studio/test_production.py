@@ -22,7 +22,7 @@ class StubDesigner:
         return [CharacterDesign(p.id, f"{p.name}, full body", "clothes", 1.7, False, "", [], "") for p in people]
 
     def places(self, places):
-        return [PlaceDesign(p["id"], True, [10, 8], "wood", "stone", "warm", [{"id": "bar", "prompt": "a long oak bar", "count": 1, "where": "back wall", "size_m": 4}], [], "") for p in places]
+        return [PlaceDesign(p["id"], True, [10, 8], "wood", "stone", "#5a4030", "#7a6a5a", "night", [{"id": "bar", "prompt": "a long oak bar", "count": 1, "where": "back wall", "size_m": 4}], [], "") for p in places]
 
     def objects(self, objects):
         return [ObjectDesign(o["id"], o["description"], 0.15, True, []) for o in objects]

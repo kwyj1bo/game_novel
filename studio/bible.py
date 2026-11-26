@@ -8,6 +8,7 @@ was not given, so every detail traces back to the text (or is marked as
 invented where the book says nothing).
 """
 
+import re
 from dataclasses import asdict, dataclass
 
 from .llm import B, N, S, Model, arr, obj
@@ -23,10 +24,10 @@ CHARACTER_SYSTEM = (
 )
 PLACE_SYSTEM = (
     "You are the set designer for a 3D game made from a novel. For each place you get quotes from the book, "
-    "each with an id like q3. Describe the set: indoor or outdoor, its size in metres, the floor, the walls or "
-    "the sky, the light, and the set pieces that make it recognisable (furniture, plants, structures), each "
-    "with a short 3D prompt, a count and where it stands. Follow the quotes and cite them; invent only what "
-    "the place needs and say so."
+    "each with an id like q3. Describe the set: indoor or outdoor, its size in metres, the floor and the walls or "
+    "the sky (in words and as #rrggbb colours), the light (day, dusk or night), and the set pieces that make it "
+    "recognisable (furniture, plants, structures), each with a short 3D prompt, a count, its longest side in "
+    "metres and where it stands. Follow the quotes and cite them; invent only what the place needs and say so."
 )
 OBJECT_SYSTEM = (
     "You are the prop maker for a 3D game made from a novel. For each object you get its description from "
@@ -54,6 +55,8 @@ class PlaceDesign:
     size_m: list[float]
     floor: str
     walls: str
+    floor_color: str
+    wall_color: str
     light: str
     pieces: list[dict]
     cites: list[str]
@@ -95,12 +98,15 @@ class Designer:
         quotes = self.evidence.find(qs)
         items, ids = _with_quotes(places, quotes)
         piece = obj({"id": S, "prompt": S, "count": {"type": "integer"}, "where": S, "size_m": N})
-        schema = obj({"designs": arr(obj({"id": S, "indoor": B, "size_m": arr(N), "floor": S, "walls": S, "light": S, "pieces": arr(piece), "cites": arr(S), "invented": S}))})
+        schema = obj({"designs": arr(obj({"id": S, "indoor": B, "size_m": arr(N), "floor": S, "walls": S, "floor_color": S, "wall_color": S,
+                                         "light": S, "pieces": arr(piece), "cites": arr(S), "invented": S}))})  # fmt: skip
         want = {p["id"] for p in places}
 
         def errors(a):
             out = [f"missing design for {i}" for i in want - {d["id"] for d in a["designs"]}] + _cite_errors(a["designs"], ids)
-            return out + [f"{d['id']}: size_m must be [width, depth] in metres" for d in a["designs"] if len(d["size_m"]) != 2 or min(d["size_m"]) <= 0]
+            out += [f"{d['id']}: size_m must be [width, depth] in metres" for d in a["designs"] if len(d["size_m"]) != 2 or min(d["size_m"]) <= 0]
+            out += [f"{d['id']}: light must be day, dusk or night" for d in a["designs"] if d["light"] not in ("day", "dusk", "night")]
+            return out + [f"{d['id']}: {k} must be #rrggbb" for d in a["designs"] for k in ("floor_color", "wall_color") if not re.fullmatch(r"#[0-9a-fA-F]{6}", d[k])]
 
         a = self.model.ask(PLACE_SYSTEM, "Design the places", items, schema, effort="medium", check=errors)
         return [PlaceDesign(**d) for d in a["designs"] if d["id"] in want]
