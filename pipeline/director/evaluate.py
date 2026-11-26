@@ -74,12 +74,17 @@ def evaluate_beats(book, catalog, client) -> dict:
 
 def staging_counts(story: dict) -> dict:
     scenes = [s for k, s in story["scenes"].items() if not k.endswith("_wrong")]
-    placed = [m for s in scenes for m in s["cast"].values()]
+    placed = [m for s in scenes for c, m in s["cast"].items() if not c.startswith("extra_")]
     lines = [b for s in scenes for b in s["beats"] if "narrate" in b or "say" in b]
     acts = sum(1 for s in scenes for b in s["beats"] if "act" in b)
     return {
         "people_placed": len(placed),
+        "crowd_extras": sum(c.startswith("extra_") for s in scenes for c in s["cast"]),
+        "scenes_with_crowd": sum(any(c.startswith("extra_") for c in s["cast"]) for s in scenes),
+        "scenes": len(scenes),
         "on_named_spots": sum(not m.startswith("auto_") for m in placed),
+        "gestures": sum(1 for s in scenes for b in s["beats"] if "say" in b and "anim" in b),
+        "reactions": sum(1 for s in scenes for b in s["beats"] if "anim" in b and "clip" in b),
         "entrances": sum(1 for s in scenes for b in s["beats"] if "spawn" in b),
         "lines": len(lines),
         "actions": acts,
