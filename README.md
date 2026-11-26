@@ -18,18 +18,17 @@ Two hand-made chapters from that book (the troll, and the trapdoor) are kept as 
 | Retrieval | `rag.py` | Navigates the tree to the scenes that answer a question, then ranks sentences with hybrid search (BM25 + embeddings, RRF) and returns cited quotes. |
 | Screenplay | `screenplay.py` | Writes each chapter as scenes of beats (narration, dialogue, actions, entrances, exits), objects, and choices with a wrong path. |
 | Bibles | `bible.py` | Designs every character, place and object from quotes of the book, citing them. |
-| Production | `production.py`, `meshy.py` | Picks each character's animation clips from Meshy's library and generates models, rigs, clips and props with Meshy (text-to-3D, auto-rigging, animation). |
+| Production | `production.py`, `modeler.py` | Builds every character from shapes on a humanoid skeleton, every object and set piece from shapes at real size, and writes the animations as keyframes of joint controls (shared idle, walk, talk, and one clip per scripted action). Free: the same Claude sign-in. |
 | Director | `director.py` | Lays out each set and stages every beat: positions, walks, looks, clips, props passing from hand to hand, camera. |
-| Assembly | `assemble.py` | Turns all of it into a story the engine plays (`GltfActor` plays rigged GLB models). |
+| Assembly | `assemble.py` | Turns all of it into a story the engine plays (`BuiltActor` plays the built skeleton and clips with an animation mixer). |
 | Evaluation | `evaluate.py` | Pairwise LLM judge (both orders) against the rule-built chapter; grounding of designs in the book. |
 
 ```bash
 python -m studio index library/<book>                      # once per book
-python -m studio build library/<book> --chapter 10         # placeholders, no 3D cost
-python -m studio build library/<book> --chapter 10 --generate   # Meshy models (needs MESHY_API_KEY in .env, a paid plan)
+python -m studio build library/<book> --chapter 10         # screenplay, designs, models, clips, staging, story
 ```
 
-First run on *Harry Potter and the Philosopher's Stone*: the index (17 chapters, 173 scenes, 106 people) took 18 requests, 11 minutes and $3.43; chapter 10 (12 scenes, 216 beats, 22 objects, staged and validated) took 11 requests with 4 self-repairs, 29 minutes and $9.32.
+First run on *Harry Potter and the Philosopher's Stone*: the index (17 chapters, 173 scenes, 106 people) took 18 requests, 11 minutes and $3.43; chapter 10 with every character, object and set piece built by the model (19 characters of 30 to 35 parts each, 22 objects, 269 set pieces, staged and validated) took 45 requests (10 from the cache) with 17 self-repairs, 94 minutes and $21.58 of usage.
 
 ## Run the game
 
