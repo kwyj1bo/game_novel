@@ -1,3 +1,4 @@
+import { generatedLocation } from "./generated";
 import { ManifestSchema, type Manifest } from "../engine/assets/manifest";
 import type { ActionRegistry } from "../engine/story/actions";
 import type { Story } from "../engine/story/schema";
@@ -47,5 +48,10 @@ export const LOCATION_INFO: LocationRegistryInfo = Object.fromEntries(Object.val
 
 // A story's own places, built from their presets.
 export function storyLocations(story: Story): Record<string, LocationDef> {
-  return Object.fromEntries(Object.entries(story.sceneries ?? {}).map(([id, s]) => [id, presetLocation({ id, title: s.title, keywords: [s.title], preset: s.preset })]));
+  return Object.fromEntries(
+    Object.entries(story.sceneries ?? {}).map(([id, s]) => [
+      id,
+      s.set ? generatedLocation(id, s.title, s.set) : presetLocation({ id, title: s.title, keywords: [s.title], preset: s.preset! }),
+    ]),
+  );
 }

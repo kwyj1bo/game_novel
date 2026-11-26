@@ -21,6 +21,12 @@ export interface Stage {
   moveActor(id: string, to: Target, run: boolean, instant: boolean): Promise<void>;
   lookAt(id: string, at: Target, instant: boolean): void;
   playAnim(id: string, clip: AnimClip, hold: boolean, instant: boolean): Promise<void>;
+  // A generated actor's clip for a use ("talk", "hands over the coins").
+  perform(id: string, use: string, hold: boolean, instant: boolean): Promise<void>;
+  // Generated props: in a hand, from hand to hand, or put down at a target.
+  takeProp(prop: string, actor: string): void;
+  giveProp(prop: string, from: string, to: string, instant: boolean): Promise<void>;
+  putProp(prop: string, at: Target): void;
   setSpeaking(id: string, speaking: boolean): void;
   camera(shot: CameraShot, on: Target | undefined, withTarget: Target | undefined, ms: number): Promise<void>;
   fx(kind: FxKind, opts: FxOptions): Promise<void>;

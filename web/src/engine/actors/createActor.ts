@@ -1,11 +1,13 @@
 import type { ActorSpec } from "../story/schema";
 import type { Actor } from "./Actor";
 import { Dog3 } from "./Dog3";
+import { GltfActor } from "./GltfActor";
 import { Beast } from "./Beast";
 import { Human } from "./Human";
 import { Troll } from "./Troll";
 
 export function createActor(id: string, spec: ActorSpec): Actor {
+  if (spec.model) return new GltfActor(id, spec);
   switch (spec.kind) {
     case "dog3":
       return new Dog3(id, spec);

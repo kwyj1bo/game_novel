@@ -102,6 +102,12 @@ const MusicBeat = z.object({ music: z.string() });
 const PropBeat = z.object({ prop: z.string(), state: z.string() });
 const SpawnBeat = z.object({ spawn: z.string(), at: Target });
 const DespawnBeat = z.object({ despawn: z.string() });
+// Plays a generated actor's clip for a use ("talk", "hands over the coins").
+const PerformBeat = z.object({ perform: z.string(), use: z.string(), hold: z.boolean().optional(), async: z.boolean().optional() });
+// Props: appears in an actor's hand, passes from one hand to another, is put down at a spot.
+const TakeBeat = z.object({ take: z.string(), actor: z.string() });
+const GiveBeat = z.object({ give: z.string(), from: z.string(), to: z.string() });
+const PutBeat = z.object({ put: z.string(), at: Target });
 // Performs an action asset from the manifest with its parameters.
 const ActBeat = z.object({ act: z.string(), actor: z.string(), target: z.string().optional(), object: z.string().optional() });
 
@@ -120,6 +126,10 @@ export type Beat =
   | z.infer<typeof SpawnBeat>
   | z.infer<typeof DespawnBeat>
   | z.infer<typeof ActBeat>
+  | z.infer<typeof PerformBeat>
+  | z.infer<typeof TakeBeat>
+  | z.infer<typeof GiveBeat>
+  | z.infer<typeof PutBeat>
   | { together: Beat[] };
 
 export const BeatSchema: z.ZodType<Beat> = z.lazy(() =>
@@ -138,6 +148,10 @@ export const BeatSchema: z.ZodType<Beat> = z.lazy(() =>
     SpawnBeat.strict(),
     DespawnBeat.strict(),
     ActBeat.strict(),
+    PerformBeat.strict(),
+    TakeBeat.strict(),
+    GiveBeat.strict(),
+    PutBeat.strict(),
     z.object({ together: z.array(BeatSchema).min(1) }).strict(),
   ]),
 );
@@ -183,6 +197,37 @@ export const SceneSchema = z
     message: "scene must end with exactly one of: choice, goto, ending",
   });
 
+// A rigged GLB and the GLB files holding its animation clips; `uses` maps what
+// the story asks for ("idle", "walk", "talk", "hands over the coins") to a clip name.
+export const GeneratedModelSchema = z
+  .object({
+    url: z.string(),
+    clips: z.array(z.string()).default([]),
+    uses: z.record(z.string(), z.string()).default({}),
+    height: z.number().positive(),
+  })
+  .strict();
+export type GeneratedModel = z.infer<typeof GeneratedModelSchema>;
+
+// A generated object: scaled so its longest side is `size` metres.
+export const PropModelSchema = z.object({ url: z.string(), size: z.number().positive(), held: z.boolean().default(false) }).strict();
+export type PropModel = z.infer<typeof PropModelSchema>;
+
+// A set built from generated pieces: a floor, walls or sky, light, and models placed at [x, z].
+export const SetSchema = z
+  .object({
+    indoor: z.boolean(),
+    size: z.tuple([z.number().positive(), z.number().positive()]),
+    floor: z.string().regex(/^#[0-9a-fA-F]{6}$/),
+    wall: z.string().regex(/^#[0-9a-fA-F]{6}$/),
+    light: z.enum(["day", "dusk", "night"]),
+    pieces: z
+      .array(z.object({ url: z.string(), at: z.tuple([z.number(), z.number()]), yaw: z.number().default(0), size: z.number().positive() }).strict())
+      .default([]),
+  })
+  .strict();
+export type GeneratedSet = z.infer<typeof SetSchema>;
+
 export const ActorSpecSchema = z
   .object({
     name: z.string(),
@@ -206,6 +251,8 @@ export const ActorSpecSchema = z
     // Picks a matching spoken voice; without it the pitch decides.
     gender: z.enum(["m", "f"]).optional(),
     subtitleColor: z.string().default("#ffffff"),
+    // A generated, rigged model: drawn instead of the procedural figure.
+    model: GeneratedModelSchema.optional(),
   })
   .strict();
 
@@ -219,8 +266,18 @@ export const StorySchema = z
     start: z.string(),
     actors: z.record(z.string(), ActorSpecSchema),
     scenes: z.record(z.string(), SceneSchema),
-    // Places this story brings with it (made for its book), built from a preset.
-    sceneries: z.record(z.string(), z.object({ title: z.string(), preset: PresetSchema }).strict()).optional(),
+    // Places this story brings with it (made for its book): a preset, or a generated set.
+    sceneries: z
+      .record(
+        z.string(),
+        z
+          .object({ title: z.string(), preset: PresetSchema.optional(), set: SetSchema.optional() })
+          .strict()
+          .refine((s) => !!s.preset !== !!s.set, { message: "a scenery has a preset or a set" }),
+      )
+      .optional(),
+    // Generated objects that can be held, handed over or put down.
+    props: z.record(z.string(), PropModelSchema).optional(),
   })
   .strict();
 
@@ -255,5 +312,9 @@ const BEAT_KEYS = new Set([
   "spawn",
   "despawn",
   "act",
+  "perform",
+  "take",
+  "give",
+  "put",
   "together",
 ]);

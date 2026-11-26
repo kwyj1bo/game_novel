@@ -126,6 +126,14 @@ export class Director {
       return;
     }
     if ("despawn" in beat) return s.removeActor(beat.despawn);
+    if ("perform" in beat) {
+      const p = s.perform(beat.perform, beat.use, !!beat.hold, instant);
+      if (!beat.async || instant) await p;
+      return;
+    }
+    if ("take" in beat) return s.takeProp(beat.take, beat.actor);
+    if ("give" in beat) return s.giveProp(beat.give, beat.from, beat.to, instant);
+    if ("put" in beat) return s.putProp(beat.put, beat.at);
   }
 }
 

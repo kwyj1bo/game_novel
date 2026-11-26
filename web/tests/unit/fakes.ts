@@ -49,6 +49,18 @@ export class FakeStage implements Stage {
     this.props.set(prop, state);
     this.log.push(`prop:${prop}=${state}`);
   }
+  async perform(id: string, use: string) {
+    this.log.push(`perform:${id}:${use}`);
+  }
+  takeProp(prop: string, actor: string) {
+    this.log.push(`take:${actor}:${prop}`);
+  }
+  async giveProp(prop: string, from: string, to: string) {
+    this.log.push(`give:${prop}:${from}->${to}`);
+  }
+  putProp(prop: string, at: unknown) {
+    this.log.push(`put:${prop}@${String(at)}`);
+  }
   sfx() {}
   music() {}
   resetLook() {}
