@@ -53,7 +53,7 @@ class Evaluation:
 
     def looks(self, modes: list[str]) -> dict:
         cast = self._cast()
-        truth = {c.id: self.catalog["characters"][c.id]["spec"] for c in cast}
+        truth = {c.id: self.catalog["characters"][self.real_id[c.id]]["spec"] for c in cast}
         out = {"characters": len(cast), "modes": {}}
         for how in modes:
             scores, raw = [], []
@@ -68,11 +68,15 @@ class Evaluation:
         return out
 
     def _cast(self):
+        """The book's cast under opaque ids (p1, p2...): a real id such as
+        "dumbledore" next to an invented name would give the answer away."""
         cast = []
+        self.real_id: dict[str, str] = {}
         for cid, c in self.catalog["characters"].items():
             if c["spec"].get("kind", "human") != "human" or cid in GENERIC:
                 continue
-            ch = self.fake_names.character(cid, c["names"])
+            ch = self.fake_names.character(f"p{len(self.real_id) + 1}", c["names"])
+            self.real_id[ch.id] = cid
             from .retrievers import name_pattern
 
             pattern = name_pattern(ch)
