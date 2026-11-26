@@ -63,13 +63,15 @@ class Director:
         for i, (sc, _) in enumerate(parts):
             if not sc.lines:
                 continue
-            people = list(dict.fromkeys([*(prev_people if sc.location == prev_loc else []), *asm.present(sc.lines)]))
+            span = _span(sc)
+            around = [ln for ln in asm.a.lines if ln.para in span]
+            people = list(dict.fromkeys([*(prev_people if sc.location == prev_loc else []), *asm.present(around)]))
             if asm.hero and asm.hero not in people:
                 people.insert(0, asm.hero)
             spots = _staging.spots_of(sc.location, asm.cat, asm.places)
             title = (asm.cat["locations"].get(sc.location) or asm.places.get(sc.location) or {}).get("title", "a room")
             items.append({
-                "part": i, "place": title, "spots": [_staging.describe(s) for s in spots],
+                "part": i, "place": title, "context": _context(asm.paragraphs, span), "spots": [_staging.describe(s) for s in spots],
                 "people": [{"id": c, "name": asm.name(c), "kind": asm.chars[c].kind} for c in people],
                 "lines": [{"line": j, "speaker": ln.speaker if ln.kind == "say" and ln.speaker in people else "narrator", "text": ln.text[:300]} for j, ln in enumerate(sc.lines)],
             })
@@ -96,6 +98,29 @@ class Director:
             self.cache_path.write_text(json.dumps(self.cache, indent=1, ensure_ascii=False))
 
 
+CONTEXT_CHARS = 4000
+PARAGRAPH_CHARS = 500
+
+
+def _span(sc) -> list[int]:
+    """The book paragraphs a scene part covers, plus the two before it."""
+    paras = sorted({ln.para for ln in sc.lines})
+    return list(range(max(0, paras[0] - 2), paras[-1] + 1))
+
+
+def _context(paragraphs: list[str], span: list[int]) -> str:
+    """The book's own text around a part: each paragraph cut to 500
+    characters, 4000 in all, so the model sees who is really there."""
+    out = ""
+    for p in span:
+        text = " ".join(paragraphs[p].split())
+        text = text if len(text) <= PARAGRAPH_CHARS else text[:PARAGRAPH_CHARS].rsplit(" ", 1)[0] + "…"
+        if len(out) + len(text) > CONTEXT_CHARS:
+            break
+        out = f"{out}\n{text}".strip()
+    return out
+
+
 def default_director(library: Path) -> Director | None:
     """A director using the asset model, or None when AI is off."""
     if os.environ.get("NOVEL_ASSET_AI", "1") == "0" or os.environ.get("NOVEL_DIRECTOR", "1") == "0":
@@ -103,7 +128,8 @@ def default_director(library: Path) -> Director | None:
     from ..assetgen import asker, default_client
 
     try:
-        return Director(asker(default_client()), library / "director.json", beats=os.environ.get("NOVEL_DIRECTOR_BEATS") == "1")
+        effort = os.environ.get("NOVEL_DIRECTOR_EFFORT", "high")
+        return Director(asker(default_client(), effort), library / "director.json", beats=os.environ.get("NOVEL_DIRECTOR_BEATS") == "1")
     except Exception as e:  # SDK missing
         log.warning("story director unavailable (%s)", e)
         return None

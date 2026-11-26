@@ -22,9 +22,15 @@ SYSTEM = (
     "You are the director of a 3D game made from a novel. Stage each scene part like a play, so that a player "
     "who watches without reading would still follow it. For each part you get the place, its spots, the people "
     "who may be there and the numbered lines the player will see.\n"
-    "Decide who is physically present at the start and on which spot, who walks in (at which line, to which "
-    "spot) and who leaves. Leave out people who are only mentioned or remembered. Put people who talk to each "
-    "other on nearby spots, people at a fire, table or bed by that prop, and monsters on the threat spot.\n"
+    "Each part also has `context`: the book's full text around it. Use it to know who is physically there at "
+    "this moment. Someone talked about, thought about, remembered or seen elsewhere is NOT present: if Harry "
+    "and Ron discuss Malfoy, Malfoy stays away. Decide who is present at the start and on which spot, who walks "
+    "in (at which line, to which spot) and who leaves. Put people who talk to each other on nearby spots, "
+    "people at a fire, table or bed by that prop, and monsters on the threat spot.\n"
+    "Give each part a background crowd when the book implies other people around: students at a feast, in a "
+    "lesson or a corridor between classes; shoppers in a street or shop; travellers at a station. Count 0 to "
+    "10, kind student, adult or mixed. Private moments (a cupboard, a secret corridor at night, two people "
+    "alone) have no crowd. Keep the same crowd for parts in the same place unless people arrive or leave.\n"
     "Then act every line: what the text says happens must be seen. A speaker faces the person they talk to and "
     "gestures when the line calls for it (points at what they mention, nods to agree, shakes their head to "
     "refuse, waves to greet, laughs at a joke, cowers when afraid), and their line gets a mood. Listeners react "
@@ -40,6 +46,8 @@ AUTO_SPOTS = {
     "auto_entry": "the way in (people arrive and leave here)",
 }  # fmt: skip
 GROUP_SPOTS = ["auto_1", "auto_2", "auto_3", "auto_4", "auto_5"]
+CROWD_SPOTS = [f"crowd_{i}" for i in range(1, 11)]  # for extras only; the model never places named people there
+CROWD_KINDS = ("student", "adult", "mixed")
 HUMAN_CLIPS = ["nod", "shake", "point", "wave", "laugh", "cower", "reach", "celebrate", "kneel", "jump", "stagger", "lean", "sit", "struggle", "push", "fall"]
 BEAST_CLIPS = ["roar", "lunge", "fall", "nod", "shake", "cower", "jump", "sleep"]  # what Beast.ts animates
 MOODS = ["calm", "urgent", "scared", "angry", "whisper"]
@@ -53,6 +61,7 @@ class Plan:
     exits: dict[str, int] = field(default_factory=dict)  # actor -> line they leave after
     lines: dict[int, list[dict]] = field(default_factory=dict)  # line -> beats before its text
     say: dict[int, dict] = field(default_factory=dict)  # line -> extra fields for the say beat
+    crowd: tuple[int, str] = (0, "student")  # background extras: how many, which kind
     after: dict[int, list[dict]] = field(default_factory=dict)  # line -> beats after its text
     dropped: int = 0  # suggestions that failed the checks
     why: list[str] = field(default_factory=list)  # what each dropped suggestion was
@@ -71,8 +80,9 @@ class Plan:
 
 
 def spots_of(location: str, catalog, places: dict) -> list[str]:
+    """Spots a named person can stand on (crowd spots are for extras)."""
     if location in catalog["locations"]:
-        return list(catalog["locations"][location]["marks"])
+        return [m for m in catalog["locations"][location]["marks"] if m not in CROWD_SPOTS]
     preset = (places.get(location) or {}).get("preset", {})
     return [*AUTO_SPOTS, *dict.fromkeys(f"at_{p['kind']}" for p in preset.get("props", []))]
 
@@ -107,7 +117,8 @@ def schema() -> dict:
         "react": arr(obj({"who": s, "clip": s})),
         "exit": arr(s),
     })  # fmt: skip
-    part = obj({"part": i, "start": arr(obj({"who": s, "spot": s})), "enter": arr(obj({"who": s, "line": i, "spot": s})), "lines": arr(line)})
+    part = obj({"part": i, "crowd": obj({"count": i, "kind": s}), "start": arr(obj({"who": s, "spot": s})),
+                "enter": arr(obj({"who": s, "line": i, "spot": s})), "lines": arr(line)})
     return obj({"parts": arr(part)})
 
 
@@ -123,6 +134,9 @@ class Checker:
 
     def plan(self, part: dict) -> Plan:
         p = Plan()
+        crowd = part.get("crowd") or {}
+        if isinstance(crowd.get("count"), int) and crowd["count"] > 0:
+            p.crowd = (min(len(CROWD_SPOTS), crowd["count"]), crowd.get("kind") if crowd.get("kind") in CROWD_KINDS else "mixed")
         taken: set[str] = set()
         for s in part.get("start", []):
             spot = self._spot(s["who"], s["spot"], taken, p)

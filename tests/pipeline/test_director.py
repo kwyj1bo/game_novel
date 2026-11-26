@@ -152,3 +152,28 @@ def test_two_people_never_walk_to_the_same_spot():
         {"line": 0, "shot": {}, "look": [], "do": [], "gesture": "", "mood": "", "react": [], "exit": [],
          "move": [{"who": "harry", "to": "at_table", "run": False}, {"who": "ron", "to": "at_table", "run": False}, {"who": "harry", "to": "at_table", "run": False}]}]})  # fmt: skip
     assert plan.lines[0] == [{"move": "harry", "to": "at_table"}, {"move": "ron", "to": "harry"}]
+
+
+class CrowdModel:
+    """Asks for a mixed crowd of three in the first part, and keeps the request."""
+
+    def __init__(self):
+        self.items = None
+
+    def __call__(self, system, label, items, schema):
+        if "beats" in schema["properties"]:
+            return None
+        self.items = items
+        return {"parts": [{"part": 0, "crowd": {"count": 3, "kind": "mixed"}, "start": [{"who": "harry", "spot": "start_harry"}], "enter": [], "lines": []}]}
+
+
+def test_a_crowd_fills_the_background_and_the_model_sees_the_book(halloween):
+    catalog, ch = halloween
+    model = CrowdModel()
+    story = build_chapter(ch, catalog, "Fixture", director=Director(model, beats=False))[0]
+    cast = story["scenes"]["scene_1"]["cast"]
+    assert cast["extra_student_1"] == "crowd_1" and cast["extra_adult_2"] == "crowd_2" and cast["extra_student_3"] == "crowd_3"
+    assert story["actors"]["extra_student_1"]["outfit"] == "student"
+    assert not any(b.get("say", "").startswith("extra_") for s in story["scenes"].values() for b in s["beats"])
+    part = model.items[1]
+    assert "Torches flickered" in part["context"] and not any(s.startswith("crowd_") for s in part["spots"])

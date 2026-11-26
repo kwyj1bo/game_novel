@@ -319,6 +319,23 @@ def actor_spec(c: Character, catalog) -> dict:
     }
 
 
+def extra_spec(xid: str, kind: str) -> dict:
+    """A plain background look: students in school robes, adults in colours."""
+    h = _h(xid)
+    student = kind == "student"
+    return {
+        "name": "Student" if student else "Passer-by",
+        "height": round((1.35 if student else 1.62) + (h % 18) / 100, 2),
+        "robe": "#18181f" if student else ROBES[h % len(ROBES)],
+        "skin": SKINS[(h >> 3) % len(SKINS)],
+        "hair": HAIRS[(h >> 6) % len(HAIRS)],
+        "hairStyle": ["short", "messy", "long", "bun", "bushy"][(h >> 9) % 5],
+        "outfit": "student" if student else "adult",
+        "voice": 1.0,
+        "subtitleColor": "#cccccc",
+    }
+
+
 class _Assembler:
     def __init__(self, a: Analysis, catalog, chapter_title: str, source: str):
         self.a = a
@@ -332,6 +349,19 @@ class _Assembler:
         self.places: dict[str, dict] = {}  # AI-made places this story uses
         self.actions = {x["id"]: x for x in catalog["actions"]}
         self.director = None  # stages scenes when set
+        self.paragraphs: list[str] = []  # the chapter's text, for the director's context
+        self.extras: dict[str, dict] = {}  # background crowd: actor id -> spec
+
+    def crowd(self, count: int, kind: str) -> dict[str, str]:
+        """Background extras on the crowd spots. A mixed crowd alternates
+        students and adults; the same extra keeps one look all chapter."""
+        out = {}
+        for k in range(count):
+            who = kind if kind != "mixed" else ("student" if k % 2 == 0 else "adult")
+            xid = f"extra_{who}_{k + 1}"
+            self.extras.setdefault(xid, extra_spec(xid, who))
+            out[xid] = f"crowd_{k + 1}"
+        return out
 
     def planned_cast(self, plan) -> tuple[dict, dict, set, dict]:
         """Cast, slots and entrances from a staging plan. The hero is always
@@ -560,8 +590,10 @@ class _Assembler:
             plan = plans.get(pi)
             if plan:
                 cast, slots, entering, first_seen = self.planned_cast(plan)
+            if plan and plan.crowd[0]:
+                cast = {**cast, **self.crowd(*plan.crowd)}
             used.update(slots)
-            stage = set(cast)
+            stage = {c for c in cast if c in self.chars}  # extras never act
             first: list = []
             if new_loc:
                 danger = sum(ln.danger for ln in sc.lines) / max(1, len(sc.lines))
@@ -619,10 +651,11 @@ class _Assembler:
                 }
             story_scenes[sid] = scene
 
-        actors = {c: actor_spec(self.chars[c], self.cat) for c in used}
+        actors = {c: actor_spec(self.chars[c], self.cat) for c in used if c in self.chars}
         for c, spec in actors.items():
             if self.chars[c].gender in ("m", "f"):
                 spec["gender"] = self.chars[c].gender  # picks a matching spoken voice
+        actors.update(self.extras)
         return {
             "$schema": "../../../story.schema.json",
             "id": _slug(f"{self.source}-{self.title}"),
@@ -709,5 +742,6 @@ def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str,
     assembler = _Assembler(a, catalog, chapter_title, source)
     assembler.places = used_places
     assembler.director = director
+    assembler.paragraphs = paragraphs
     story = assembler.build(condensed, moments)
     return story, condensed, moments, chain
