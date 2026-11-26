@@ -567,6 +567,8 @@ class _Assembler:
                     arrivals = [e.actor for e in ln.events if e.actor in pending_entries]
                     arrivals += [c for c, at in first_seen.items() if at == li and c in pending_entries and c not in arrivals]
                 for actor in dict.fromkeys(arrivals):
+                    if actor not in slots:
+                        continue  # past the five spots: stays off stage
                     if self.chars[actor].kind != "human":
                         # Creatures loom out of the far side of the room.
                         lines_out += [{"spawn": actor, "at": slots[actor]}, {"sfx": "growl"}]
