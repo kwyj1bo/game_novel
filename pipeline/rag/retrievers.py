@@ -13,12 +13,14 @@ Three modes, chosen with NOVEL_RETRIEVAL:
 Every mode returns the same budget of text, so they compare fairly.
 """
 
+import logging
 import os
 import re
 
 from .search import SearchIndex
 from .tree import BookTree
 
+log = logging.getLogger(__name__)
 MODES = ("keyword", "hybrid", "tree")
 MAX_DESCRIPTIONS = 6
 PLACE_CHARS = 900
@@ -28,9 +30,15 @@ LOOK_QUESTION = "Where does the book describe what {name} looks like (face, hair
 PLACE_QUESTION = "Where does the book describe the place of this scene (its walls, light, furniture)? The scene starts: \"{start}\""
 
 
-def mode() -> str:
-    m = os.environ.get("NOVEL_RETRIEVAL", "hybrid")
-    return m if m in MODES else "hybrid"
+# Best per task in docs/evaluation.md: the tree for looks (a character is
+# described where they are introduced), hybrid search for places (the scene
+# itself describes its place, and the tree tends to wander to other scenes).
+DEFAULTS = {"looks": "tree", "places": "hybrid"}
+
+
+def mode(task: str = "looks") -> str:
+    m = os.environ.get("NOVEL_RETRIEVAL", DEFAULTS[task])
+    return m if m in MODES else DEFAULTS[task]
 
 
 class Retriever:
@@ -65,7 +73,7 @@ class Retriever:
         near = {c.id: self._near(c) for c in people}
         if self.how == "tree" and self.ask:
             qs = [{"id": c.id, "question": LOOK_QUESTION.format(name=c.name)} for c in people]
-            for cid, leaves in self.tree.navigate(self.ask, qs).items():
+            for cid, leaves in self._navigate(qs).items():
                 if leaves:
                     near[cid] = self.index.in_paragraphs((n.chapter, p) for n in leaves for p in n.paras)
         return {c.id: self._top(LOOK_QUERY.format(name=c.name), near[c.id], MAX_DESCRIPTIONS) for c in people}
@@ -94,7 +102,7 @@ class Retriever:
         within = {s["key"]: self.index.in_paragraphs((s["chapter"], p) for p in s["paras"]) for s in scenes}
         if self.how == "tree" and self.ask:
             qs = [{"id": s["key"], "question": PLACE_QUESTION.format(start=s["start"][:160])} for s in scenes]
-            for key, leaves in self.tree.navigate(self.ask, qs).items():
+            for key, leaves in self._navigate(qs).items():
                 if leaves:
                     within[key] = self.index.in_paragraphs((n.chapter, p) for n in leaves for p in n.paras)
         return {s["key"]: self._budget(self._top(PLACE_QUERY, within[s["key"]], 12), PLACE_CHARS) for s in scenes}
@@ -110,6 +118,14 @@ class Retriever:
         return [ids[i] for i in dict.fromkeys(i for t in texts for i in index.search(t, k))]
 
     # ---- helpers ----------------------------------------------------------
+
+    def _navigate(self, questions: list[dict]) -> dict:
+        """Tree navigation; on any failure the hybrid candidates stay."""
+        try:
+            return self.tree.navigate(self.ask, questions)
+        except Exception as e:  # model error or an answer in the wrong shape
+            log.warning("tree navigation failed (%s); using hybrid search", e)
+            return {}
 
     def _top(self, query: str, within: list[int], k: int) -> list[str]:
         best = self.index.search(query, k, within)

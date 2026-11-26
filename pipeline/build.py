@@ -331,6 +331,21 @@ class _Assembler:
         self._last_narration = ""
         self.places: dict[str, dict] = {}  # AI-made places this story uses
         self.actions = {x["id"]: x for x in catalog["actions"]}
+        self.director = None  # stages scenes when set
+
+    def planned_cast(self, plan) -> tuple[dict, dict, set, dict]:
+        """Cast, slots and entrances from a staging plan. The hero is always
+        in the room (the player's point of view)."""
+        from .director.staging import GROUP_SPOTS
+
+        start = dict(plan.start)
+        entries = {c: spot for c, (_, spot) in plan.enter.items()}
+        if self.hero and self.hero not in start and self.hero not in entries:
+            used = set(start.values()) | set(entries.values())
+            start[self.hero] = next((s for s in GROUP_SPOTS if s not in used), "auto_1")
+        # Creatures loom in at their line; people walk in from the entry.
+        first_seen = {c: line for c, (line, _) in plan.enter.items() if self.chars[c].kind != "human"}
+        return start, {**start, **entries}, set(plan.enter), first_seen
 
     def name(self, cid: str | None) -> str:
         return self.chars[cid].name if cid in self.chars else "someone"
@@ -378,7 +393,9 @@ class _Assembler:
         cast = {c: m for c, m in slots.items() if c not in entering}
         return cast, slots
 
-    def beats(self, lines: list[Line], slots: dict, on_stage: set[str], first_beats: list) -> list:
+    def beats(self, lines: list[Line], slots: dict, on_stage: set[str], first_beats: list, planned: list | None = None) -> list:
+        """Beats for these lines. `planned` (from the director's staging plan)
+        replaces the actions the rules read from the verbs."""
         out = list(first_beats)
         last_cam = None
         last_speaker = self._last_speaker
@@ -386,7 +403,10 @@ class _Assembler:
         for ln in lines:
             actions: list = []
             for e in self.story_events(ln):
-                actions.extend(self.event_beats(e, slots, on_stage))
+                if planned is None or e.kind in ("sound", "spell"):
+                    actions.extend(self.event_beats(e, slots, on_stage))
+            if planned is not None:
+                actions.extend(planned)
             if ln.kind == "say" and ln.speaker in on_stage:
                 if ln.speaker != last_cam:
                     # Turn to whoever they're talking to first, so the close-up sees their face.
@@ -407,6 +427,8 @@ class _Assembler:
                 out.append({"narrate": f"“{ln.text}”"})
                 continue
             focus = next((e.actor for e in ln.events if e.actor in on_stage and e.kind == "action"), None)
+            if planned is not None:
+                focus = next((b.get("actor") or b.get("move") for b in planned), None)
             if focus and focus != last_cam:
                 out.append({"camera": "medium", "on": focus, "ms": 700})
                 last_cam = focus
@@ -415,7 +437,8 @@ class _Assembler:
                 out.append({"camera": "wide", "ms": 900})
                 last_cam = None
             out.extend(actions)
-            text = self.narration(ln, on_stage)
+            # With a staging plan the action plays and the book's own sentence is read.
+            text = _trim(ln.text, 170) if planned is not None else self.narration(ln, on_stage)
             if text and text[:1].islower():
                 text = ""  # a dialogue tag cut loose ("faltered Professor McGonagall.")
             if text and text != self._last_narration and (narrations < MAX_NARRATION_PER_SCENE or ln.events):
@@ -497,6 +520,7 @@ class _Assembler:
         on_stage: set[str] = set()
         prev_loc = None
         ids = [f"scene_{i + 1}" for i in range(len(parts))]
+        plans = self.director.stage(self, parts) if self.director else {}
         for pi, (sc, moment) in enumerate(parts):
             sid = ids[pi]
             new_loc = sc.location != prev_loc
@@ -523,6 +547,9 @@ class _Assembler:
                             entering.add(e.actor)
             all_ids = list(dict.fromkeys([*on_stage, *present]))
             cast, slots = self.cast(all_ids, entering - on_stage)
+            plan = plans.get(pi)
+            if plan:
+                cast, slots, entering, first_seen = self.planned_cast(plan)
             used.update(slots)
             stage = set(cast)
             first: list = []
@@ -534,9 +561,14 @@ class _Assembler:
             pending_entries = set(entering - on_stage)
             lines_out: list = []
             for li, ln in enumerate(sc.lines):
-                arrivals = [e.actor for e in ln.events if e.actor in pending_entries]
-                arrivals += [c for c, at in first_seen.items() if at == li and c in pending_entries and c not in arrivals]
+                if plan:
+                    arrivals = [c for c, (at, _) in plan.enter.items() if at == li and c in pending_entries]
+                else:
+                    arrivals = [e.actor for e in ln.events if e.actor in pending_entries]
+                    arrivals += [c for c, at in first_seen.items() if at == li and c in pending_entries and c not in arrivals]
                 for actor in dict.fromkeys(arrivals):
+                    if actor not in slots:
+                        continue  # past the five spots: stays off stage
                     if self.chars[actor].kind != "human":
                         # Creatures loom out of the far side of the room.
                         lines_out += [{"spawn": actor, "at": slots[actor]}, {"sfx": "growl"}]
@@ -544,7 +576,7 @@ class _Assembler:
                         lines_out += [{"spawn": actor, "at": "auto_entry"}, {"move": actor, "to": slots[actor], "async": True}]
                     pending_entries.discard(actor)
                     stage.add(actor)
-                lines_out += self.beats([ln], slots, stage, [])
+                lines_out += self.beats([ln], slots, stage, [], plan.lines.get(li, []) if plan else None)
             body = first + lines_out
             if not body:
                 body = [{"camera": "wide", "ms": 0}]
@@ -638,11 +670,12 @@ def _trim(text: str, limit: int = 240) -> str:
     return cut.rstrip(" ,;") + "…"
 
 
-def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str, source: str, places: dict | None = None):
+def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str, source: str, places: dict | None = None, director=None):
     """Scenes and choices come from the whole chapter; what the game shows is
     only the event chain (the important events, in order). `places` maps an
-    unplaced scene's key to an AI-made place."""
-    from .events import build_chain
+    unplaced scene's key to an AI-made place. A `director` (the story model)
+    picks the chain's events; without one the rules do."""
+    from .events import build_chain, target_events
 
     scenes = segment(paragraphs, a.lines, catalog)
     used_places: dict[str, dict] = {}
@@ -653,11 +686,15 @@ def build_story(paragraphs: list[str], a: Analysis, catalog, chapter_title: str,
             if p:
                 used_places[p["id"]] = {"title": p["title"], "preset": p["preset"]}
     moments = find_moments(a, scenes, catalog)
-    chain = build_chain(a, scenes, moments, catalog)
+    picks = None
+    if director is not None and director.pick_beats:
+        picks = director.beats(chapter_title, paragraphs, scenes, catalog, used_places, target_events(len({ln.para for ln in a.lines})))
+    chain = build_chain(a, scenes, moments, catalog, picks)
     shown = {id(ln) for node in chain for ln in node.lines}
     condensed = [Scene(location=sc.location, lines=[ln for ln in sc.lines if id(ln) in shown]) for sc in scenes]
     condensed = [sc for sc in condensed if sc.lines]
     assembler = _Assembler(a, catalog, chapter_title, source)
     assembler.places = used_places
+    assembler.director = director
     story = assembler.build(condensed, moments)
     return story, condensed, moments, chain

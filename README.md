@@ -2,7 +2,7 @@
 
 A game engine that renders a novel as a playable 3D story. The player watches each scene and makes choices at key moments. Each choice has two options. The wrong option plays its consequence and ends the run. The right option continues the story. After a wrong choice, the player can try the same choice again.
 
-You upload a novel (PDF or plain text). The engine splits it into chapters and builds a playable game for each chapter on its own, with no AI model and no manual step. It can stage only the assets that it has. The asset manifest lists them: what each character looks like, every scenery, and which animation and sound each word triggers.
+You upload a novel (PDF or plain text). The engine splits it into chapters and builds a playable game for each chapter on its own, with no manual step. Rules find the story. When a Claude model is available, a story director also stages each chapter's scenes (see [Story director](#story-director)); without one, the rules do everything. It can stage only the assets that it has. The asset manifest lists them: what each character looks like, every scenery, and which animation and sound each word triggers.
 
 The manifest has the cast and places of *Harry Potter and the Philosopher's Stone*, plus generic sceneries (forest, tavern, street, ship and more) for other books. Characters it does not know get a generated look.
 
@@ -106,7 +106,7 @@ Every scenery has generic marks (`auto_1` to `auto_5`, `auto_threat`, `auto_entr
 
 ## From novel to game
 
-The pipeline in `pipeline/` turns a novel (PDF or plain text) into one story file per chapter. It uses no AI model. spaCy supplies sentences, part-of-speech tags and the dependency parse. WordNet supplies antonyms. Every other decision is a rule in `pipeline/analyze.py` and `pipeline/build.py`, or a word list in `pipeline/lexicon.py`. The same input always gives the same story.
+The pipeline in `pipeline/` turns a novel (PDF or plain text) into one story file per chapter. The rules below need no AI model. spaCy supplies sentences, part-of-speech tags and the dependency parse. WordNet supplies antonyms. Every other decision is a rule in `pipeline/analyze.py` and `pipeline/build.py`, or a word list in `pipeline/lexicon.py`. The same input always gives the same story.
 
 The steps are:
 
@@ -151,12 +151,14 @@ A book is too long to send whole, so a retrieval step (`pipeline/rag/`) picks th
 | Mode | How it finds text about a character's looks or a scene's place |
 | --- | --- |
 | `keyword` | Sentences that name the character and contain a look word ("hair", "tall"); the first lines of a scene. |
-| `hybrid` (default) | BM25 and a sentence-embedding model rank the sentences near the character, or inside the scene, and reciprocal rank fusion merges the two rankings. |
-| `tree` | PageIndex-style: the book becomes a table of contents (chapter, scene, section of a few paragraphs, each with a summary). The model reads it and chooses the sections to open, in two requests (scenes first, then sections). Hybrid search ranks the sentences inside them. |
+| `hybrid` (default for places) | BM25 and a sentence-embedding model rank the sentences near the character, or inside the scene, and reciprocal rank fusion merges the two rankings. |
+| `tree` (default for looks) | PageIndex-style: the book becomes a table of contents (chapter, scene, section of a few paragraphs, each with a summary). The model reads it and chooses the sections to open, in two requests (scenes first, then sections). Hybrid search ranks the sentences inside them. |
 
 Every mode returns the same amount of text: six sentences for a character, 900 characters for a scene. The library places shown to the model for reuse are the five most similar to each scene, not the first 80.
 
 Embeddings need `pip install sentence-transformers` (the model, `all-MiniLM-L6-v2`, downloads on first use). Without the package, or with `NOVEL_EMBEDDINGS=0`, hybrid search is BM25 only. The tree needs no embeddings and no extra model calls to build: its scenes and summaries come from the rule pipeline and TextRank.
+
+`NOVEL_RETRIEVAL` sets one mode for both. The defaults are the winners in [docs/evaluation.md](docs/evaluation.md): on the Harry Potter cast, with invented names, looks scored 79.9% with the tree, 74.1% with hybrid search, 69.7% with the keyword rule and 54.7% with no book text. For places, the keyword rule and hybrid search were level and the tree was worse.
 
 `python -m pipeline.rag.evaluate --book <library folder>` compares the modes on a book with hand-made assets. It hides the book's cast and sceneries and replaces every name with an invented one, so the model cannot answer from memory of the novel. Then it scores the generated looks and places, field by field, against the hand-made ones.
 
@@ -164,6 +166,17 @@ It reaches the model in one of two ways:
 
 - **Claude Code** on this computer, signed in with a Claude subscription (Pro or Max). This needs no API key. Requests count toward the subscription's usage limits. The pipeline finds `claude` on the PATH or the copy inside the VS Code extension; `NOVEL_CLAUDE_BIN` points it at another one. Sign in once with `claude auth login`.
 - **An API key:** set `ANTHROPIC_API_KEY` before you start the backend. API usage is billed separately, in the Claude Console. When a key is set, it is used instead of Claude Code. Without credentials, or with `NOVEL_ASSET_AI=0`, characters keep their generated looks and scenes use the default scenery. `NOVEL_ASSET_MODEL` picks the model (default `claude-opus-5-5`).
+
+### Story director
+
+With a model available (the same Claude Code sign-in or API key as the AI assets), the model can take two more decisions from the rules (`pipeline/director/`). `NOVEL_DIRECTOR=0` turns them off.
+
+- **What the chapter shows.** The rules score paragraphs by surface signals (actions, names, exclamation marks), so a loud aside can beat a quiet reveal. The director reads the chapter as a table of contents, scenes with summaries and the opening of every paragraph under them, and picks the paragraphs a player needs to follow the plot. This is the PageIndex idea: reason over the document's structure. The choices and their setup stay whatever it picks. This is off by default, because it did not beat the rules in the evaluation; `NOVEL_DIRECTOR_BEATS=1` turns it on.
+- **How each scene is staged.** The rules put people on numbered spots in order of appearance and turn verbs into actions ("go", "move" and "come" all become `approach`). The director reads each scene's shown lines with the place's spots, the people who may be there and the engine's action list. It answers who stands where, who walks in at which line, and which action plays on which line. Generated places have a spot beside each kind of prop (`at_fireplace`, `at_table`), so someone can wait by the fire.
+
+Every staging suggestion is checked against the engine: the spot exists, the person is in the scene, the action exists and a creature can do it. What fails is dropped, and a scene part without a usable plan keeps the rule staging. Lines with a plan read the book's sentence instead of a templated one ("Ron walks over to Harry."). Answers are cached in `library/assets/director.json`, so building a chapter again gives the same game and costs nothing. Staging costs one request per chapter, and picking beats one more.
+
+`python -m pipeline.director.evaluate --book <library folder>` compares the director with the rules. On all 17 Harry Potter chapters both versions pass the engine's validator. The director puts 40% fewer people on stage (only those really there), uses named spots 72 times where the rules never do, plays 159 actions against 65, and 91% of its suggestions pass the checks. Full results: [docs/evaluation.md](docs/evaluation.md).
 
 `python -m pytest` runs the pipeline tests on original fixture texts in `tests/pipeline/fixtures/`: two single chapters and two whole books, one in the Harry Potter world and one with no known assets.
 
